@@ -20,7 +20,7 @@ export default {
     return {
       title: 'Employees',
       description: ' This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page ',
-      addLabel: 'Employee',
+      addLabel: 'Add Employee',
     };
   },
   methods: {

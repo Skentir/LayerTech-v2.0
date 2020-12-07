@@ -10,7 +10,7 @@
             </b-col>
             <b-col align-self="end" class="right-container">
                 <div class= 'btn-container'>
-                    <b-button>Add {{addLabel}}</b-button>
+                    <b-button>{{addLabel}}</b-button>
                 </div>
             </b-col>
         </b-row>
