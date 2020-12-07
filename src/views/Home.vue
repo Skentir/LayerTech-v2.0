@@ -1,7 +1,6 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
-    <b-alert show>Default Alert</b-alert> <!-- this is a bootstrap vue component -->
     <Table/>
   </div>
 </template>
