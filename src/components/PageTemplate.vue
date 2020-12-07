@@ -1,6 +1,5 @@
 <template>
   <div class="pageTemplate">
-    <b-container>
         <b-row>
             <b-col class="left-container">
                 <div class="info-container">
@@ -15,7 +14,6 @@
                 </div>
             </b-col>
         </b-row>
-    </b-container>
   </div>
 </template>
 
@@ -32,10 +30,13 @@ export default {
 </script>
 
 <style scoped>
-    .container {
+    .pageTemplate {
         margin-top: 5vh;
         margin-bottom: 2.5vh;
+        margin-left: 4vw;
+        margin-right: 4vw;
     }
+
     .info-container {
         color: black;
     }
