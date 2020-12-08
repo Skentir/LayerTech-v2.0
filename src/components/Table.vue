@@ -14,6 +14,8 @@
     <v-data-table
       :headers="tableCols"
       :items="tableData"
+      :items-per-page="10"
+      :footer-props="footerProps"
       :search="search"
     ></v-data-table>
   </v-card>
@@ -62,6 +64,7 @@ export default {
   },
   data() {
     return {
+      footerProps: { 'items-per-page-options': [5, 10, 15, 30, 50, 100] },
       search: '',
     };
   },
