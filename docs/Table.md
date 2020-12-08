@@ -6,6 +6,8 @@ Features:
 - Sort column
 - Pagination
 
+Main reference: https://vuetifyjs.com/en/components/data-tables/
+
 ### Preview (Ipad):
 
 ![image](https://user-images.githubusercontent.com/54620209/101488241-52184080-399a-11eb-9da0-1b6bce8c417d.png)
