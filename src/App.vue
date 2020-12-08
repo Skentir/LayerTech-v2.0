@@ -2,8 +2,12 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link> |
+<<<<<<< HEAD
       <router-link to="/suppliers">Suppliers</router-link> |
       <router-link to="/employees">Employees</router-link>
+=======
+      <router-link to="/about">About</router-link>
+>>>>>>> parent of 8c7e8b3... init
     </div>
     <router-view/>
   </div>
