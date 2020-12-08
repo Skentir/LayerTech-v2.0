@@ -1,19 +1,19 @@
 <template>
   <div class="pageTemplate">
-        <b-row>
-            <b-col class="left-container">
+        <v-row>
+            <v-col class="left-container">
                 <div class="info-container">
                     <h1>{{title}}</h1>
                     <br>
                     <p>{{description}}</p>
                 </div>
-            </b-col>
-            <b-col align-self="end" class="right-container">
+            </v-col>
+            <v-col align-self="end" class="right-container">
                 <div class= 'btn-container'>
-                    <b-button>{{addLabel}}</b-button>
+                    <v-btn>{{addLabel}}</v-btn>
                 </div>
-            </b-col>
-        </b-row>
+            </v-col>
+        </v-row>
   </div>
 </template>
 
@@ -57,16 +57,17 @@ export default {
     }
     .btn-container button {
         border-radius: 6px;
-        background-color: #CCF6FF;
+        background-color: #CCF6FF !important;
         border-style: none;
-        transition-duration: 0.4s;
+        transition: 0.4s;
         color: black;
         font-weight: bold;
         font-size: 15px;
         float: right;
     }
     button:hover {
-        background-color: #36409B;
+        background-color: #36409B !important;
         color: white;
+        font-weight: bold;
     }
 </style>
