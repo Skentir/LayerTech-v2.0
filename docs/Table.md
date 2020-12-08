@@ -76,3 +76,33 @@ export default {
 };
 </script>
 ```
+### JSON File
+
+header value refers to the key to refer to the data (see <b>bold</b>)
+
+<pre>
+[{
+  "headers": [
+    {
+      "text": "Dessert (100g serving)",
+      "align": "start",
+      "sortable": false,
+      "value": "name"
+    },
+    { "text": "calories", "value":<b>"calories"</b>},
+    { "text": "carbs (g)", "value":"carbs"},
+    { "text": "protein (g)", "value":"protein"},
+    { "text": "iron (%)", "value":"iron"}
+  ],
+  "data": [
+    {
+      "name": "Frozen Yogurt",
+      <b>"calories"</b>: 159,
+      "fat": 6.0,
+      "carbs": 24,
+      "protein": 4.0,
+      "iron": "1%"
+    },
+   ]
+}]
+<pre>
