@@ -32,7 +32,7 @@ export default {
 <style scoped>
     .pageTemplate {
         margin-top: 5vh;
-        margin-bottom: 2.5vh;
+        margin-bottom: 1.5vh;
         margin-left: 4vw;
         margin-right: 4vw;
     }

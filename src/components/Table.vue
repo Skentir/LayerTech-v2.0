@@ -1,24 +1,26 @@
 <template>
-  <v-card>
-    <v-card-title>
-      {{tableTitle}}
-      <v-spacer></v-spacer>
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Search"
-        single-line
-        hide-details
-      ></v-text-field>
-    </v-card-title>
-    <v-data-table
-      :headers="tableCols"
-      :items="tableData"
-      :items-per-page="10"
-      :footer-props="footerProps"
-      :search="search"
-    ></v-data-table>
-  </v-card>
+  <div class="table-container">
+    <v-card class='card'>
+      <v-card-title>
+        {{tableTitle}}
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+          hide-details
+        ></v-text-field>
+      </v-card-title>
+      <v-data-table
+        :headers="tableCols"
+        :items="tableData"
+        :items-per-page="10"
+        :footer-props="footerProps"
+        :search="search"
+      ></v-data-table>
+    </v-card>
+  </div>
 </template>
 
 <script>
@@ -70,3 +72,10 @@ export default {
   },
 };
 </script>
+
+<style  scoped>
+ .table-container {
+  margin-left: 4vw ;
+  margin-right: 4vw ;
+ }
+</style>
