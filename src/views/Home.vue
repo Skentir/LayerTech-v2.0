@@ -25,8 +25,5 @@ export default {
       componentData: dessertData,
     };
   },
-  mounted() {
-    console.log(this.componentData[0].data);
-  },
 };
 </script>
