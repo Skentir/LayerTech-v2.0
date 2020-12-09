@@ -12,7 +12,11 @@
     { "text": "Mortality Rate (%)", "value":"mortalityRate"},
     { "text": "Morbidity Rate (%)", "value":"morbidityRate"},
     { "text": "Feed Requirement", "value":"feedRequirement"},
-    { "text": "Vaccination Schedule", "value":"vaccinationSchedule"}
+    { "text": "Vaccination Schedule", "value":"vaccinationSchedule"},
+    { "text": "Date Recieved", "value": "dateRecieved"},
+    { "text": "Person in-charge", "value": "personInCharge"},
+    { "text": "Section Assigned", "value": "sectionAssigned"},
+    { "text": "Building Assigned", "value": "buildingAssigned"}
   ],
   "data": [
     {
@@ -23,7 +27,11 @@
       "mortalityRate": 17.2,
       "morbidityRate": 1.0,
       "feedRequirement": "Normal Diet Feed",
-      "vaccinationSchedule": "Semi-Annually "
+      "vaccinationSchedule": "Semi-Annually ",
+      "dateRecieved" : "2020-09-27",
+      "personInCharge": "Micheal Scott",
+      "sectionAssigned": "1",
+      "buildingAssigned": "Building A"
     },
     {
       "batchNumber": 2,
@@ -33,7 +41,11 @@
       "mortalityRate": 13.2,
       "morbidityRate": 0.9,
       "feedRequirement": "Normal Diet Feed",
-      "vaccinationSchedule": "Annually "
+      "vaccinationSchedule": "Annually ",
+      "dateRecieved" : "2020-10-01",
+      "personInCharge": "John Peter",
+      "sectionAssigned": "3",
+      "buildingAssigned": "Building S"
     },
     {
       "batchNumber": 3,
@@ -43,7 +55,11 @@
       "mortalityRate": 20.5,
       "morbidityRate": 3.0,
       "feedRequirement": "Special Diet Feed",
-      "vaccinationSchedule": "Monthly "
+      "vaccinationSchedule": "Monthly ",
+      "dateRecieved" : "2019-01-13",
+      "personInCharge": "Anne Marie",
+      "sectionAssigned": "2",
+      "buildingAssigned": "Building A"
     },
     {
       "batchNumber": 4,
@@ -53,7 +69,11 @@
       "mortalityRate": 12.6,
       "morbidityRate": 2.73,
       "feedRequirement": "Normal Diet Feed",
-      "vaccinationSchedule": "Annually "
+      "vaccinationSchedule": "Annually ",
+      "dateRecieved" : "2019-07-01",
+      "personInCharge": "Peter Jobs",
+      "sectionAssigned": "1",
+      "buildingAssigned": "Building C"
     },
     {
       "batchNumber": 5,
@@ -63,7 +83,11 @@
       "mortalityRate": 8.1,
       "morbidityRate": 0.02,
       "feedRequirement": "Normal Diet Feed",
-      "vaccinationSchedule": "Annually "
+      "vaccinationSchedule": "Annually ",
+      "dateRecieved" : "2018-11-27",
+      "personInCharge": "Steven Stevenson",
+      "sectionAssigned": "2",
+      "buildingAssigned": "Building A"
     },
     {
       "batchNumber": 6,
@@ -73,7 +97,11 @@
       "mortalityRate": 19.72,
       "morbidityRate": 5.37,
       "feedRequirement": "Normal Diet Feed",
-      "vaccinationSchedule": "Semi-Annually "
+      "vaccinationSchedule": "Semi-Annually ",
+      "dateRecieved" : "2017-10-11",
+      "personInCharge": "Daisy Bob",
+      "sectionAssigned": "5",
+      "buildingAssigned": "Building D"
     },
     {
       "batchNumber": 7,
@@ -83,7 +111,11 @@
       "mortalityRate": 8.3,
       "morbidityRate": 5.2,
       "feedRequirement": "Special Diet Feed",
-      "vaccinationSchedule": "Bi-Weekly "
+      "vaccinationSchedule": "Bi-Weekly ",
+      "dateRecieved" : "2020-02-14",
+      "personInCharge": "John Steward",
+      "sectionAssigned": "1",
+      "buildingAssigned": "Building B"
     },
     {
       "batchNumber": 8,
@@ -93,7 +125,11 @@
       "mortalityRate": 13.9,
       "morbidityRate": 2.5,
       "feedRequirement": "Normal Diet Feed",
-      "vaccinationSchedule": "Bi-Monthly "
+      "vaccinationSchedule": "Bi-Monthly ",
+      "dateRecieved" : "2018-05-25",
+      "personInCharge": "Bob Bob",
+      "sectionAssigned": "2",
+      "buildingAssigned": "Building A"
     }
   ]
 }]
