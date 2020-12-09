@@ -1,0 +1,64 @@
+[{
+    "headers": [
+      { "text": "Item ID", "value":"item_id"},
+      { "text": "Serial ID", "value":"serial_id"},
+      { "text": "Item Name", "value":"item_name"},
+      { "text": "Product Type", "value":"product_type"},
+      { "text": "Quantity", "value":"quantity"},
+      { "text": "Unit", "value":"unit"},
+      { "text": "Expiration Date", "value":"exp_date"},
+      { "text": "Dosage", "value":"dosage"}
+    ],
+    "data": [
+      {
+        "item_id": "01",
+        "serial_id": "V1",
+        "item_name": "E. coli vaccine",
+        "product_type": "Vaccine",
+        "quantity": "20",
+        "unit": "bottles",
+        "exp_date": "12/25/2020",
+        "dosage": "once a week"
+      },
+      {
+        "item_id": "02",
+        "serial_id": "F1",
+        "item_name": "Grower (B-Meg Integra 2000)",
+        "product_type": "Feeds",
+        "quantity": "12",
+        "unit": "sacks",
+        "exp_date": "01/16/2021",
+        "dosage": ""
+      },
+      {
+        "item_id": "03",
+        "serial_id": "F2",
+        "item_name": "Chick Booster Sagupaan",
+        "product_type": "Feeds",
+        "quantity": "5",
+        "unit": "pouches",
+        "exp_date": "12/29/2020",
+        "dosage": "thrice a week"
+      },
+      {
+        "item_id": "04",
+        "serial_id": "V2",
+        "item_name": "Ambroxitil",
+        "product_type": "Vaccine",
+        "quantity": "9",
+        "unit": "bottles",
+        "exp_date": "12/25/2020",
+        "dosage": "twice a week"
+      },
+      {
+        "item_id": "05",
+        "serial_id": "F3",
+        "item_name": "Booster Malakas",
+        "product_type": "Feeds",
+        "quantity": "2",
+        "unit": "sacks",
+        "exp_date": "4/19/2021",
+        "dosage": "once a month"
+      }
+    ]
+}]

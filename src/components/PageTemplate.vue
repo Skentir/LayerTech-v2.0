@@ -33,8 +33,6 @@ export default {
     .pageTemplate {
         margin-top: 5vh;
         margin-bottom: 1.5vh;
-        margin-left: 4vw;
-        margin-right: 4vw;
     }
 
     .info-container {

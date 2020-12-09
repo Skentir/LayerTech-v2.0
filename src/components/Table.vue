@@ -74,8 +74,4 @@ export default {
 </script>
 
 <style  scoped>
- .table-container {
-  margin-left: 4vw ;
-  margin-right: 4vw ;
- }
 </style>
