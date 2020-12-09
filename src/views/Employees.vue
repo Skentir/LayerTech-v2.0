@@ -26,7 +26,6 @@ export default {
       pageInfo: {
         title: 'Employees',
         description: ' This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page ',
-        addLabel: 'Add Employee',
       },
       componentData: employeeData,
       tableTitle: 'Employees',
