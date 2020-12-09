@@ -1,19 +1,16 @@
 <template>
   <div class="employees">
     <PageTemplate :title="title" :description="description" :addLabel="addLabel"/>
-    <Table/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Table from '@/components/Table.vue';
 import PageTemplate from '@/components/PageTemplate.vue';
 
 export default {
   name: 'Employees',
   components: {
-    Table,
     PageTemplate,
   },
   data() {
