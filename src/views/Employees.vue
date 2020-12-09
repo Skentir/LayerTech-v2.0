@@ -1,6 +1,6 @@
 <template>
   <div class="employees">
-    <PageTemplate :title="title" :description="description" :addLabel="addLabel"/>
+    <PageTemplate :pageInfo="pageInfo"/>
     <Table
       :tableData="this.componentData[0].data"
       :tableCols="this.componentData[0].headers"
@@ -23,11 +23,13 @@ export default {
   },
   data() {
     return {
-      title: 'Employees',
-      description: ' This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page ',
-      addLabel: 'Add Employee',
-      tableTitle: 'Employees',
+      pageInfo: {
+        title: 'Employees',
+        description: ' This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page This is the employees page ',
+        addLabel: 'Add Employee',
+      },
       componentData: employeeData,
+      tableTitle: 'Employees',
     };
   },
   methods: {
