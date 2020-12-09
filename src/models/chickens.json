@@ -1,0 +1,99 @@
+[{
+  "headers": [
+    {
+      "text": "Batch Number",
+      "align": "start",
+      "sortable": false,
+      "value": "batchNumber"
+    },
+    { "text": "Breed", "value":"breed"},
+    { "text": "Chicken Type", "value":"chickenType"},
+    { "text": "Population", "value":"population"},
+    { "text": "Mortalitly Rate (%)", "value":"mortalityRate"},
+    { "text": "Morbidity Rate (%)", "value":"morbidityRate"},
+    { "text": "Feed Requirement", "value":"feedRequirement"},
+    { "text": "Vaccination Schedule", "value":"vaccinationSchedule"}
+  ],
+  "data": [
+    {
+      "batchNumber": 1,
+      "breed": "Banaba",
+      "chickenType": "Adult",
+      "population": 30,
+      "mortalityRate": 17.2,
+      "morbidityRate": 1.0,
+      "feedRequirement": "Normal Diet Feed",
+      "vaccinationSchedule": "Semi-Annually "
+    },
+    {
+      "batchNumber": 2,
+      "breed": "Banaba",
+      "chickenType": "Adult",
+      "population": 54,
+      "mortalityRate": 13.2,
+      "morbidityRate": 0.9,
+      "feedRequirement": "Normal Diet Feed",
+      "vaccinationSchedule": "Annually "
+    },
+    {
+      "batchNumber": 3,
+      "breed": "Banaba",
+      "chickenType": "Adult",
+      "population": 16,
+      "mortalityRate": 20.5,
+      "morbidityRate": 3.0,
+      "feedRequirement": "Special Diet Feed",
+      "vaccinationSchedule": "Monthly "
+    },
+    {
+      "batchNumber": 4,
+      "breed": "Darag",
+      "chickenType": "Adult",
+      "population": 155,
+      "mortalityRate": 12.6,
+      "morbidityRate": 2.73,
+      "feedRequirement": "Normal Diet Feed",
+      "vaccinationSchedule": "Annually "
+    },
+    {
+      "batchNumber": 5,
+      "breed": "Joloano",
+      "chickenType": "Adult",
+      "population": 63,
+      "mortalityRate": 8.1,
+      "morbidityRate": 0.02,
+      "feedRequirement": "Normal Diet Feed",
+      "vaccinationSchedule": "Annually "
+    },
+    {
+      "batchNumber": 6,
+      "breed": "Paraoakan",
+      "chickenType": "Adult",
+      "population": 694,
+      "mortalityRate": 19.72,
+      "morbidityRate": 5.37,
+      "feedRequirement": "Normal Diet Feed",
+      "vaccinationSchedule": "Semi-Annually "
+    },
+    {
+      "batchNumber": 7,
+      "breed": "Joloano",
+      "chickenType": "Adult",
+      "population": 13,
+      "mortalityRate": 8.3,
+      "morbidityRate": 5.2,
+      "feedRequirement": "Special Diet Feed",
+      "vaccinationSchedule": "Bi-Weekly "
+    },
+    {
+      "batchNumber": 8,
+      "breed": "Paraoakan",
+      "chickenType": "Adult",
+      "population": 754,
+      "mortalityRate": 13.9,
+      "morbidityRate": 2.5,
+      "feedRequirement": "Normal Diet Feed",
+      "vaccinationSchedule": "Bi-Monthly "
+    }
+  ]
+}]
