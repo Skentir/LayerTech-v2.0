@@ -9,7 +9,7 @@
     { "text": "Breed", "value":"breed"},
     { "text": "Chicken Type", "value":"chickenType"},
     { "text": "Population", "value":"population"},
-    { "text": "Mortalitly Rate (%)", "value":"mortalityRate"},
+    { "text": "Mortality Rate (%)", "value":"mortalityRate"},
     { "text": "Morbidity Rate (%)", "value":"morbidityRate"},
     { "text": "Feed Requirement", "value":"feedRequirement"},
     { "text": "Vaccination Schedule", "value":"vaccinationSchedule"}
