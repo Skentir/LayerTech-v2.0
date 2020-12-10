@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <PageTemplate :title="title" :description="description" :addLabel="addLabel"/>
+    <PageTemplate :pageInfo="pageInfo"/>
     <Form></Form>
     <Table
       :tableData="this.componentData[0].data"
@@ -26,9 +26,10 @@ export default {
   },
   data() {
     return {
-      title: 'Operations',
-      description: ' This is the operations page This is the operations page This is the operations page This is the operations page This is the operations page This is the operations page This is the operations page This is the operations page This is the operations page This is the operations page This is the operations page ',
-      addLabel: 'Add item',
+      pageInfo: {
+        title: 'Operations',
+        description: ' This is the operations page This is the operations page This is the operations page This is the operations page This is the operations page This is the operations page This is the operations page This is the operations page This is the operations page This is the operations page This is the operations page ',
+      },
       tableTitle: 'Inventory',
       componentData: operationsData,
     };
