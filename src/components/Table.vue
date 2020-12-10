@@ -17,7 +17,24 @@
       :items-per-page="10"
       :footer-props="footerProps"
       :search="search"
-    ></v-data-table>
+    >
+      <template v-slot:item.actions="{ item }">
+        <v-icon
+          small
+          class="mr-2"
+          @click="editItem(item)"
+        >
+          mdi-pencil
+        </v-icon>
+        <v-icon
+          v-if="false"
+          small
+          @click="deleteItem(item)"
+        >
+          mdi-delete
+        </v-icon>
+      </template>
+    </v-data-table>
   </v-card>
 </template>
 
@@ -62,11 +79,45 @@ export default {
       type: Array,
     },
   },
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
+    },
+  },
   data() {
     return {
+      showDialog: false,
+      dialogDelete: false,
+      editedIndex: -1,
+      editedItem: {
+        name: '',
+        calories: 0,
+        fat: 0,
+        carbs: 0,
+        protein: 0,
+      },
+      defaultItem: {
+        name: '',
+        calories: 0,
+        fat: 0,
+        carbs: 0,
+        protein: 0,
+      },
       footerProps: { 'items-per-page-options': [5, 10, 15, 30, 50, 100] },
       search: '',
     };
+  },
+  methods: {
+    editItem(item) {
+      this.editedIndex = this.desserts.indexOf(item);
+      this.editedItem = { ...item };
+      this.showDialog = true;
+    },
+    deleteItem(item) {
+      this.editedIndex = this.desserts.indexOf(item);
+      this.editedItem = { ...item };
+      this.dialogDelete = true;
+    },
   },
 };
 </script>
