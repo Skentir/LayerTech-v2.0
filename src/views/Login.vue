@@ -14,6 +14,9 @@
             outlined="true" placeholder="Password"></v-text-field>
             <v-btn id="login_btn" color="rgba(4,35,178,1)" class="lButton"
             elevation="2">Log In</v-btn>
+            <br>
+            <br>
+            <h3 id="error-msg" v-if="hasError">Error!</h3> <!-- Error message container -->
         </v-form>
     </div>
   </div>
@@ -29,6 +32,7 @@ export default {
     return {
       username: null,
       password: null,
+      hasError: false, // for whether status message will show or not
     };
   },
 };
@@ -41,7 +45,7 @@ export default {
     width: 100%;
     display: block;
     text-align: center;
-    padding: 10%;
+    padding: 5%;
 }
 
 .loginWidget{
@@ -49,7 +53,10 @@ export default {
     background-color: #D7EEF3;
     margin-left: 30%;
     margin-right: 30%;
-    padding: 5%;
+    padding-top: 5%;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-bottom: 2%;
     border-radius: 6px;
 }
 
@@ -60,5 +67,9 @@ img#company-logo{
 
 h3.splash-text{
   font-weight: normal;
+}
+
+h3#error-msg{
+  color: red;
 }
 </style>
