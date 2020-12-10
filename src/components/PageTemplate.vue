@@ -1,19 +1,14 @@
 <template>
-  <div class="pageTemplate">
-        <v-row>
-            <v-col class="left-container">
-                <div class="info-container">
-                    <h1>{{title}}</h1>
-                    <br>
-                    <p>{{description}}</p>
-                </div>
-            </v-col>
-            <v-col align-self="end" class="right-container">
-                <div class= 'btn-container'>
-                    <v-btn>{{addLabel}}</v-btn>
-                </div>
-            </v-col>
-        </v-row>
+  <div>
+    <v-row class="pageTemplate">
+        <v-col cols="6" class="left-container">
+            <div class="info-container">
+                <h1>{{pageInfo.title}}</h1>
+                <br>
+                <p>{{pageInfo.description}}</p>
+            </div>
+        </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -22,9 +17,11 @@
 
 export default {
   props: {
-    title: String,
-    description: String,
-    addLabel: String,
+    pageInfo: Object,
+    tableCols: {
+      default: null,
+      type: Array,
+    },
   },
 };
 </script>
@@ -49,23 +46,5 @@ export default {
         font-size: 15px;
         float: left;
         text-align: justify;
-    }
-    .right-container {
-        padding-bottom: 20px;
-    }
-    .btn-container button {
-        border-radius: 6px;
-        background-color: #CCF6FF !important;
-        border-style: none;
-        transition: 0.4s;
-        color: black;
-        font-weight: bold;
-        font-size: 15px;
-        float: right;
-    }
-    button:hover {
-        background-color: #36409B !important;
-        color: white;
-        font-weight: bold;
     }
 </style>
