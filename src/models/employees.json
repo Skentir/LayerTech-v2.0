@@ -1,0 +1,52 @@
+[{
+    "headers": [
+      { "text": "Username", "value":"username"},
+      { "text": "First Name", "value":"firstname"},
+      { "text": "Last Name", "value":"lastname"},
+      { "text": "Contact Number", "value":"number"},
+      { "text": "Department", "value":"department"},
+      { "text": "Role", "value":"role"}
+    ],
+    "data": [
+      {
+        "username": "employee1",
+        "firstname": "Axel",
+        "lastname": "Alba",
+        "number": "09982503661",
+        "department": "Logistics",
+        "role": "Operations"
+      },
+      {
+        "username": "employee2",
+        "firstname": "Alex",
+        "lastname": "Samson",
+        "number": "09982503662",
+        "department": "Logistics",
+        "role": "Chickens"
+      },
+      {
+        "username": "employee3",
+        "firstname": "Lexa",
+        "lastname": "Amazon",
+        "number": "09982503663",
+        "department": "Logistics",
+        "role": "Warehouse"
+      },
+      {
+        "username": "employee4",
+        "firstname": "Goo",
+        "lastname": "Glero",
+        "number": "09982503664",
+        "department": "Logistics",
+        "role": "Operations"
+      },
+      {
+        "username": "employee5",
+        "firstname": "Mama",
+        "lastname": "Momo",
+        "number": "09982503665",
+        "department": "Logistics",
+        "role": "Warehouse"
+      }    
+    ]
+}]
