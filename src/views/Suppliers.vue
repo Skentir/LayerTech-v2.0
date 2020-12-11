@@ -128,10 +128,13 @@ export default {
     search: '',
     tableTitle: 'Suppliers',
     showDialog: false,
-    dialogDelete: false,
     componentData: [],
     editedIndex: -1,
     editedItem: {
+      /*
+        Below are temporary data that will be filled in
+        for the edit form
+      */
       supplier_name: '',
       files_link: '',
       contact_num: '',
@@ -139,6 +142,10 @@ export default {
       company_name: '',
       position: '',
     },
+    /*
+      Below are temporary data that will be filled in
+      for the create form
+    */
     defaultItem: {
       supplier_name: '',
       files_link: '',
@@ -163,14 +170,31 @@ export default {
     this.initialize();
   },
   methods: {
+    /*
+      Loads dummy data into table above
+    */
     initialize() {
       this.componentData = SuppliersData;
     },
+    /*
+      Fetches data from a row and loads them into
+      the edit form modal
+    */
     editItem(item) {
+      /*
+        In Order:
+          1. Gets index of the row being edited to editedIndex
+          2. loads said item into editedItem object
+          3. then displays the dialog/modal
+      */
       this.editedIndex = this.componentData[0].data.indexOf(item);
       this.editedItem = { ...item };
       this.showDialog = true;
     },
+    /*
+      Closes the dialog/modal then wipes the data from
+      editedItem object ; resets editedIndex back to -1
+    */
     close() {
       this.showDialog = false;
       this.$nextTick(() => {
@@ -178,11 +202,16 @@ export default {
         this.editedIndex = -1;
       });
     },
+    /*
+      Creates a new row based on new input data
+      appends newly created row into the existing table
+    */
     save() {
       if (this.editedIndex > -1) {
         Object.assign(this.componentData[0].data[this.editedIndex], this.editedItem);
       } else {
         // eslint-disable-next-line prefer-template
+        this.editedItem.supplier_id = '0' + (this.componentData[0].data.length + 1).toString();
         this.componentData[0].data.push(this.editedItem);
       }
       this.close();
