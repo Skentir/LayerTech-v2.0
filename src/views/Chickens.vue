@@ -82,8 +82,8 @@
             </v-col>
             <v-col cols="6">
               <v-menu
-                ref="menu1"
-                v-model="menu1"
+                ref="menu_date_recieved"
+                v-model="menu_date_recieved"
                 :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y
@@ -105,7 +105,7 @@
                 <v-date-picker
                   v-model="editedItem.date_recieved"
                   no-title
-                  @input="menu1 = false"
+                  @input="menu_date_recieved = false"
                 ></v-date-picker>
               </v-menu>
             </v-col>
@@ -169,7 +169,7 @@ export default {
   components: {
     PageTemplate,
   },
-  data: (vm) => ({
+  data: () => ({
     pageInfo: {
       title: 'Chickens',
       description: ' This is the Chickens page This is the Chickens page This is the Chickens page This is the Chickens page This is the Chickens page This is the Chickens page This is the Chickens page This is the Chickens page This is the Chickens page This is the Chickens page This is the Chickens page ',
@@ -177,10 +177,13 @@ export default {
     search: '',
     tableTitle: 'Chickens',
     showDialog: false,
-    dialogDelete: false,
     componentData: [],
     editedIndex: -1,
     editedItem: {
+      /*
+        Below are temporary data that will be filled in
+        for the edit form
+      */
       breed: '',
       chicken_type: '',
       population: 0,
@@ -194,6 +197,10 @@ export default {
       building_assigned: '',
     },
     defaultItem: {
+      /*
+        Below are temporary data that will be filled in
+        for the create form
+      */
       breed: '',
       chicken_type: '',
       population: 0,
@@ -207,18 +214,11 @@ export default {
       building_assigned: '',
     },
     date: new Date().toISOString().substr(0, 10),
-    // di nagamit pero for reference
-    dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
-    menu1: false,
-    menu2: false,
-
+    menu_date_recieved: false,
   }),
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
-    },
-    computedDateFormatted() {
-      return this.formatDate(this.date);
     },
   },
   watch: {
@@ -226,26 +226,40 @@ export default {
       // eslint-disable-next-line no-unused-expressions
       val || this.close();
     },
-    watch: {
-      date() {
-        this.dateFormatted = this.formatDate(this.date);
-      },
-    },
   },
   created() {
     this.initialize();
   },
   methods: {
+    /*
+      Loads dummy data into table above
+    */
     initialize() {
       this.componentData = ChickensData;
     },
+    /*
+      Fetches data from a row and loads them into
+      the edit form modal
+    */
     editItem(item) {
+      /*
+        In Order:
+          1. Gets index of the row being edited to editedIndex
+          2. loads said item into editedItem object
+          3. Also has to edit the date for editedItem
+          4. then displays the dialog/modal
+      */
+
       this.editedIndex = this.componentData[0].data.indexOf(item);
       this.editedItem = { ...item };
       this.editedItem.date_recieved = new
       Date(this.editedItem.date_recieved).toISOString().substr(0, 10);
       this.showDialog = true;
     },
+    /*
+      Closes the dialog/modal then wipes the data from
+      editedItem object ; resets editedIndex back to -1
+    */
     close() {
       this.showDialog = false;
       this.$nextTick(() => {
@@ -253,25 +267,19 @@ export default {
         this.editedIndex = -1;
       });
     },
+    /*
+      Creates a new row based on new input data
+      appends newly created row into the existing table
+    */
     save() {
       if (this.editedIndex > -1) {
         Object.assign(this.componentData[0].data[this.editedIndex], this.editedItem);
       } else {
         // eslint-disable-next-line prefer-template
-        this.editedItem.item_id = '0' + (this.componentData[0].data.length + 1).toString();
+        this.editedItem.chicken_id = '0' + (this.componentData[0].data.length + 1).toString();
         this.componentData[0].data.push(this.editedItem);
       }
       this.close();
-    },
-    formatDate(date) {
-      if (!date) return null;
-      const [year, month, day] = date.split('-');
-      return `${month}/${day}/${year}`;
-    },
-    parseDate(date) {
-      if (!date) return null;
-      const [month, day, year] = date.split('/');
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
     },
   },
 };
