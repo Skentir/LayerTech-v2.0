@@ -52,7 +52,7 @@
             </v-col>
             <v-col cols="6">
               <v-text-field
-                v-model="editedItem.chickenType"
+                v-model="editedItem.chicken_type"
                 label="Chicken Type" required/>
             </v-col>
             <v-col cols="4">
@@ -62,22 +62,22 @@
             </v-col>
             <v-col cols="4">
               <v-text-field
-                v-model="editedItem.morbidityRate"
+                v-model="editedItem.mortality_rate"
                 label="Mortality Rate" required/>
             </v-col>
             <v-col cols="4">
               <v-text-field
-                v-model="editedItem.morbidityRate"
+                v-model="editedItem.morbidity_rate"
                 label="Morbidity Rate" required/>
             </v-col>
             <v-col cols="6">
               <v-text-field
-                v-model="editedItem.feedRequirement"
+                v-model="editedItem.feed_requirement"
                 label="Feed Requirement" required/>
             </v-col>
             <v-col cols="6">
               <v-text-field
-                v-model="editedItem.vaccinationSchedule"
+                v-model="editedItem.vaccination_schedule"
                 label="Vaccination Schedule" required/>
             </v-col>
             <v-col cols="6">
@@ -91,7 +91,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-model="editedItem.dateRecieved"
+                    v-model="editedItem.date_recieved"
                     label="Date"
                     hint="MM/DD/YYYY format"
                     persistent-hint
@@ -103,7 +103,7 @@
                   ></v-text-field>
                 </template>
                 <v-date-picker
-                  v-model="editedItem.dateRecieved"
+                  v-model="editedItem.date_recieved"
                   no-title
                   @input="menu1 = false"
                 ></v-date-picker>
@@ -111,17 +111,17 @@
             </v-col>
             <v-col cols="6">
               <v-text-field
-                v-model="editedItem.personInCharge"
+                v-model="editedItem.person_in_charge"
                 label="Person in-Charge" required/>
             </v-col>
             <v-col cols="6">
               <v-text-field
-                v-model="editedItem.sectionAssigned"
+                v-model="editedItem.section_assigned"
                 label="Section Assigned" required/>
             </v-col>
             <v-col cols="6">
               <v-text-field
-                v-model="editedItem.buildingAssigned"
+                v-model="editedItem.building_assigned"
                 label="Building Assigned" required/>
             </v-col>
           </v-row>
@@ -182,29 +182,29 @@ export default {
     editedIndex: -1,
     editedItem: {
       breed: '',
-      chickenType: '',
+      chicken_type: '',
       population: 0,
-      mortalityRate: 0,
-      morbidityRate: 0,
-      feedRequirement: '',
-      vaccinationSchedule: '',
-      dateRecieved: new Date().toISOString().substr(0, 10),
-      personInCharge: '',
-      sectionAssigned: '',
-      buildingAssigned: '',
+      mortality_rate: 0,
+      morbidity_rate: 0,
+      feed_requirement: '',
+      vaccination_schedule: '',
+      date_recieved: new Date().toISOString().substr(0, 10),
+      person_in_charge: '',
+      section_assigned: '',
+      building_assigned: '',
     },
     defaultItem: {
       breed: '',
-      chickenType: '',
+      chicken_type: '',
       population: 0,
-      mortalityRate: 0,
-      morbidityRate: 0,
-      feedRequirement: '',
-      vaccinationSchedule: '',
-      dateRecieved: new Date().toISOString().substr(0, 10),
-      personInCharge: '',
-      sectionAssigned: '',
-      buildingAssigned: '',
+      mortality_rate: 0,
+      morbidity_rate: 0,
+      feed_requirement: '',
+      vaccination_schedule: '',
+      date_recieved: new Date().toISOString().substr(0, 10),
+      person_in_charge: '',
+      section_assigned: '',
+      building_assigned: '',
     },
     date: new Date().toISOString().substr(0, 10),
     // di nagamit pero for reference
@@ -242,8 +242,8 @@ export default {
     editItem(item) {
       this.editedIndex = this.componentData[0].data.indexOf(item);
       this.editedItem = { ...item };
-      this.editedItem.dateRecieved = new
-      Date(this.editedItem.dateRecieved).toISOString().substr(0, 10);
+      this.editedItem.date_recieved = new
+      Date(this.editedItem.date_recieved).toISOString().substr(0, 10);
       this.showDialog = true;
     },
     close() {
