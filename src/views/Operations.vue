@@ -5,16 +5,17 @@
       :headers="this.componentData[0].headers"
       :items="this.componentData[0].data"
       :search="search"
-      sort-by="calories"
+      sort-by="date_received"
       class="elevation-1"
     >
       <template v-slot:top>
         <v-toolbar
           flat
         >
-          <v-toolbar-title>{{tableTitle}}</v-toolbar-title>
+          <v-toolbar-title id="table_title">{{tableTitle}}</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-text-field
+            id="table_search_bar"
             v-model="search"
             append-icon="mdi-magnify"
             label="Search"
@@ -23,12 +24,14 @@
           ></v-text-field>
           <!-- main dialog -->
           <v-dialog
+            id="form"
             v-model="showDialog"
             max-width="500px"
           >
             <template v-slot:activator="{ on, attrs }">
             <v-col class="text-right pr-0">
               <v-btn
+                id="add_item_btn"
                 color="primary"
                 dark
                 v-bind="attrs"
@@ -40,7 +43,7 @@
           </template>
           <v-card>
             <v-card-title>
-              <span class="headline">Add item to inventory</span>
+              <span id="form_title" class="headline">Add item to inventory</span>
             </v-card-title>
             <v-card-text>
               <v-container>
@@ -51,6 +54,7 @@
                     md="8"
                   >
                     <v-text-field
+                      id="item_name_text_field"
                       v-model="editedItem.item_name"
                       label="Item Name"
                       required
@@ -62,17 +66,22 @@
                     md="4"
                   >
                     <v-text-field
+                      id="product_type_text_field"
                       v-model="editedItem.product_type"
                       label="Product Type"
                       hint="e.g. vaccine, feeds, etc."
+                      persistent-hint
                     ></v-text-field>
                   </v-col>
+                </v-row>
+                <v-row>
                   <v-col
                     cols="12"
                     sm="6"
-                    md="4"
+                    md="6"
                   >
                     <v-text-field
+                      id="quantity_text_field"
                       v-model="editedItem.quantity"
                       label="Quantity"
                       required
@@ -81,22 +90,25 @@
                   <v-col
                     cols="12"
                     sm="6"
-                    md="4"
+                    md="6"
                   >
                     <v-text-field
+                      id="unit_text_field"
                       v-model="editedItem.unit"
                       label="Unit"
                       required
                     ></v-text-field>
                   </v-col>
+                </v-row>
+                <v-row>
                   <v-col
                     cols="12"
                     sm="6"
-                    md="4"
+                    md="6"
                   >
                     <v-menu
-                      ref="menu1"
-                      v-model="menu1"
+                      ref="menu_date_exp"
+                      v-model="menu_date_exp"
                       :close-on-content-click="false"
                       transition="scale-transition"
                       offset-y
@@ -105,11 +117,11 @@
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
-                          v-model="editedItem.exp_date"
-                          label="Date"
-                          hint="MM/DD/YYYY format"
+                          id="date_exp_text_field"
+                          v-model="editedItem.date_exp"
+                          label="Expiration Date"
+                          hint="YYYY/MM/DD format"
                           persistent-hint
-                          prepend-icon="mdi-calendar"
                           v-bind="attrs"
                           @blur="date = parseDate(dateFormatted)"
                           v-on="on"
@@ -117,9 +129,45 @@
                         ></v-text-field>
                       </template>
                       <v-date-picker
-                        v-model="editedItem.exp_date"
+                        id="date_exp_datepicker"
+                        v-model="editedItem.date_exp"
                         no-title
-                        @input="menu1 = false"
+                        @input="menu_date_exp = false"
+                      ></v-date-picker>
+                    </v-menu>
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    sm="6"
+                    md="6"
+                  >
+                    <v-menu
+                      ref="menu_date_received"
+                      v-model="menu_date_received"
+                      :close-on-content-click="false"
+                      transition="scale-transition"
+                      offset-y
+                      max-width="290px"
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          id="date_received_text_field"
+                          v-model="editedItem.date_received"
+                          label="Received Date"
+                          hint="YYYY/MM/DD format"
+                          persistent-hint
+                          v-bind="attrs"
+                          @blur="date = parseDate(dateFormatted)"
+                          v-on="on"
+                          required
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker
+                        id="date_received_datepicker"
+                        v-model="editedItem.date_received"
+                        no-title
+                        @input="menu_date_received = false"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
@@ -145,34 +193,16 @@
             </v-card-actions>
           </v-card>
           </v-dialog>
-          <v-dialog v-model="dialogDelete" max-width="500px">
-            <v-card>
-              <v-card-title class="headline">
-                Are you sure you want to delete this item?
-              </v-card-title>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
-                <v-spacer></v-spacer>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
         <v-icon
+          id="edit_item_btn"
           small
           class="mr-2"
           @click="editItem(item)"
         >
           mdi-pencil
-        </v-icon>
-        <v-icon
-          small
-          @click="deleteItem(item)"
-        >
-          mdi-delete
         </v-icon>
       </template>
       <template v-slot:no-data>
@@ -195,10 +225,10 @@ export default {
   components: {
     PageTemplate,
   },
-  data: (vm) => ({
+  data: () => ({
     pageInfo: {
       title: 'Operations',
-      description: ' This is the Operations page This is the Operations page This is the Operations page This is the Operations page This is the Operations page This is the Operations page This is the Operations page This is the Operations page This is the Operations page This is the Operations page This is the Operations page ',
+      description: 'Track inventory of operations here. This page contains pulled out items from the warehouse.',
     },
     search: '',
     tableTitle: 'Inventory',
@@ -208,33 +238,30 @@ export default {
     editedIndex: -1,
     editedItem: {
       item_name: '',
-      product_type: 0,
+      product_type: '',
       quantity: 0,
       unit: 0,
-      exp_date: new Date().toISOString().substr(0, 10),
+      date_exp: new Date().toISOString().substr(0, 10),
+      date_received: new Date().toISOString().substr(0, 10),
       dosage: '',
     },
     defaultItem: {
       item_name: '',
-      product_type: 0,
+      product_type: '',
       quantity: 0,
       unit: 0,
-      exp_date: new Date().toISOString().substr(0, 10),
+      date_exp: new Date().toISOString().substr(0, 10),
+      date_received: new Date().toISOString().substr(0, 10),
       dosage: '',
     },
     date: new Date().toISOString().substr(0, 10),
-    // di nagamit pero for reference
-    dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
-    menu1: false,
-    menu2: false,
+    menu_date_exp: false,
+    menu_date_received: false,
   }),
 
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
-    },
-    computedDateFormatted() {
-      return this.formatDate(this.date);
     },
   },
 
@@ -243,15 +270,6 @@ export default {
       // eslint-disable-next-line no-unused-expressions
       val || this.close();
     },
-    dialogDelete(val) {
-      // eslint-disable-next-line no-unused-expressions
-      val || this.closeDelete();
-    },
-    watch: {
-      date() {
-        this.dateFormatted = this.formatDate(this.date);
-      },
-    },
   },
 
   created() {
@@ -259,27 +277,30 @@ export default {
   },
 
   methods: {
+    /*
+      Assigns fetched data to local reference inside the component
+    */
     initialize() {
       this.componentData = operationsData;
     },
+    /*
+      Copies the data to editedItem to display on dialog.
+      showDialog triggers the dialog view of the form.
+    */
     editItem(item) {
+      // get index of item
       this.editedIndex = this.componentData[0].data.indexOf(item);
+      // assign item to editedItem obj
       this.editedItem = { ...item };
-      this.editedItem.exp_date = new Date(this.editedItem.exp_date).toISOString().substr(0, 10);
+      // format string to date
+      this.editedItem.date_exp = new Date(this.editedItem.date_exp).toISOString().substr(0, 10);
+      // set true to show dialog view
       this.showDialog = true;
     },
-
-    deleteItem(item) {
-      this.editedIndex = this.componentData[0].data.indexOf(item);
-      this.editedItem = { ...item };
-      this.dialogDelete = true;
-    },
-
-    deleteItemConfirm() {
-      this.componentData[0].data.splice(this.editedIndex, 1);
-      this.closeDelete();
-    },
-
+    /*
+      Closes the dialog and resets editedItem
+      to defaultItem. Also resets editedIndex to -1.
+    */
     close() {
       this.showDialog = false;
       this.$nextTick(() => {
@@ -287,15 +308,10 @@ export default {
         this.editedIndex = -1;
       });
     },
-
-    closeDelete() {
-      this.dialogDelete = false;
-      this.$nextTick(() => {
-        this.editedItem = { ...this.defaultItem };
-        this.editedIndex = -1;
-      });
-    },
-
+    /*
+      Pushers the object to the source data
+      or update the existing object with new data.
+    */
     save() {
       if (this.editedIndex > -1) {
         Object.assign(this.componentData[0].data[this.editedIndex], this.editedItem);
@@ -305,18 +321,6 @@ export default {
         this.componentData[0].data.push(this.editedItem);
       }
       this.close();
-    },
-
-    formatDate(date) {
-      if (!date) return null;
-      const [year, month, day] = date.split('-');
-      return `${month}/${day}/${year}`;
-    },
-
-    parseDate(date) {
-      if (!date) return null;
-      const [month, day, year] = date.split('/');
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
     },
   },
 };

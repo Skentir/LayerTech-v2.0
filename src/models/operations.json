@@ -6,7 +6,8 @@
       { "text": "Product Type", "value":"product_type"},
       { "text": "Quantity", "value":"quantity"},
       { "text": "Unit", "value":"unit"},
-      { "text": "Expiration Date", "value":"exp_date"},
+      { "text": "Expiration Date", "value":"date_exp"},
+      { "text": "Received Date", "value":"date_received"},
       { "text": "Dosage", "value":"dosage"},
       { "text": "Actions", "value": "actions", "sortable": false }
     ],
@@ -18,7 +19,8 @@
         "product_type": "Vaccine",
         "quantity": "20",
         "unit": "bottles",
-        "exp_date": "2020-12-25",
+        "date_exp": "2020-12-25",
+        "date_received": "2020-10-12",
         "dosage": "once a week"
       },
       {
@@ -28,7 +30,8 @@
         "product_type": "Feeds",
         "quantity": "12",
         "unit": "sacks",
-        "exp_date": "2021-01-12",
+        "date_exp": "2021-01-12",
+        "date_received": "2020-11-09",
         "dosage": ""
       },
       {
@@ -38,7 +41,8 @@
         "product_type": "Feeds",
         "quantity": "5",
         "unit": "pouches",
-        "exp_date": "2020-10-13",
+        "date_exp": "2020-10-13",
+        "date_received": "2020-09-26",
         "dosage": "thrice a week"
       },
       {
@@ -48,7 +52,8 @@
         "product_type": "Vaccine",
         "quantity": "9",
         "unit": "bottles",
-        "exp_date": "2020-11-17",
+        "date_exp": "2020-11-17",
+        "date_received": "2020-09-07",
         "dosage": "twice a week"
       },
       {
@@ -58,7 +63,8 @@
         "product_type": "Feeds",
         "quantity": "2",
         "unit": "sacks",
-        "exp_date": "2021-02-14",
+        "date_exp": "2021-02-14",
+        "date_received": "2021-01-01",
         "dosage": "once a month"
       }
     ]
