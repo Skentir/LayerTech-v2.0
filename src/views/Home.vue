@@ -154,6 +154,9 @@ export default {
     top: 13px;
     left: 20px;
     background-color: white;
+    font-size: 20px;
+    padding-left: 5px;
+    padding-right: 5px;
   }
 
   .alerts > div > div.alerts-box{
@@ -178,13 +181,14 @@ export default {
 
   .alerts-box > .alert{
     margin-bottom: 5px;
-    padding: 5px;
+    padding: 7px;
     border-radius: 5px;
     vertical-align: center;
   }
 
   .alerts-box > .alert > p{
     margin: auto;
+    font-size: 20px;
   }
 
   .alerts-box > .alert.alert-red{
