@@ -194,4 +194,8 @@ export default {
   .alerts-box > .alert.alert-yellow{
     background-color: #FCF5B7;
   }
+
+  .nav-icons{
+    display: flex;
+  }
 </style>
