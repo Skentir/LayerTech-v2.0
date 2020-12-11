@@ -1,14 +1,29 @@
 <template>
+<div>
+  <Navbar />
   <v-app id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
+    <div class="content-wrap">
       <router-link to="/suppliers">Suppliers</router-link> |
       <router-link to="/employees">Employees</router-link> |
       <router-link to="/operations">Operations</router-link>
+      <router-view/>
     </div>
-    <router-view/>
+      <v-footer id="footer">
+    </v-footer>
   </v-app>
+</div>
 </template>
+
+<script>
+import Navbar from '@/components/layout/Navbar.vue';
+
+export default {
+  name: 'App',
+  components: {
+    Navbar,
+  },
+};
+</script>
 
 <style lang="scss">
 #app {
@@ -19,18 +34,22 @@
   color: #2c3e50;
   margin-left: 4vw;
   margin-right: 4vw;
+  position: relative;
+  min-height: 100vh;
 }
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+.content-wrap {
+  padding-bottom: 5vh;
 }
+
+#footer {
+  position: absolute;
+  background-color: #C4C4C4;
+  bottom: 0;
+  width: 100vw;
+  height: 3.5rem;
+  margin-left: -4vw;
+  margin-right: -4vw;
+}
+
 </style>
