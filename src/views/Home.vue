@@ -1,48 +1,38 @@
 <template>
   <div class="home">
-<<<<<<< HEAD
-    <img alt="Vue logo" src="../assets/logo.png">
-<<<<<<< HEAD
-    <b-alert show>Default Alert</b-alert> <!-- this is a bootstrap vue component -->
-    <Table/>
-=======
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
->>>>>>> parent of 8c7e8b3... init
-=======
     <v-row>
       <div class="image-banner">
-        <v-col cols="6" class="farm-title">
-            Farm Title Here
-        </v-col>
-        <v-col class="location-title">
-          Location Here
-        </v-col>
+        <v-row no-gutters>
+          <v-col cols="6" class="farm-title" tag="span">
+            <span id="farm-title">Farm Title Here</span>
+          </v-col>
+          <v-col cols="4" class="location-title" tag="span">
+            <span id="location-title">Location Here</span>
+          </v-col>
+        </v-row>
+      </div>
+      <div class="content">
+        <div class="alerts">
+
+        </div>
+        <div class="quick-nav">
+        </div>
       </div>
     </v-row>
->>>>>>> e8eae7b4627af0a51e88d46c1dc2bd5cab44cd26
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-<<<<<<< HEAD
-import HelloWorld from '@/components/HelloWorld.vue';
-=======
->>>>>>> e8eae7b4627af0a51e88d46c1dc2bd5cab44cd26
 
 export default {
   name: 'Home',
   components: {
-<<<<<<< HEAD
-    HelloWorld,
-=======
 
   },
   data() {
     return {
 
     };
->>>>>>> e8eae7b4627af0a51e88d46c1dc2bd5cab44cd26
   },
 };
 </script>
@@ -50,7 +40,7 @@ export default {
 <style scoped>
   .image-banner {
     width: 100%;
-    height: 55%;
+    height: 40%;
     position: absolute;
     top: 0;
     left: 0;
@@ -67,14 +57,16 @@ export default {
     position: absolute;
     bottom:3px;
     left:3px;
+    text-align: left;
   }
 
   .location-title {
-    font-weight: bold;
+    font-weight: normal;
     color: rgb(255, 255, 255);
     font-size: 16px;
     position: absolute;
     bottom:3px;
     right:3px;
+    text-align: right;
   }
 </style>
