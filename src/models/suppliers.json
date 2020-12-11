@@ -7,9 +7,9 @@
         "value": "id"
       },
       { "text": "Supplier Name", "value":"supplier_name"},
-      { "text": "Suppliers Files Link", "value":"files_link"},
-      { "text": "Contact Number", "value":"contact_num"},
-      { "text": "Email", "value":"email"},
+      { "text": "Suppliers Files Link", "value":"files_link", "sortable": false },
+      { "text": "Contact Number", "value":"contact_num", "sortable": false },
+      { "text": "Email", "value":"email", "sortable": false },
       { "text": "Company Name", "value":"company_name"},
       { "text": "Position in Company", "value":"position"},
       { "text": "Actions", "value": "actions", "sortable": false }
