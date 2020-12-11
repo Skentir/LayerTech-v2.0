@@ -7,8 +7,6 @@
 <script>
 // @ is an alias to /src
 
-import dessertData from '@/models/desserts.json';
-
 export default {
   name: 'Home',
   components: {
@@ -16,7 +14,6 @@ export default {
   data() {
     return {
       tableTitle: 'Nutrition',
-      componentData: dessertData,
     };
   },
 };
