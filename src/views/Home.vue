@@ -85,7 +85,9 @@ export default {
   },
   data() {
     return {
-
+      accountingNotifIsEmpty: false,
+      warehouseNotifIsEmpty: true,
+      operationsNotifIsEmpty: false,
     };
   },
 };
@@ -140,6 +142,7 @@ export default {
   .content > div > p.heading{
     font-size: 36px;
     font-weight: bold;
+    margin-bottom: 0px;
   }
 
   .alerts > div > span.label{
