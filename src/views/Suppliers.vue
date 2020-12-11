@@ -14,7 +14,7 @@
 // @ is an alias to /src
 import Table from '@/components/Table.vue';
 import PageTemplate from '@/components/PageTemplate.vue';
-import suppliersData from '@/models/employees.json';
+import suppliersData from '@/models/suppliers.json';
 import addSupplier from '@/components/FormSupplier.vue';
 
 export default {
