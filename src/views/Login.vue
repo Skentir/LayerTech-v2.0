@@ -12,7 +12,7 @@
             outlined="true" placeholder="Username"></v-text-field>
             <v-text-field class="tField" v-model="password" background-color="rgba(255,255,255,1)"
             outlined="true" placeholder="Password"></v-text-field>
-            <v-btn id="login_btn" color="rgba(4,35,178,1)" class="lButton"
+            <v-btn id="login-btn" color="rgba(4,35,178,1)" class="lButton"
             elevation="2">Log In</v-btn>
             <br>
             <br>
@@ -48,11 +48,15 @@ export default {
     padding: 5%;
 }
 
+#login-btn{
+  color: #FFFFFF;
+}
+
 .loginWidget{
     text-align: center;
     background-color: #D7EEF3;
-    margin-left: 30%;
-    margin-right: 30%;
+    margin-left: 32%;
+    margin-right: 32%;
     padding-top: 5%;
     padding-left: 5%;
     padding-right: 5%;
