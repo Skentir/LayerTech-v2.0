@@ -16,7 +16,8 @@
     { "text": "Date Recieved", "value": "dateRecieved"},
     { "text": "Person in-charge", "value": "personInCharge"},
     { "text": "Section Assigned", "value": "sectionAssigned"},
-    { "text": "Building Assigned", "value": "buildingAssigned"}
+    { "text": "Building Assigned", "value": "buildingAssigned"},
+    { "text": "Actions", "value": "actions", "sortable": false }
   ],
   "data": [
     {
