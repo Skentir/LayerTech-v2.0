@@ -49,7 +49,7 @@ export default {
     margin-left: 15px;
 }
 #home {
-    margin-left: 12px;
+    margin-left: 10px;
     margin-top: 6px;
 }
 #home a{
@@ -59,7 +59,7 @@ export default {
 }
 
 #user {
-    margin-top: 5px;
+    margin-top: 7px;
     margin-right: 10px;
     font-weight: bold;
 }
