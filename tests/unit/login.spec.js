@@ -30,7 +30,6 @@ describe('Login.vue', () => {
 
   it('reveals an error message when login failed due to incorrect credentials', async () => {
     const wrapper = mountFunction();
-    
     await wrapper.find('#username_tfield').setValue('admin123');
     await wrapper.find('#password_tfield').setValue('wrongPassword');
     await wrapper.find('form').trigger('submit.prevent');
@@ -40,12 +39,30 @@ describe('Login.vue', () => {
   });
 
   it('login successful', async () => {
-    const wrapper = mountFunction();
+    const mockRoute = {
+      params: {
+        id: 1,
+      },
+    };
+    const mockRouter = {
+      push: jest.fn(),
+    };
+
+    const wrapper = mount(Login, {
+      localVue,
+      vuetify,
+      global: {
+        mocks: {
+          $route: mockRoute,
+          $router: mockRouter,
+        },
+      },
+    });
 
     await wrapper.find('#username_tfield').setValue('admin123');
     await wrapper.find('#password_tfield').setValue('correctPassword');
     await wrapper.find('form').trigger('submit.prevent');
 
-    expect(window.location.href).toBe('/home');
+    expect(mockRouter.push).toHaveBeenCalledWith('/home');
   });
 });
