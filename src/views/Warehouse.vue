@@ -1,6 +1,7 @@
 <template>
   <div class="operations">
     <PageTemplate :pageInfo="pageInfo"/>
+    <!-- table, may add scrollbar/overflow if too tight -->
     <v-data-table
       :headers="this.componentData[0].headers"
       :items="this.componentData[0].data"
