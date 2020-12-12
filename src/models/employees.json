@@ -17,7 +17,8 @@
         "last_name": "Alba",
         "number": "09982503661",
         "department": "Logistics",
-        "role": "Operations"
+        "role": "Operations",
+        "password": "123456"
       },
       {
         "item_id": "02",
@@ -26,7 +27,8 @@
         "last_name": "Samson",
         "number": "09982503662",
         "department": "Logistics",
-        "role": "Chickens"
+        "role": "Chickens",
+        "password": "123456"
       },
       {
         "item_id": "03",
@@ -35,7 +37,8 @@
         "last_name": "Amazon",
         "number": "09982503663",
         "department": "Logistics",
-        "role": "Warehouse"
+        "role": "Warehouse",
+        "password": "123456"
       },
       {
         "item_id": "04",
@@ -44,7 +47,8 @@
         "last_name": "Glero",
         "number": "09982503664",
         "department": "Logistics",
-        "role": "Operations"
+        "role": "Operations",
+        "password": "123456"
       },
       {
         "item_id": "05",
@@ -53,7 +57,18 @@
         "last_name": "Momo",
         "number": "09982503665",
         "department": "Logistics",
-        "role": "Warehouse"
+        "role": "Warehouse",
+        "password": "123456"
+      },
+      {
+        "item_id": "06",
+        "username": "admin123",
+        "first_name": "Joel",
+        "last_name": "Cruz",
+        "number": "09982503667",
+        "department": "Logistics",
+        "role": "Warehouse",
+        "password": "correctPassword"
       }    
     ]
 }]
