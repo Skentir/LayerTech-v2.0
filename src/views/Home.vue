@@ -68,39 +68,39 @@
         <div class="quick-nav">
           <p class="heading">Quick Navigation</p>
           <div class="nav-icons"> <!-- Navigation Buttons -->
-            <a href="">
-              <div id="nav-accounting" class="nav-button">
-                <span class="nav-label">Accounting</span>
-              </div>
-            </a>
-            <a href="">
-              <div id="nav-warehouse" class="nav-button">
-                <span class="nav-label">Warehouse</span>
-              </div>
-            </a>
-            <a href="">
-              <div id="nav-operations" class="nav-button">
-                <span class="nav-label">Operations</span>
-              </div>
-            </a>
-            <a href="#/Employees">
+            <a href="#/suppliers">
               <div id="nav-suppliers" class="nav-button">
                 <span class="nav-label">Suppliers</span>
               </div>
             </a>
-            <a href="">
-              <div id="nav-transactions" class="nav-button">
-                <span class="nav-label">Transactions</span>
+            <a href="#/warehouse">
+              <div id="nav-warehouse" class="nav-button">
+                <span class="nav-label">Warehouse</span>
+              </div>
+            </a>
+            <a href="#/operations">
+              <div id="nav-operations" class="nav-button">
+                <span class="nav-label">Operations</span>
+              </div>
+            </a>
+            <a href="#/chickens">
+              <div id="nav-chickens" class="nav-button">
+                <span class="nav-label">Chickens</span>
+              </div>
+            </a>
+            <a href="#/employees">
+              <div id="nav-employees" class="nav-button">
+                <span class="nav-label">Manage Employees</span>
               </div>
             </a>
             <a href="">
-              <div id="nav-reports" class="nav-button">
-                <span class="nav-label">Reports</span>
+              <div class="nav-button">
+                <span class="nav-label"></span>
               </div>
             </a>
           </div>
         </div>
-      </div>
+    </div>
   </div>
 </template>
 
@@ -249,11 +249,50 @@ export default {
   }
 
   .nav-button{
+    background: grey;
+    background-position: center center;
+    background-size: cover;
     border-radius: 6px;
     width: 25vw;
     height: 30vh;
-    background-image: linear-gradient(#FFFFFF, #041A7D);
+    border-radius: 6px;
+    display: flex;
     position: relative;
+  }
+
+  #nav-chickens {
+    background: linear-gradient(rgb(255,0,0,0), rgb(4,26,125,1)),
+    url("../assets/images/Home-Chickens Card.jpg");
+    background-position: center center;
+    background-size: cover;
+  }
+
+  #nav-suppliers {
+    background: linear-gradient(rgb(255,0,0,0), rgb(4,26,125,1)),
+    url("../assets/images/Home-Suppliers Card.jpg");
+    background-position: center center;
+    background-size: cover;
+  }
+
+  #nav-warehouse {
+    background: linear-gradient(rgb(255,0,0,0), rgb(4,26,125,1)),
+    url("../assets/images/Home-Warehouse Card.jpg");
+    background-position: center center;
+    background-size: cover;
+  }
+
+  #nav-employees {
+    background: linear-gradient(rgb(255,0,0,0), rgb(4,26,125,1)),
+    url("../assets/images/Home-Manage Employees Card.jpg");
+    background-position: center center;
+    background-size: cover;
+  }
+
+  #nav-operations {
+    background: linear-gradient(rgb(255,0,0,0), rgb(4,26,125,1)),
+    url("../assets/images/Home-Operations Card.jpg");
+    background-position: center center;
+    background-size: cover;
   }
 
   .nav-label{
