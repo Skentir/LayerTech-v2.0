@@ -1,7 +1,7 @@
 <template>
   <div id="login">
     <div class="loginWidget">
-        <v-form>
+        <v-form @submit.prevent="handleSubmit">
             <img id="company-logo" src="..\assets\undraw_nature_m5ll 1.png">
             <h1 id="company-name">LayerTech</h1>
             <br>
@@ -12,11 +12,11 @@
             outlined="true" placeholder="Username"></v-text-field>
             <v-text-field class="tField" v-model="password" background-color="rgba(255,255,255,1)"
             outlined="true" placeholder="Password"></v-text-field>
-            <v-btn id="login-btn" color="rgba(4,35,178,1)" class="lButton"
+            <v-btn type="submit" id="login-btn" color="rgba(4,35,178,1)" class="lButton"
             elevation="2">Log In</v-btn>
             <br>
             <br>
-            <h3 id="error-msg" v-if="hasError">Error!</h3> <!-- Error message container -->
+            <h3 id="error-msg" v-if="hasError">The username and password you entered did not match our records. Please double-check and try again.</h3> <!-- Error message container -->
         </v-form>
     </div>
   </div>
@@ -33,7 +33,13 @@ export default {
       username: null,
       password: null,
       hasError: false, // for whether status message will show or not
+      submitted: false,
     };
+  },
+  methods: {
+    handleSubmit() {
+      this.submitted = true;
+    },
   },
 };
 </script>
