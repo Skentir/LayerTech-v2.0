@@ -219,7 +219,7 @@
 
 <script>
 import PageTemplate from '@/components/PageTemplate.vue';
-import operationsData from '@/models/operations.json';
+import warehouseData from '@/models/warehouse.json';
 
 export default {
   components: {
@@ -227,8 +227,8 @@ export default {
   },
   data: () => ({
     pageInfo: {
-      title: 'Operations',
-      description: 'Track inventory of operations here. This page contains pulled out items from the warehouse.',
+      title: 'Warehouse',
+      description: 'Track inventory of warehouse here. This page contains general information about all items within the farm.',
     },
     search: '',
     tableTitle: 'Inventory',
@@ -281,7 +281,7 @@ export default {
       Assigns fetched data to local reference inside the component
     */
     initialize() {
-      this.componentData = operationsData;
+      this.componentData = warehouseData;
     },
     /*
       Copies the data to editedItem to display on dialog.
