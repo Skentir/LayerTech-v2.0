@@ -196,7 +196,7 @@ export default {
   data: () => ({
     pageInfo: {
       title: 'Employees',
-      description: 'Track your employees here. This page contains the information of every employee.',
+      description: 'Track your employees here. This page contains the information of every employee. testing CI',
     },
     search: '',
     tableTitle: 'Employee',
