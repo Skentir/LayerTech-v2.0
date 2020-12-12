@@ -24,6 +24,8 @@
 
 <script>
 // @ is an alias to /src
+import employeesData from '@/models/employees.json';
+
 export default {
   name: 'Login',
   components: {
@@ -34,6 +36,7 @@ export default {
       password: null,
       hasError: false, // for whether status message will show or not
       submitted: false,
+      userData: employeesData,
     };
   },
   methods: {
