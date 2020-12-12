@@ -1,49 +1,56 @@
 [{
     "headers": [
+      { "text": "Item ID", "value":"item_id"},
       { "text": "Username", "value":"username"},
-      { "text": "First Name", "value":"firstname"},
-      { "text": "Last Name", "value":"lastname"},
+      { "text": "First Name", "value":"first_name"},
+      { "text": "Last Name", "value":"last_name"},
       { "text": "Contact Number", "value":"number"},
       { "text": "Department", "value":"department"},
-      { "text": "Role", "value":"role"}
+      { "text": "Role", "value":"role"},
+      { "text": "Actions", "value": "actions", "sortable": false }
     ],
     "data": [
       {
+        "item_id": "01",
         "username": "employee1",
-        "firstname": "Axel",
-        "lastname": "Alba",
+        "first_name": "Axel",
+        "last_name": "Alba",
         "number": "09982503661",
         "department": "Logistics",
         "role": "Operations"
       },
       {
+        "item_id": "02",
         "username": "employee2",
-        "firstname": "Alex",
-        "lastname": "Samson",
+        "first_name": "Alex",
+        "last_name": "Samson",
         "number": "09982503662",
         "department": "Logistics",
         "role": "Chickens"
       },
       {
+        "item_id": "03",
         "username": "employee3",
-        "firstname": "Lexa",
-        "lastname": "Amazon",
+        "first_name": "Lexa",
+        "last_name": "Amazon",
         "number": "09982503663",
         "department": "Logistics",
         "role": "Warehouse"
       },
       {
+        "item_id": "04",
         "username": "employee4",
-        "firstname": "Goo",
-        "lastname": "Glero",
+        "first_name": "Goo",
+        "last_name": "Glero",
         "number": "09982503664",
         "department": "Logistics",
         "role": "Operations"
       },
       {
+        "item_id": "05",
         "username": "employee5",
-        "firstname": "Mama",
-        "lastname": "Momo",
+        "first_name": "Mama",
+        "last_name": "Momo",
         "number": "09982503665",
         "department": "Logistics",
         "role": "Warehouse"
