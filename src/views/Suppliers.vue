@@ -109,10 +109,6 @@
         </v-icon>
       </template>
     </v-data-table>
-
-  <div class="supplier">
-    <h1>This is a suppliers page</h1>
-
   </div>
 </template>
 

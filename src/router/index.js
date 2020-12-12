@@ -5,7 +5,6 @@ import Employees from '../views/Employees.vue';
 import Suppliers from '../views/Suppliers.vue';
 import Operations from '../views/Operations.vue';
 
-
 Vue.use(VueRouter);
 
 const routes = [
