@@ -1,0 +1,71 @@
+[{
+    "headers": [
+      { "text": "Item ID", "value":"item_id"},
+      { "text": "Serial ID", "value":"serial_id"},
+      { "text": "Item Name", "value":"item_name"},
+      { "text": "Product Type", "value":"product_type"},
+      { "text": "Quantity", "value":"quantity"},
+      { "text": "Unit", "value":"unit"},
+      { "text": "Expiration Date", "value":"date_exp"},
+      { "text": "Received Date", "value":"date_received"},
+      { "text": "Dosage", "value":"dosage"},
+      { "text": "Actions", "value": "actions", "sortable": false }
+    ],
+    "data": [
+      {
+        "item_id": "01",
+        "serial_id": "V1",
+        "item_name": "E. coli vaccine",
+        "product_type": "Vaccine",
+        "quantity": "20",
+        "unit": "bottles",
+        "date_exp": "2020-12-25",
+        "date_received": "2020-10-12",
+        "dosage": "once a week"
+      },
+      {
+        "item_id": "02",
+        "serial_id": "F1",
+        "item_name": "Grower (B-Meg Integra 2000)",
+        "product_type": "Feeds",
+        "quantity": "12",
+        "unit": "sacks",
+        "date_exp": "2021-01-12",
+        "date_received": "2020-11-09",
+        "dosage": ""
+      },
+      {
+        "item_id": "03",
+        "serial_id": "F2",
+        "item_name": "Chick Booster Sagupaan",
+        "product_type": "Feeds",
+        "quantity": "5",
+        "unit": "pouches",
+        "date_exp": "2020-10-13",
+        "date_received": "2020-09-26",
+        "dosage": "thrice a week"
+      },
+      {
+        "item_id": "04",
+        "serial_id": "V2",
+        "item_name": "Ambroxitil",
+        "product_type": "Vaccine",
+        "quantity": "9",
+        "unit": "bottles",
+        "date_exp": "2020-11-17",
+        "date_received": "2020-09-07",
+        "dosage": "twice a week"
+      },
+      {
+        "item_id": "05",
+        "serial_id": "F3",
+        "item_name": "Booster Malakas",
+        "product_type": "Feeds",
+        "quantity": "2",
+        "unit": "sacks",
+        "date_exp": "2021-02-14",
+        "date_received": "2021-01-01",
+        "dosage": "once a month"
+      }
+    ]
+}]
