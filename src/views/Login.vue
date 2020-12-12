@@ -2,7 +2,7 @@
   <div id="login">
     <div class="loginWidget">
         <v-form @submit.prevent="handleSubmit">
-            <img id="company-logo" src="..\assets\undraw_nature_m5ll 1.png">
+            <img id="company-logo" src="../assets/undraw_nature_m5ll 1.png">
             <h1 id="company-name">LayerTech</h1>
             <br>
             <h3 class="splash-text"
@@ -19,6 +19,7 @@
             <v-text-field
               id="password_tfield"
               class="tField"
+              :type="'password'"
               v-model="password"
               background-color="rgba(255,255,255,1)"
               outlined
@@ -116,5 +117,6 @@ h3.splash-text{
 
 h3#error-msg{
   color: red;
+  font-weight: normal;
 }
 </style>
