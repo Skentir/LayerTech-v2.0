@@ -5,6 +5,7 @@
     <div class="content-wrap">
       <router-link to="/suppliers">Suppliers</router-link> |
       <router-link to="/employees">Employees</router-link> |
+      <router-link to="/login">Login</router-link> |
       <router-link to="/operations">Operations</router-link>
       <router-view/>
     </div>
