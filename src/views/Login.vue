@@ -71,9 +71,7 @@ export default {
       if (this.username === this.account.username && this.password === this.account.password) {
         this.authenticated = true;
         this.$router.push('/home'); // redirect to /home
-      }
-      //if  incorrect credentials
-      else {
+      } else { // if  incorrect credentials
         this.hasError = true;
       }
     },
