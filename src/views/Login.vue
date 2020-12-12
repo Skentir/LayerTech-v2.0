@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable max-len */
 <template>
   <div id="login">
     <div class="loginWidget">
@@ -17,17 +15,28 @@
               background-color="rgba(255,255,255,1)"
               outlined
               placeholder="Username"
-            >
-            </v-text-field>
-            <v-text-field class="tField" v-model="password" background-color="rgba(255,255,255,1)"
-            outlined placeholder="Password"></v-text-field>
-            <v-btn type="submit" id="login-btn" color="rgba(4,35,178,1)" class="lButton"
-            elevation="2">Log In</v-btn>
+            ></v-text-field>
+            <v-text-field
+              id="password_tfield"
+              class="tField"
+              v-model="password"
+              background-color="rgba(255,255,255,1)"
+              outlined
+              placeholder="Password"
+            ></v-text-field>
+            <v-btn
+              type="submit"
+              id="login-btn"
+              color="rgba(4,35,178,1)"
+              class="lButton"
+              elevation="2"
+            > Log In </v-btn>
             <br>
             <br>
+            <!-- Error message container -->
             <h3 id="error-msg" v-if="hasError">
               {{errorMsg}}
-            </h3> <!-- Error message container -->
+            </h3>
         </v-form>
     </div>
   </div>
