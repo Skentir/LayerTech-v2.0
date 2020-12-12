@@ -8,15 +8,35 @@
             <h3 class="splash-text"
             >An inventory and stock management web application for your farm</h3>
             <br>
-            <v-text-field class="tField" v-model="username" background-color="rgba(255,255,255,1)"
-            outlined="true" placeholder="Username"></v-text-field>
-            <v-text-field class="tField" v-model="password" background-color="rgba(255,255,255,1)"
-            outlined="true" placeholder="Password"></v-text-field>
-            <v-btn type="submit" id="login-btn" color="rgba(4,35,178,1)" class="lButton"
-            elevation="2">Log In</v-btn>
+            <v-text-field
+              id="username_tfield"
+              class="tField"
+              v-model="username"
+              background-color="rgba(255,255,255,1)"
+              outlined
+              placeholder="Username"
+            ></v-text-field>
+            <v-text-field
+              id="password_tfield"
+              class="tField"
+              v-model="password"
+              background-color="rgba(255,255,255,1)"
+              outlined
+              placeholder="Password"
+            ></v-text-field>
+            <v-btn
+              type="submit"
+              id="login-btn"
+              color="rgba(4,35,178,1)"
+              class="lButton"
+              elevation="2"
+            > Log In </v-btn>
             <br>
             <br>
-            <h3 id="error-msg" v-if="hasError">The username and password you entered did not match our records. Please double-check and try again.</h3> <!-- Error message container -->
+            <!-- Error message container -->
+            <h3 id="error-msg" v-if="hasError">
+              {{errorMsg}}
+            </h3>
         </v-form>
     </div>
   </div>
@@ -36,12 +56,17 @@ export default {
       password: null,
       hasError: false, // for whether status message will show or not
       submitted: false,
-      userData: employeesData,
+      errorMsg: 'The username and password you entered did not match our records. Please double-check and try again.',
     };
   },
   methods: {
     handleSubmit() {
-      this.submitted = true;
+      /*
+        Handles empty username and password
+      */
+      if (this.username === '' || this.username == null || this.password === '' || this.password == null) {
+        this.hasError = true;
+      }
     },
   },
 };
