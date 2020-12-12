@@ -76,19 +76,57 @@
                 </v-row>
                 <v-row>
                   <v-col
-                    cols="12"
-                    sm="6"
-                    md="6"
+                    cols="3"
+                    sm="3"
+                    md="3"
                   >
                     <v-text-field
-                      id="quantity_text_field"
-                      v-model="editedItem.quantity"
-                      label="Quantity"
+                      id="stock_quantity_text_field"
+                      v-model="editedItem.stock_quantity"
+                      label="In Stock Quantity"
                       required
                     ></v-text-field>
                   </v-col>
                   <v-col
-                    cols="12"
+                    cols="3"
+                    sm="3"
+                    md="3"
+                  >
+                    <v-text-field
+                      id="pulled_out_quantity_text_field"
+                      v-model="editedItem.pulled_out_quantity"
+                      label="Pulled Out Quantity"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col
+                    cols="3"
+                    sm="3"
+                    md="3"
+                  >
+                    <v-text-field
+                      id="liquidated_quantity_text_field"
+                      v-model="editedItem.liquidated_quantity"
+                      label="Liquidated Quantity"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col
+                    cols="3"
+                    sm="3"
+                    md="3"
+                  >
+                    <v-text-field
+                      id="critical_volume_text_field"
+                      v-model="editedItem.critical_volume"
+                      label="Critical Volume"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col
+                    cols="6"
                     sm="6"
                     md="6"
                   >
@@ -98,6 +136,19 @@
                       label="Unit"
                       required
                     ></v-text-field>
+                  </v-col>
+                  <v-col
+                    cols="6"
+                    sm="6"
+                    md="6"
+                  >
+                    <v-select
+                      id="status_select_field"
+                      v-model="editedItem.status"
+                      :items="select_options_status"
+                      label="Status"
+                      required
+                    ></v-select>
                   </v-col>
                 </v-row>
                 <v-row>
@@ -236,11 +287,16 @@ export default {
     dialogDelete: false,
     componentData: [],
     editedIndex: -1,
+    select_options_status: ['In Stock', 'Out of Stock', 'Pulled Out', 'Liquidated'],
     editedItem: {
       item_name: '',
       product_type: '',
-      quantity: 0,
+      stock_quantity: 0,
+      pulled_out_quantity: 0,
+      liquidated_quantity: 0,
+      critical_volume: 0,
       unit: 0,
+      status: '',
       date_exp: new Date().toISOString().substr(0, 10),
       date_received: new Date().toISOString().substr(0, 10),
       dosage: '',
@@ -248,8 +304,12 @@ export default {
     defaultItem: {
       item_name: '',
       product_type: '',
-      quantity: 0,
+      stock_quantity: 0,
+      pulled_out_quantity: 0,
+      liquidated_quantity: 0,
+      critical_volume: 0,
       unit: 0,
+      status: '',
       date_exp: new Date().toISOString().substr(0, 10),
       date_received: new Date().toISOString().substr(0, 10),
       dosage: '',
