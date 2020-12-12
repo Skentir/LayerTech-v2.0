@@ -124,7 +124,7 @@ export default {
   data: () => ({
     pageInfo: {
       title: 'Suppliers',
-      description: ' This is the Suppliers page This is the Suppliers page This is the Suppliers page This is the Suppliers page This is the Suppliers page This is the Suppliers page This is the Suppliers page This is the Suppliers page This is the Suppliers page This is the Suppliers page This is the Suppliers page ',
+      description: ' Track all known suppliers here. This page contains data from all existing suppliers. ',
     },
     search: '',
     tableTitle: 'Suppliers',
