@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Employees from '../views/Employees.vue';
 import Chickens from '../views/Chickens.vue';
+import Operations from '../views/Operations.vue';
 
 Vue.use(VueRouter);
 
@@ -29,6 +30,11 @@ const routes = [
     path: '/chickens',
     name: 'Chickens',
     component: Chickens,
+  },
+  {
+    path: '/operations',
+    name: 'Operations',
+    component: Operations,
   },
 ];
 
