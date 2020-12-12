@@ -93,7 +93,7 @@
                   <v-text-field
                     v-model="editedItem.date_recieved"
                     label="Date"
-                    hint="MM/DD/YYYY format"
+                    hint="YYYY/MM/DD format"
                     persistent-hint
                     prepend-icon="mdi-calendar"
                     v-bind="attrs"
@@ -172,7 +172,7 @@ export default {
   data: () => ({
     pageInfo: {
       title: 'Chickens',
-      description: ' This is the Chickens page This is the Chickens page This is the Chickens page This is the Chickens page This is the Chickens page This is the Chickens page This is the Chickens page This is the Chickens page This is the Chickens page This is the Chickens page This is the Chickens page ',
+      description: ' Track all your chickens here. This page contains all the necessary information about the chickens in the farm. ',
     },
     search: '',
     tableTitle: 'Chickens',
@@ -276,7 +276,7 @@ export default {
         Object.assign(this.componentData[0].data[this.editedIndex], this.editedItem);
       } else {
         // eslint-disable-next-line prefer-template
-        this.editedItem.chicken_id = '0' + (this.componentData[0].data.length + 1).toString();
+        this.editedItem.batch_num = '0' + (this.componentData[0].data.length + 1).toString();
         this.componentData[0].data.push(this.editedItem);
       }
       this.close();
