@@ -1,0 +1,16 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches: [dev]
+
+jobs:
+  test_pull_request:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2 # This action checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it.
+      - uses: actions/setup-node@v1 # This actions installs node
+        with:
+          node-version: 12
+      - run: npm ci # Installs all dependencies
+      - run: npm run test:unit # Run test script
