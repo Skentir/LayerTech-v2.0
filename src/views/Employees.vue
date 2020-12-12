@@ -186,6 +186,7 @@
 
 <script>
 // @ is an alias to /src
+
 import PageTemplate from '@/components/PageTemplate.vue';
 import employeesData from '@/models/employees.json';
 

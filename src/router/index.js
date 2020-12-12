@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Login from '../views/Login.vue';
 import Home from '../views/Home.vue';
 import Employees from '../views/Employees.vue';
+import Suppliers from '../views/Suppliers.vue';
 import Chickens from '../views/Chickens.vue';
 import Operations from '../views/Operations.vue';
 
@@ -13,6 +14,11 @@ const routes = [
     path: '/home',
     name: 'Home',
     component: Home,
+  },
+  {
+    path: '/suppliers',
+    name: 'Suppliers',
+    component: Suppliers,
   },
   {
     path: '/',
