@@ -55,28 +55,26 @@ export default {
       username: null,
       password: null,
       hasError: false, // for whether status message will show or not
-      submitted: false,
+      authenticated: false,
       accounts: employeesData,
-      account: null,
+      account: null, // hardcoded admin account
       errorMsg: 'The username and password you entered did not match our records. Please double-check and try again.',
     };
   },
   methods: {
     handleSubmit() {
-      /*
-        Handles empty username and password
-      */
-      if (this.username === '' || this.username == null || this.password === '' || this.password == null) {
+      // get hardcoded account
+      // eslint-disable-next-line prefer-destructuring
+      this.account = this.accounts[0].data[5];
+
+      // if correct credentials
+      if (this.username === this.account.username && this.password === this.account.password) {
+        this.authenticated = true;
+        this.$router.push('/home'); // redirect to /home
+      }
+      //if  incorrect credentials
+      else {
         this.hasError = true;
-      } else {
-        // eslint-disable-next-line no-restricted-syntax
-        // eslint-disable-next-line guard-for-in
-        // eslint-disable-next-line prefer-destructuring
-        this.account = this.accounts[0].data[5];
-        if (this.username === this.account.username && this.password === this.account.password) {
-          this.$router.push('/home');
-          this.submitted = true;
-        }
       }
     },
   },

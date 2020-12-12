@@ -39,30 +39,11 @@ describe('Login.vue', () => {
   });
 
   it('login successful', async () => {
-    const mockRoute = {
-      params: {
-        id: 1,
-      },
-    };
-    const mockRouter = {
-      push: jest.fn(),
-    };
-
-    const wrapper = mount(Login, {
-      localVue,
-      vuetify,
-      global: {
-        mocks: {
-          $route: mockRoute,
-          $router: mockRouter,
-        },
-      },
-    });
-
+    const wrapper = mountFunction();
     await wrapper.find('#username_tfield').setValue('admin123');
     await wrapper.find('#password_tfield').setValue('correctPassword');
     await wrapper.find('form').trigger('submit.prevent');
 
-    expect(mockRouter.push).toHaveBeenCalledWith('/home');
+    expect(wrapper.vm.authenticated).toBe(true);
   });
 });
