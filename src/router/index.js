@@ -6,6 +6,7 @@ import Employees from '../views/Employees.vue';
 import Suppliers from '../views/Suppliers.vue';
 import Chickens from '../views/Chickens.vue';
 import Operations from '../views/Operations.vue';
+import Warehouse from '../views/Warehouse.vue';
 
 Vue.use(VueRouter);
 
@@ -39,6 +40,11 @@ const routes = [
     path: '/operations',
     name: 'Operations',
     component: Operations,
+  },
+  {
+    path: '/warehouse',
+    name: 'Warehouse',
+    component: Warehouse,
   },
 ];
 
