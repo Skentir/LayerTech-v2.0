@@ -18,29 +18,67 @@
           <v-row id="accounting-warehouse-group">
             <v-col cols="6" id="accounting-alerts" class="alerts-group"> <!-- Accounting alerts -->
               <span class="label">Accounting</span>
-              <div class="alerts-box">
-                <div class="alert alert-red">
-                  <span class="icon-notif"></span><span>This is a notification</span>
+              <div class="alerts-box"
+              v-if="accountingAlerts.length > 0"
+              >
+                <div
+                v-for="alert in accountingAlerts"
+                :key="alert.alert_id"
+                class="alert"
+                v-bind:class="{'alert-yellow':(alert.value_left > 1),
+                'alert-red':(alert.value_left <= 1)}"
+                >
+                    <span class="icon-notif"></span>
+                    <span
+                    v-if="alert.value_left >= 0"
+                    >{{alert.item_name}} is due in {{alert.value_left}} days.
+                    </span>
+                    <span
+                    v-else-if="alert.value_left < 0"
+                    >{{alert.item_name}} is overdue by {{alert.value_left * -1}} days.
+                    </span>
                 </div>
-                <div class="alert alert-yellow">
-                  <span class="icon-notif"></span><span>This is a notification</span>
-                </div>
-                <div class="alert alert-yellow">
-                  <span class="icon-notif"></span><span>This is a notification</span>
+              </div>
+              <div class="alerts-box"
+              v-else>
+                <div class="alert">
+                <span>No new notifications to show.</span>
                 </div>
               </div>
             </v-col>
             <v-col cols="6" id="warehouse-alerts" class="alerts-group"> <!-- Warehouse alerts-->
               <span class="label">Warehouse</span>
-              <div class="alerts-box">
-                <div class="alert alert-yellow">
-                  <span class="icon-notif"></span><span>This is a notification</span>
+              <div class="alerts-box"
+              v-if="warehouseAlerts.length > 0"
+              >
+                <div
+                v-for="alert in warehouseAlerts"
+                :key="alert.alert_id"
+                class="alert"
+                v-bind:class="{'alert-yellow':(alert.value_left > 1),
+                'alert-red':(alert.value_left <= 1 || alert.type === 'critical')}"
+                >
+                    <span class="icon-notif"></span>
+                    <span
+                    v-if="alert.type === 'expiration' && alert.value_left >= 0"
+                    >Batch {{alert.batch_no}} of {{alert.item_name}}
+                     expires in {{alert.value_left}} days.
+                    </span>
+                    <span
+                    v-else-if="alert.type === 'expiration' && alert.value_left < 0"
+                    >Batch {{alert.batch_no}} of {{alert.item_name}}
+                     has expired {{alert.value_left * -1}} days ago.
+                    </span>
+                    <span
+                    v-else-if="alert.type === 'critical'"
+                    >Batch {{alert.batch_no}} of {{alert.item_name}} is almost out of stock.
+                    </span>
                 </div>
-                <div class="alert alert-red">
-                  <span class="icon-notif"></span><span>This is a notification</span>
-                </div>
-                <div class="alert alert-yellow">
-                  <span class="icon-notif"></span><span>This is a notification</span>
+              </div>
+              <div class="alerts-box"
+              v-else>
+                <div class="alert">
+                <span>No new notifications to show.</span>
                 </div>
               </div>
             </v-col>
@@ -48,18 +86,37 @@
           <v-row>
             <v-col cols="12" id="operations-alerts" class="alerts-group"> <!-- Operations alerts -->
               <span class="label">Operations</span>
-              <div class="alerts-box">
-                <div class="alert alert-yellow">
-                  <span class="icon-notif"></span><span>This is a notification</span>
+              <div class="alerts-box"
+              v-if="operationsAlerts.length > 0"
+              >
+                <div
+                v-for="alert in operationsAlerts"
+                :key="alert.alert_id"
+                class="alert"
+                v-bind:class="{'alert-yellow':(alert.value_left > 1),
+                'alert-red':(alert.value_left <= 1)}"
+                >
+                    <span class="icon-notif"></span>
+                    <span
+                    v-if="alert.type === 'expiration' && alert.value_left >= 0"
+                    >Batch {{alert.batch_no}} of {{alert.item_name}}
+                     expires in {{alert.value_left}} days.
+                    </span>
+                    <span
+                    v-else-if="alert.type === 'expiration' && alert.value_left < 0"
+                    >Batch {{alert.batch_no}} of {{alert.item_name}}
+                     has expired {{alert.value_left * -1}} days ago.
+                    </span>
+                    <span
+                    v-else-if="alert.type === 'critical'"
+                    >Batch {{alert.batch_no}} of {{alert.item_name}} is almost out of stock.
+                    </span>
                 </div>
-                <div class="alert alert-red">
-                  <span class="icon-notif"></span><span>This is a notification</span>
-                </div>
-                <div class="alert alert-yellow">
-                  <span class="icon-notif"></span><span>This is a notification</span>
-                </div>
-                <div class="alert alert-red">
-                  <span class="icon-notif"></span><span>This is a notification</span>
+              </div>
+              <div class="alerts-box"
+              v-else>
+                <div class="alert">
+                <span>No new notifications to show.</span>
                 </div>
               </div>
             </v-col>
@@ -105,16 +162,34 @@
 </template>
 
 <script>
+import alertsData from '@/models/alerts.json';
+
 export default {
   name: 'Home',
   components: {
   },
   data() {
     return {
-      accountingNotifIsEmpty: false,
-      warehouseNotifIsEmpty: true,
-      operationsNotifIsEmpty: false,
+      accountingAlerts: [],
+      warehouseAlerts: [],
+      operationsAlerts: [],
     };
+  },
+  created() {
+    this.initialize();
+  },
+  methods: {
+    /*
+      Assigns fetched data to local reference inside the component
+    */
+    initialize() {
+      // this.accountingAlerts = alertsData[0].accounting;
+      this.warehouseAlerts = alertsData[0].warehouse;
+      this.operationsAlerts = alertsData[0].operations;
+      this.accountingAlerts.sort((a, b) => a.value_left - b.value_left);
+      this.warehouseAlerts.sort((a, b) => a.value_left - b.value_left);
+      this.operationsAlerts.sort((a, b) => a.value_left - b.value_left);
+    },
   },
 };
 </script>
@@ -208,6 +283,10 @@ export default {
     width: 30%;
   }
 
+  .alerts-group{
+    height: 100%;
+  }
+
   .alerts-box > .alert{ /* styles for alerts */
     margin-bottom: 10px;
     margin-top: 10px;
@@ -243,7 +322,8 @@ export default {
 
   .nav-icons > a{
     margin: 2%;
-    padding: 2px;
+    width: 25%;
+    height: 30vh;
   }
 
   .nav-button{
@@ -251,9 +331,9 @@ export default {
     background-position: center center;
     background-size: cover;
     border-radius: 6px;
-    width: 25vw;
-    height: 30vh;
     border-radius: 6px;
+    width: 100%;
+    height: 100%;
     display: flex;
     position: relative;
   }

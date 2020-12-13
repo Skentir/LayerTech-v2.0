@@ -1,0 +1,85 @@
+[{
+    "accounting": [
+        {
+            "alert_id": 3,
+            "item_name": "Rice",
+            "type": "deadline",
+            "batch_no": 0,
+            "value_left": 7
+        },
+        {
+            "alert_id": 1,
+            "item_name": "Rice",
+            "type": "deadline",
+            "batch_no": 0,
+            "value_left": -2
+        },
+        {
+            "alert_id": 2,
+            "item_name": "Pills",
+            "type": "deadline",
+            "batch_no": 0,
+            "value_left": 3
+        }
+    ],
+    "warehouse": [
+        {
+            "alert_id": 1,
+            "item_name": "Feeds",
+            "type": "expiration",
+            "batch_no": 526,
+            "value_left": 7
+        },
+        {
+            "alert_id": 2,
+            "item_name": "Feeds",
+            "type": "expiration",
+            "batch_no": 2,
+            "value_left": -2
+        },
+        {
+            "alert_id": 3,
+            "item_name": "Rice",
+            "type": "expiration",
+            "batch_no": 6,
+            "value_left": 3
+        },
+        {
+            "alert_id": 4,
+            "item_name": "Meat",
+            "type": "critical",
+            "batch_no": 25,
+            "value_left": -365
+        }
+    ],
+    "operations": [
+        {
+            "alert_id": 1,
+            "item_name": "Oxygen",
+            "type": "critical",
+            "batch_no": 67,
+            "value_left": -365
+        },
+        {
+            "alert_id": 2,
+            "item_name": "Nitrogen",
+            "type": "expiration",
+            "batch_no": 4,
+            "value_left": 5
+        },
+        {
+            "alert_id": 3,
+            "item_name": "Rice",
+            "type": "expiration",
+            "batch_no": 42,
+            "value_left": -3
+        },
+        {
+            "alert_id": 4,
+            "item_name": "Beef",
+            "type": "expiration",
+            "batch_no": 25,
+            "value_left": 1
+        }
+    ]
+}]
