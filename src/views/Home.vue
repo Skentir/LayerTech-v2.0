@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <Navbar/>
     <div class="header"> <!-- Header section -->
       <div class="image-banner">
         <v-row no-gutters class="image-banner-text">
@@ -150,7 +151,7 @@
                 <span class="nav-label">Manage Employees</span>
               </div>
             </a>
-            <a href="">
+            <a href="#/home">
               <div class="nav-button">
                 <span class="nav-label"></span>
               </div>
@@ -158,15 +159,19 @@
           </div>
         </div>
     </div>
+    <v-footer id="footer">
+    </v-footer>
   </div>
 </template>
 
 <script>
 import alertsData from '@/models/alerts.json';
+import Navbar from '@/components/layout/Navbar.vue';
 
 export default {
   name: 'Home',
   components: {
+    Navbar,
   },
   data() {
     return {
@@ -238,6 +243,10 @@ export default {
     color: black;
     text-align: left;
     padding: 3%;
+    margin-left: 4vw;
+    margin-right: 4vw;
+    position: relative;
+    min-height: 100vh;
   }
 
   .content > div > p.heading{

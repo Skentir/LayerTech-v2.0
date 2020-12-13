@@ -6,12 +6,12 @@
                 </v-img>
             </div>
             <div class="left-container" id="home">
-                <router-link to="/">Home</router-link>
+                <router-link to="/home">Home</router-link>
             </div>
         </v-col>
         <v-col cols="6">
             <div class="right-container">
-                <v-btn id="logout">
+                <v-btn to ="/" id="logout">
                     Log Out
                 </v-btn>
             </div>

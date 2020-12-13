@@ -1,45 +1,49 @@
 <template>
-  <div id="login">
-    <div class="loginWidget">
-        <v-form @submit.prevent="handleSubmit">
-            <img id="company-logo" src="../assets/undraw_nature_m5ll 1.png">
-            <h1 id="company-name">LayerTech</h1>
-            <br>
-            <h3 class="splash-text"
-            >An inventory and stock management web application for your farm</h3>
-            <br>
-            <v-text-field
-              id="username_tfield"
-              class="tField"
-              v-model="username"
-              background-color="rgba(255,255,255,1)"
-              outlined
-              placeholder="Username"
-            ></v-text-field>
-            <v-text-field
-              id="password_tfield"
-              class="tField"
-              :type="'password'"
-              v-model="password"
-              background-color="rgba(255,255,255,1)"
-              outlined
-              placeholder="Password"
-            ></v-text-field>
-            <v-btn
-              type="submit"
-              id="login-btn"
-              color="rgba(4,35,178,1)"
-              class="lButton"
-              elevation="2"
-            > Log In </v-btn>
-            <br>
-            <br>
-            <!-- Error message container -->
-            <h3 id="error-msg" v-if="hasError">
-              {{errorMsg}}
-            </h3>
-        </v-form>
+  <div>
+    <div id="login">
+      <div class="loginWidget">
+          <v-form @submit.prevent="handleSubmit">
+              <img id="company-logo" src="../assets/undraw_nature_m5ll 1.png">
+              <h1 id="company-name">LayerTech</h1>
+              <br>
+              <h3 class="splash-text"
+              >An inventory and stock management web application for your farm</h3>
+              <br>
+              <v-text-field
+                id="username_tfield"
+                class="tField"
+                v-model="username"
+                background-color="rgba(255,255,255,1)"
+                outlined
+                placeholder="Username"
+              ></v-text-field>
+              <v-text-field
+                id="password_tfield"
+                class="tField"
+                :type="'password'"
+                v-model="password"
+                background-color="rgba(255,255,255,1)"
+                outlined
+                placeholder="Password"
+              ></v-text-field>
+              <v-btn
+                type="submit"
+                id="login-btn"
+                color="rgba(4,35,178,1)"
+                class="lButton"
+                elevation="2"
+              > Log In </v-btn>
+              <br>
+              <br>
+              <!-- Error message container -->
+              <h3 id="error-msg" v-if="hasError">
+                {{errorMsg}}
+              </h3>
+          </v-form>
+      </div>
     </div>
+    <v-footer id="footer">
+    </v-footer>
   </div>
 </template>
 
@@ -83,7 +87,7 @@ export default {
 <style>
 #login{
     background-color: #36409B;
-    height: 100vh;
+    height: 100%;
     width: 100%;
     display: block;
     text-align: center;
