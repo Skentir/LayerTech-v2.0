@@ -1,13 +1,14 @@
 <template>
   <div class="home">
+    <Navbar/>
     <div class="header"> <!-- Header section -->
       <div class="image-banner">
         <v-row no-gutters class="image-banner-text">
           <v-col cols="8" class="farm-title">
-            <span id="farm-title">Guyun Stone Forest</span>
+            <span id="farm-title">{{farmName}}</span>
           </v-col>
           <v-col cols="4" class="location-title">
-            <span id="location-title">Sea of Clouds, Liyue</span>
+            <span id="location-title">{{farmAddress}}</span>
           </v-col>
         </v-row>
       </div>
@@ -150,7 +151,7 @@
                 <span class="nav-label">Manage Employees</span>
               </div>
             </a>
-            <a href="">
+            <a href="#/home">
               <div class="nav-button">
                 <span class="nav-label"></span>
               </div>
@@ -158,18 +159,24 @@
           </div>
         </div>
     </div>
+    <v-footer id="footer">
+    </v-footer>
   </div>
 </template>
 
 <script>
 import alertsData from '@/models/alerts.json';
+import Navbar from '@/components/layout/Navbar.vue';
 
 export default {
   name: 'Home',
   components: {
+    Navbar,
   },
   data() {
     return {
+      farmName: 'Guyun Stone Forest',
+      farmAddress: 'Sea of Clouds, Liyue',
       accountingAlerts: [],
       warehouseAlerts: [],
       operationsAlerts: [],
@@ -238,6 +245,11 @@ export default {
     color: black;
     text-align: left;
     padding: 3%;
+    margin-left: 4vw;
+    margin-right: 4vw;
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: 5%;
   }
 
   .content > div > p.heading{
@@ -310,6 +322,8 @@ export default {
     width: 24px;
     height: 24px;
     background: url("../assets/Icon-Notifications.png");
+    position: relative;
+    top: 4px;
     background-size: cover;
     display: inline-block;
   }
@@ -318,11 +332,12 @@ export default {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+    flex-grow: 1;
   }
 
   .nav-icons > a{
     margin: 2%;
-    width: 25%;
+    width: 29%;
     height: 30vh;
   }
 
@@ -334,7 +349,6 @@ export default {
     border-radius: 6px;
     width: 100%;
     height: 100%;
-    display: flex;
     position: relative;
   }
 
