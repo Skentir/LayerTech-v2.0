@@ -310,6 +310,8 @@ export default {
     width: 24px;
     height: 24px;
     background: url("../assets/Icon-Notifications.png");
+    position: relative;
+    top: 4px;
     background-size: cover;
     display: inline-block;
   }
