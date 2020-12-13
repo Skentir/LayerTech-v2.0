@@ -42,8 +42,6 @@
           </v-form>
       </div>
     </div>
-    <v-footer id="footer">
-    </v-footer>
   </div>
 </template>
 
@@ -91,7 +89,10 @@ export default {
     width: 100%;
     display: block;
     text-align: center;
-    padding: 5%;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 2%;
+    padding-bottom: 2%;
 }
 
 #login-btn{

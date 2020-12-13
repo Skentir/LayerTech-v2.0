@@ -5,10 +5,10 @@
       <div class="image-banner">
         <v-row no-gutters class="image-banner-text">
           <v-col cols="8" class="farm-title">
-            <span id="farm-title">Guyun Stone Forest</span>
+            <span id="farm-title">{{farmName}}</span>
           </v-col>
           <v-col cols="4" class="location-title">
-            <span id="location-title">Sea of Clouds, Liyue</span>
+            <span id="location-title">{{farmAddress}}</span>
           </v-col>
         </v-row>
       </div>
@@ -175,6 +175,8 @@ export default {
   },
   data() {
     return {
+      farmName: 'Guyun Stone Forest',
+      farmAddress: 'Sea of Clouds, Liyue',
       accountingAlerts: [],
       warehouseAlerts: [],
       operationsAlerts: [],
@@ -247,6 +249,7 @@ export default {
     margin-right: 4vw;
     position: relative;
     min-height: 100vh;
+    padding-bottom: 5%;
   }
 
   .content > div > p.heading{
@@ -329,11 +332,12 @@ export default {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+    flex-grow: 1;
   }
 
   .nav-icons > a{
     margin: 2%;
-    width: 25%;
+    width: 29%;
     height: 30vh;
   }
 
@@ -345,7 +349,6 @@ export default {
     border-radius: 6px;
     width: 100%;
     height: 100%;
-    display: flex;
     position: relative;
   }
 

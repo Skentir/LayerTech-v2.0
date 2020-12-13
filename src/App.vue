@@ -27,7 +27,7 @@ export default {
 }
 
 .content-wrap {
-  padding-bottom: 5vh;
+  padding: 0%;
 }
 
 #footer {
