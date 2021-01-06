@@ -1,5 +1,5 @@
 <template>
-  <div class="Suppliers">
+  <div class="chickens">
     <Navbar/>
     <div class="page-container">
       <PageTemplate :pageInfo="pageInfo"/>
@@ -36,46 +36,95 @@
                   v-bind="attrs"
                   v-on="on"
                 >
-                  Add Supplier
+                  Add Chicken
                 </v-btn>
               </v-col>
             </template>
             <v-card>
         <v-card-title>
-          <span class="headline">Add a new Supplier</span>
+          <span class="headline">Add a new Chicken</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12">
+              <v-col cols="6">
                 <v-text-field
-                  v-model="editedItem.supplier_name"
-                  label="Supplier Name" required/>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="editedItem.files_link"
-                  label="Supplier Files Link" required/>
+                  v-model="editedItem.breed"
+                  label="Breed" required/>
               </v-col>
               <v-col cols="6">
                 <v-text-field
-                  v-model="editedItem.contact_num"
-                  label="Contact Number" required/>
+                  v-model="editedItem.chicken_type"
+                  label="Chicken Type" required/>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                  v-model="editedItem.population"
+                  label="Population" required/>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                  v-model="editedItem.mortality_rate"
+                  label="Mortality Rate" required/>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                  v-model="editedItem.morbidity_rate"
+                  label="Morbidity Rate" required/>
               </v-col>
               <v-col cols="6">
                 <v-text-field
-                  v-model="editedItem.email"
-                  label="Email" required/>
+                  v-model="editedItem.feed_requirement"
+                  label="Feed Requirement" required/>
               </v-col>
               <v-col cols="6">
                 <v-text-field
-                  v-model="editedItem.company_name"
-                  label="Company Name" required/>
+                  v-model="editedItem.vaccination_schedule"
+                  label="Vaccination Schedule" required/>
+              </v-col>
+              <v-col cols="6">
+                <v-menu
+                  ref="menu_date_recieved"
+                  v-model="menu_date_recieved"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="editedItem.date_recieved"
+                      label="Date"
+                      hint="YYYY/MM/DD format"
+                      persistent-hint
+                      prepend-icon="mdi-calendar"
+                      v-bind="attrs"
+                      @blur="date = parseDate(dateFormatted)"
+                      v-on="on"
+                      required
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="editedItem.date_recieved"
+                    no-title
+                    @input="menu_date_recieved = false"
+                  ></v-date-picker>
+                </v-menu>
               </v-col>
               <v-col cols="6">
                 <v-text-field
-                  v-model="editedItem.position"
-                  label="Position in Company" required/>
+                  v-model="editedItem.person_in_charge"
+                  label="Person in-Charge" required/>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  v-model="editedItem.section_assigned"
+                  label="Section Assigned" required/>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  v-model="editedItem.building_assigned"
+                  label="Building Assigned" required/>
               </v-col>
             </v-row>
           </v-container>
@@ -118,12 +167,10 @@
 </template>
 
 <script>
-
 import PageTemplate from '@/components/PageTemplate.vue';
-import SuppliersData from '@/models/suppliers.json';
+import ChickensData from '@/models/chickens.json';
 import Navbar from '@/components/layout/Navbar.vue';
 
-// @ is an alias to /src
 export default {
   components: {
     PageTemplate,
@@ -131,11 +178,11 @@ export default {
   },
   data: () => ({
     pageInfo: {
-      title: 'Suppliers',
-      description: ' This page stores the information of all the suppliers that the farm works with. ',
+      title: 'Chickens',
+      description: ' This page is for tracking the information of chickens by batches. ',
     },
     search: '',
-    tableTitle: 'Suppliers',
+    tableTitle: 'Chickens',
     showDialog: false,
     componentData: [],
     editedIndex: -1,
@@ -144,25 +191,37 @@ export default {
         Below are temporary data that will be filled in
         for the edit form
       */
-      supplier_name: '',
-      files_link: '',
-      contact_num: '',
-      email: '',
-      company_name: '',
-      position: '',
+      breed: '',
+      chicken_type: '',
+      population: 0,
+      mortality_rate: 0,
+      morbidity_rate: 0,
+      feed_requirement: '',
+      vaccination_schedule: '',
+      date_recieved: new Date().toISOString().substr(0, 10),
+      person_in_charge: '',
+      section_assigned: '',
+      building_assigned: '',
     },
-    /*
-      Below are temporary data that will be filled in
-      for the create form
-    */
     defaultItem: {
-      supplier_name: '',
-      files_link: '',
-      contact_num: '',
-      email: '',
-      company_name: '',
-      position: '',
+      /*
+        Below are temporary data that will be filled in
+        for the create form
+      */
+      breed: '',
+      chicken_type: '',
+      population: 0,
+      mortality_rate: 0,
+      morbidity_rate: 0,
+      feed_requirement: '',
+      vaccination_schedule: '',
+      date_recieved: new Date().toISOString().substr(0, 10),
+      person_in_charge: '',
+      section_assigned: '',
+      building_assigned: '',
     },
+    date: new Date().toISOString().substr(0, 10),
+    menu_date_recieved: false,
   }),
   computed: {
     formTitle() {
@@ -183,7 +242,7 @@ export default {
       Loads dummy data into table above
     */
     initialize() {
-      this.componentData = SuppliersData;
+      this.componentData = ChickensData;
     },
     /*
       Fetches data from a row and loads them into
@@ -194,10 +253,14 @@ export default {
         In Order:
           1. Gets index of the row being edited to editedIndex
           2. loads said item into editedItem object
-          3. then displays the dialog/modal
+          3. Also has to edit the date for editedItem
+          4. then displays the dialog/modal
       */
+
       this.editedIndex = this.componentData[0].data.indexOf(item);
       this.editedItem = { ...item };
+      this.editedItem.date_recieved = new
+      Date(this.editedItem.date_recieved).toISOString().substr(0, 10);
       this.showDialog = true;
     },
     /*
@@ -220,7 +283,7 @@ export default {
         Object.assign(this.componentData[0].data[this.editedIndex], this.editedItem);
       } else {
         // eslint-disable-next-line prefer-template
-        this.editedItem.supplier_id = '0' + (this.componentData[0].data.length + 1).toString();
+        this.editedItem.batch_num = '0' + (this.componentData[0].data.length + 1).toString();
         this.componentData[0].data.push(this.editedItem);
       }
       this.close();

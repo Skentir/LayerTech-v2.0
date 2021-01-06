@@ -1,13 +1,21 @@
 <template>
+<div>
   <v-app id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/suppliers">Suppliers</router-link> |
-      <router-link to="/employees">Employees</router-link>
+    <div class="content-wrap">
+      <router-view/>
     </div>
-    <router-view/>
   </v-app>
+</div>
 </template>
+
+<script>
+
+export default {
+  name: 'App',
+  components: {
+  },
+};
+</script>
 
 <style lang="scss">
 #app {
@@ -18,16 +26,24 @@
   color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+.content-wrap {
+  padding: 0%;
 }
+
+#footer {
+  position: absolute;
+  background-color: #C4C4C4;
+  bottom: 0;
+  width: 100%;
+  height: 3.5rem;
+}
+
+.page-container{
+    margin-left: 4vw;
+    margin-right: 4vw;
+    position: relative;
+    min-height: 100vh;
+    margin-bottom: 2vw;
+  }
+
 </style>
