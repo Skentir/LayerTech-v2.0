@@ -1,5 +1,22 @@
 # layertech
 
+## To STSWENG testers
+### Project Setup
+```
+git clone https://github.com/Skentir/LayerTech-v2.0.git
+cd LayerTech-v2.0
+cd client
+npm install
+npm run serve
+```
+
+### Login Credentials
+
+```
+username: admin123
+password: correctPassword
+```
+
 ## Project setup
 ```
 npm install
@@ -29,6 +46,3 @@ npm run test:e2e
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
