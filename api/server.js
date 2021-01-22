@@ -1,7 +1,11 @@
 const express = require('express');
 const { envPort, mongoURI } = require('./config');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const users = require('./routes/users');
+const passport = require('passport');
+
+
 
 // create express app
 const app = express();
@@ -30,7 +34,7 @@ mongoose.connect(mongoURI, options)
 });;
 
 // temporary 
-app.get('/users', users);
+app.use('/users', users);
 
 // listen on port
 app.listen(port, () => console.log(`Listening to ${port}`));

@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const { secret } = require('../config');
-const User = require('../model/User');
+const User = require('../models/User');
 
 /**
  * @route POST /users/register
@@ -15,10 +15,10 @@ router.post('/register', (req, res) => {
     let {
         name,
         username,
-        email,
         password,
         confirm_password
     } = req.body
+
     if (password !== confirm_password) {
         return res.status(400).json({
             msg: "Password do not match."
@@ -34,6 +34,7 @@ router.post('/register', (req, res) => {
             });
         }
     })
+    /*
     // Check for the Unique Email
     User.findOne({
         email: email
@@ -43,13 +44,13 @@ router.post('/register', (req, res) => {
                 msg: "Email is already registred. Did you forgot your password."
             });
         }
-    });
+    });*/
+
     // The data is valid and new we can register the user
     let newUser = new User({
         name,
         username,
-        password,
-        email
+        password
     });
     // Hash the password
     bcrypt.genSalt(10, (err, salt) => {
@@ -59,7 +60,7 @@ router.post('/register', (req, res) => {
             newUser.save().then(user => {
                 return res.status(201).json({
                     success: true,
-                    msg: "Hurry! User is now registered."
+                    msg: "User is now registered."
                 });
             });
         });
@@ -88,21 +89,20 @@ router.post('/login', (req, res) => {
                 const payload = {
                     _id: user._id,
                     username: user.username,
-                    name: user.name,
-                    email: user.email
+                    name: user.name
                 }
-                jwt.sign(payload, key, {
+                jwt.sign(payload, secret, {
                     expiresIn: 604800
                 }, (err, token) => {
                     res.status(200).json({
                         success: true,
                         token: `Bearer ${token}`,
-                        user: user,
-                        msg: "Hurry! You are now logged in."
+                        //user: user,
+                        msg: "You are now logged in."
                     });
                 })
             } else {
-                return res.status(404).json({
+                return res.status(404).json({   // token is undefined since it doesn't exist
                     msg: "Incorrect password.",
                     success: false
                 });
@@ -123,4 +123,5 @@ router.get('/profile', passport.authenticate('jwt', {
         user: req.user
     });
 });
+
 module.exports = router;
