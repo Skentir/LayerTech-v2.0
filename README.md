@@ -3,7 +3,7 @@
 ## To STSWENG testers
 ### Project Setup
 ```
-git clone https://github.com/Skentir/LayerTech-v2.0.git
+git clone --branch main https://github.com/Skentir/LayerTech-v2.0.git
 cd LayerTech-v2.0
 cd client
 npm install
