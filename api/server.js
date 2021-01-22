@@ -18,6 +18,7 @@ const options = {
 mongoose.connect(dbURL, options);
 
 // Sessions
+/*
 app.use(session({
   secret: sessionKey,
   store: new MongoStore({ mongooseConnection: mongoose.connection }),
@@ -25,13 +26,18 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 }
 }));
+*/
 
 // Setup middlewares
 app.use(express.json()); // support json encoded bodies
 app.use(express.urlencoded({ extended: true })); // support encoded bodies
 
 // serve static files 
-app.use(express.static('public')); 
+app.use(express.static('public'));
+
+app.get('/login', (req, res) => {
+  console.log("API: /login");
+})
 
 // listen on port
 app.listen(port, () => console.log(`Listening to ${port}`));
