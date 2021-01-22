@@ -1,5 +1,5 @@
 const express = require('express');
-const { envPort, sessionKey, dbURL } = require('./config');
+const { envPort, dbURL } = require('./config');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const mongoose = require('mongoose');
@@ -17,20 +17,10 @@ const options = {
 
 mongoose.connect(dbURL, options);
 
-// Sessions
-/*
-app.use(session({
-  secret: sessionKey,
-  store: new MongoStore({ mongooseConnection: mongoose.connection }),
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 }
-}));
-*/
-
 // Setup middlewares
 app.use(express.json()); // support json encoded bodies
 app.use(express.urlencoded({ extended: true })); // support encoded bodies
+app.use(cors()); // allow access to API from difference sources
 
 // serve static files 
 app.use(express.static('public'));
