@@ -4,10 +4,9 @@
     <div class="page-container">
       <PageTemplate :pageInfo="pageInfo"/>
       <v-data-table
-        :headers="this.componentData[0].headers"
-        :items="this.componentData[0].data"
+        :headers="this.headers"
+        :items="this.componentData"
         :search="search"
-        sort-by="calories"
         class="elevation-1"
       >
         <template v-slot:top>
@@ -120,8 +119,8 @@
 <script>
 
 import PageTemplate from '@/components/PageTemplate.vue';
-import SuppliersData from '@/models/suppliers.json';
 import Navbar from '@/components/layout/Navbar.vue';
+import axios from 'axios';
 
 // @ is an alias to /src
 export default {
@@ -138,6 +137,18 @@ export default {
     tableTitle: 'Suppliers',
     showDialog: false,
     componentData: [],
+    headers: [
+      {
+        text: 'id', align: 'start', sortable: false, value: 'supplier_id',
+      },
+      { text: 'Supplier Name', value: 'supplier_name' },
+      { text: 'Suppliers Files Link', value: 'files_link', sortable: false },
+      { text: 'Contact Number', value: 'contact_num', sortable: false },
+      { text: 'Email', value: 'email', sortable: false },
+      { text: 'Company Name', value: 'company_name' },
+      { text: 'Position in Company', value: 'position' },
+      { text: 'Actions', value: 'actions', sortable: false },
+    ],
     editedIndex: -1,
     editedItem: {
       /*
@@ -175,16 +186,14 @@ export default {
       val || this.close();
     },
   },
-  created() {
-    this.initialize();
+  async mounted() {
+    const response = await axios.get('/api/suppliers/');
+    this.componentData = response.data;
   },
   methods: {
     /*
       Loads dummy data into table above
     */
-    initialize() {
-      this.componentData = SuppliersData;
-    },
     /*
       Fetches data from a row and loads them into
       the edit form modal
@@ -196,9 +205,10 @@ export default {
           2. loads said item into editedItem object
           3. then displays the dialog/modal
       */
-      this.editedIndex = this.componentData[0].data.indexOf(item);
+      this.editedIndex = this.componentData.indexOf(item);
       this.editedItem = { ...item };
       this.showDialog = true;
+      console.log(item);
     },
     /*
       Closes the dialog/modal then wipes the data from
@@ -215,14 +225,33 @@ export default {
       Creates a new row based on new input data
       appends newly created row into the existing table
     */
-    save() {
+    /*
+      NEED TO REDO SAVE:
+      TO SEND TO API INSTEAD OF APPENDING TO COMPONENTDATA ARRAY
+
+      ALSO UPDATE SINCE IT APPLIES TO HERE TOO
+
+      PROBS JUST RELOAD AFTER SAVE/UPDATE
+    */
+    async save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.componentData[0].data[this.editedIndex], this.editedItem);
+        const param = this.editedItem.supplier_id;
+        /* eslint no-underscore-dangle: 0 */
+        /* eslint prefer-template: 0 */
+        const response = await axios.put('/api/suppliers/' + param, this.editedItem);
+        console.log(response.data);
+        this.componentData[this.editedIndex] = response.data;
       } else {
         // eslint-disable-next-line prefer-template
-        this.editedItem.supplier_id = '0' + (this.componentData[0].data.length + 1).toString();
-        this.componentData[0].data.push(this.editedItem);
+        this.editedItem.supplier_id = '0' + (this.componentData.length + 1).toString();
+        /*
+          ****Throws Error 500 when all fields are not filled in
+        */
+
+        const response = await axios.post('/api/suppliers/', this.editedItem);
+        this.componentData.push(response.data);
       }
+
       this.close();
     },
   },
