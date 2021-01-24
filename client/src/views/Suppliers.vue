@@ -186,9 +186,15 @@ export default {
     rules: {
       /* eslint arrow-parens: 0 */
       name: [val => (val || '').length > 0 || 'This field is required'],
-      link: [val => (val || '').length > 0 || 'This field is required'],
+      link: [
+        val => (val || '').length > 0 || 'This field is required',
+        val => /.+..+/.test(val) || 'Link must be valid',
+      ],
       contact_num: [val => (val || '').length > 0 || 'This field is required'],
-      email: [val => (val || '').length > 0 || 'This field is required'],
+      email: [
+        val => (val || '').length > 0 || 'This field is required',
+        val => /.+@.+/.test(val) || 'E-mail must be valid',
+      ],
       company_name: [val => (val || '').length > 0 || 'This field is required'],
       position: [val => (val || '').length > 0 || 'This field is required'],
     },
@@ -267,7 +273,7 @@ export default {
         /* eslint no-underscore-dangle: 0 */
         /* eslint prefer-template: 0 */
         const response = await axios.put('/api/suppliers/' + param, this.editedItem);
-        this.componentData[this.editedIndex] = response.data;
+        Object.assign(this.componentData[this.editedIndex], response.data);
       } else {
         // eslint-disable-next-line prefer-template
         this.editedItem.supplier_id = '0' + (this.componentData.length + 1).toString();
