@@ -3,7 +3,6 @@ const { envPort, mongoURI } = require('./config');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const users = require('./routes/users');
-const passport = require('passport');
 
 
 
@@ -22,6 +21,7 @@ const options = {
 app.use(express.json()); // support json encoded bodies
 app.use(express.urlencoded({ extended: true })); // support encoded bodies
 app.use(cors()); // allow access to API from difference sources
+
 
 // serve static files 
 app.use(express.static('public'));

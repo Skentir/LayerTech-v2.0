@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const passport = require('passport');
 const { secret } = require('../config');
 const User = require('../models/User');
+const verifyToken = require('./verifyToken');
 
 /**
  * @route POST /users/register
@@ -52,6 +52,7 @@ router.post('/register', (req, res) => {
         username,
         password
     });
+
     // Hash the password
     bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
@@ -94,12 +95,7 @@ router.post('/login', (req, res) => {
                 jwt.sign(payload, secret, {
                     expiresIn: 604800
                 }, (err, token) => {
-                    res.status(200).json({
-                        success: true,
-                        token: `Bearer ${token}`,
-                        //user: user,
-                        msg: "You are now logged in."
-                    });
+                    res.header('auth-token', token).send(token);
                 })
             } else {
                 return res.status(404).json({   // token is undefined since it doesn't exist
@@ -116,11 +112,10 @@ router.post('/login', (req, res) => {
  * @desc Return the User's Data
  * @access Private
  */
-router.get('/profile', passport.authenticate('jwt', {
-    session: false
-}), (req, res) => {
-    return res.json({
-        user: req.user
+router.get('/profile', verifyToken, (req,res) => {
+    // return profile details
+    res.json({
+        name: 'Dan'
     });
 });
 
