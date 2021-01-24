@@ -3,9 +3,11 @@ const { envPort, sessionKey, dbURL } = require('./config');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const mongoose = require('mongoose');
-const cors = require('cors');
-const morgan = require('morgan');
-const suppliers_routes = require('./routes/api/suppliers');
+const suppliers_routes = require('./routes/suppliers');
+const chickenRoutes = require('./routes/chickens')
+const cors = require('cors') // will allow us to make ajax requests from frontend to backend
+const morgan = require('morgan') //http requests automatic logger
+
 
 // create express app
 const app = express();
@@ -14,11 +16,14 @@ const port = envPort || 3000;
 // setup mongoose
 const options = { 
   useNewUrlParser: true,
+  useCreateIndex: true,
   useUnifiedTopology: true,
   useFindAndModify: false 
 };
 
-mongoose.connect(dbURL, options);
+mongoose.connect(dbURL, options)
+.then(() => console.log('MongoDB database Connected...'))
+.catch((err) => console.log(err))
 
 // Sessions
 /*
@@ -33,11 +38,14 @@ app.use(session({
 // Setup middlewares
 app.use(express.json()); // support json encoded bodies
 app.use(express.urlencoded({ extended: true })); // support encoded bodies
+
 app.use(cors());
 app.use(morgan('tiny'));
 
 // serve static files 
 app.use(express.static('public')); 
 app.use('/api/suppliers', suppliers_routes);
+app.use('/api/chickens', chickenRoutes)
+
 // listen on port
 app.listen(port, () => console.log(`Listening to ${port}`));

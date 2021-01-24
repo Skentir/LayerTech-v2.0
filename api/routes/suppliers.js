@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const Suppliers = require('../../models/SupplierModel')
+const Suppliers = require('../models/SupplierModel')
 const router = Router();
 
 // Get

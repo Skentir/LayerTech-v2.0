@@ -49,32 +49,38 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="editedItem.supplier_name"
-                  label="Supplier Name" required/>
+                  :rules="rules.name"
+                  label="Supplier Name" required />
               </v-col>
               <v-col cols="12">
                 <v-text-field
                   v-model="editedItem.files_link"
-                  label="Supplier Files Link" required/>
+                  :rules="rules.link"
+                  label="Supplier Files Link" required />
               </v-col>
               <v-col cols="6">
                 <v-text-field
                   v-model="editedItem.contact_num"
-                  label="Contact Number" required/>
+                  :rules="rules.contact_num"
+                  label="Contact Number" required />
               </v-col>
               <v-col cols="6">
                 <v-text-field
                   v-model="editedItem.email"
-                  label="Email" required/>
+                  :rules="rules.email"
+                  label="Email" required />
               </v-col>
               <v-col cols="6">
                 <v-text-field
                   v-model="editedItem.company_name"
-                  label="Company Name" required/>
+                  :rules="rules.company_name"
+                  label="Company Name" required />
               </v-col>
               <v-col cols="6">
                 <v-text-field
                   v-model="editedItem.position"
-                  label="Position in Company" required/>
+                  :rules="rules.position"
+                  label="Position in Company" required />
               </v-col>
             </v-row>
           </v-container>
@@ -89,6 +95,7 @@
             Close
           </v-btn>
           <v-btn
+            :disabled="!formIsValid"
             color="blue darken-1"
             text
             @click="save()"
@@ -174,10 +181,29 @@ export default {
       company_name: '',
       position: '',
     },
+    rules: {
+      /* eslint arrow-parens: 0 */
+      name: [val => (val || '').length > 0 || 'This field is required'],
+      link: [val => (val || '').length > 0 || 'This field is required'],
+      contact_num: [val => (val || '').length > 0 || 'This field is required'],
+      email: [val => (val || '').length > 0 || 'This field is required'],
+      company_name: [val => (val || '').length > 0 || 'This field is required'],
+      position: [val => (val || '').length > 0 || 'This field is required'],
+    },
   }),
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
+    },
+    formIsValid() {
+      return (
+        this.editedItem.supplier_name
+        && this.editedItem.files_link
+        && this.editedItem.contact_num
+        && this.editedItem.email
+        && this.editedItem.company_name
+        && this.editedItem.position
+      );
     },
   },
   watch: {
@@ -208,7 +234,6 @@ export default {
       this.editedIndex = this.componentData.indexOf(item);
       this.editedItem = { ...item };
       this.showDialog = true;
-      console.log(item);
     },
     /*
       Closes the dialog/modal then wipes the data from
@@ -239,7 +264,6 @@ export default {
         /* eslint no-underscore-dangle: 0 */
         /* eslint prefer-template: 0 */
         const response = await axios.put('/api/suppliers/' + param, this.editedItem);
-        console.log(response.data);
         this.componentData[this.editedIndex] = response.data;
       } else {
         // eslint-disable-next-line prefer-template
