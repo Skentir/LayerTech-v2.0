@@ -188,7 +188,6 @@ export default {
       name: [val => (val || '').length > 0 || 'This field is required'],
       link: [
         val => (val || '').length > 0 || 'This field is required',
-        val => /.+..+/.test(val) || 'Link must be valid',
       ],
       contact_num: [val => (val || '').length > 0 || 'This field is required'],
       email: [
@@ -203,6 +202,12 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
     },
+    /*
+      Button for Save will be disabled if at least one field is empty
+
+      To-do:
+        1. button is still disabled if one field is showing an error
+    */
     formIsValid() {
       return (
         this.editedItem.supplier_name
@@ -221,13 +226,15 @@ export default {
     },
   },
   async mounted() {
+    /*
+      switched created to mounted based on reference
+
+      this just loads the suppliers into componentData
+    */
     const response = await axios.get('/api/suppliers/');
     this.componentData = response.data;
   },
   methods: {
-    /*
-      Loads dummy data into table above
-    */
     /*
       Fetches data from a row and loads them into
       the edit form modal
@@ -252,6 +259,13 @@ export default {
       this.$nextTick(() => {
         this.editedItem = { ...this.defaultItem };
         this.editedIndex = -1;
+        /*
+          I encased the text field in a v-form
+          why:
+          error messages dont reset after closing the
+          dialog box, based on docs can only 'reset'
+          if encased in a v-form
+        */
         this.$refs.form.reset();
       });
     },
@@ -260,21 +274,32 @@ export default {
       appends newly created row into the existing table
     */
     /*
-      NEED TO REDO SAVE:
-      TO SEND TO API INSTEAD OF APPENDING TO COMPONENTDATA ARRAY
-
-      ALSO UPDATE SINCE IT APPLIES TO HERE TOO
-
-      PROBS JUST RELOAD AFTER SAVE/UPDATE
+      I just reused the save function to minimize additional functions
+      its now aync to accomodate api calls
     */
     async save() {
       if (this.editedIndex > -1) {
-        const param = this.editedItem.supplier_id;
+        /*
+          this sends the _id to api/suppliers/:id to update
+        */
+        const param = this.componentData[this.editedIndex]._id;
         /* eslint no-underscore-dangle: 0 */
         /* eslint prefer-template: 0 */
+        /*
+          I found that sending the entire this.edited item is acceptable
+
+          returns the updated supplier/row
+        */
         const response = await axios.put('/api/suppliers/' + param, this.editedItem);
+        /*
+          Reused the the line under to 'refresh' the table with the updated row
+        */
         Object.assign(this.componentData[this.editedIndex], response.data);
       } else {
+        /*
+          To follow:
+          remove this supplier_id and other X_id
+        */
         // eslint-disable-next-line prefer-template
         this.editedItem.supplier_id = '0' + (this.componentData.length + 1).toString();
         /*
@@ -282,6 +307,9 @@ export default {
         */
 
         const response = await axios.post('/api/suppliers/', this.editedItem);
+        /*
+          returns newly created suppliers then pushing it in the table
+        */
         this.componentData.push(response.data);
       }
 

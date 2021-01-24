@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
     try{
-        const response = await Suppliers.findOneAndUpdate({supplier_id: req.params.id}, req.body);
+        const response = await Suppliers.findByIdAndUpdate(req.body);
         if(!response) throw Error('Something went wrong')
         const updated = { ...response._doc, ...req.body}
         res.status(200).json(updated);
