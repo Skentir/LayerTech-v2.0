@@ -9,7 +9,7 @@
         :search="search"
         sort-by="calories"
         class="elevation-1"
-      >
+      >                                                   <!-- get the :items from the axios call-->
         <template v-slot:top>
           <v-toolbar
             flat
