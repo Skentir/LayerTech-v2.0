@@ -44,46 +44,48 @@
           <span class="headline">Add a new Supplier</span>
         </v-card-title>
         <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="editedItem.supplier_name"
-                  :rules="rules.name"
-                  label="Supplier Name" required />
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="editedItem.files_link"
-                  :rules="rules.link"
-                  label="Supplier Files Link" required />
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  v-model="editedItem.contact_num"
-                  :rules="rules.contact_num"
-                  label="Contact Number" required />
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  v-model="editedItem.email"
-                  :rules="rules.email"
-                  label="Email" required />
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  v-model="editedItem.company_name"
-                  :rules="rules.company_name"
-                  label="Company Name" required />
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  v-model="editedItem.position"
-                  :rules="rules.position"
-                  label="Position in Company" required />
-              </v-col>
-            </v-row>
-          </v-container>
+          <v-form ref="form">
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="editedItem.supplier_name"
+                    :rules="rules.name"
+                    label="Supplier Name" required />
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="editedItem.files_link"
+                    :rules="rules.link"
+                    label="Supplier Files Link" required />
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field
+                    v-model="editedItem.contact_num"
+                    :rules="rules.contact_num"
+                    label="Contact Number" required />
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field
+                    v-model="editedItem.email"
+                    :rules="rules.email"
+                    label="Email" required />
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field
+                    v-model="editedItem.company_name"
+                    :rules="rules.company_name"
+                    label="Company Name" required />
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field
+                    v-model="editedItem.position"
+                    :rules="rules.position"
+                    label="Position in Company" required />
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -244,6 +246,7 @@ export default {
       this.$nextTick(() => {
         this.editedItem = { ...this.defaultItem };
         this.editedIndex = -1;
+        this.$refs.form.reset();
       });
     },
     /*
