@@ -4,8 +4,8 @@
     <div class="page-container">
       <PageTemplate :pageInfo="pageInfo"/>
       <v-data-table
-        :headers="this.componentData[0].headers"
-        :items="this.componentData[0].data"
+        :headers="this.headers"
+        :items="this.componentData"
         :search="search"
         sort-by="calories"
         class="elevation-1"
@@ -50,36 +50,43 @@
               <v-col cols="6">
                 <v-text-field
                   v-model="editedItem.breed"
+                  :rules="rules.breed"
                   label="Breed" required/>
               </v-col>
               <v-col cols="6">
                 <v-text-field
                   v-model="editedItem.chicken_type"
+                  :rules="rules.chicken_type"
                   label="Chicken Type" required/>
               </v-col>
               <v-col cols="4">
                 <v-text-field
                   v-model="editedItem.population"
+                  :rules="rules.population"
                   label="Population" required/>
               </v-col>
               <v-col cols="4">
                 <v-text-field
                   v-model="editedItem.mortality_rate"
+                  :rules="rules.mortality_rate"
                   label="Mortality Rate" required/>
               </v-col>
               <v-col cols="4">
                 <v-text-field
                   v-model="editedItem.morbidity_rate"
+                  :rules="rules.morbidity_rate"
                   label="Morbidity Rate" required/>
               </v-col>
               <v-col cols="6">
                 <v-text-field
                   v-model="editedItem.feed_requirement"
+                  :rules="rules.feed_requirement"
                   label="Feed Requirement" required/>
               </v-col>
               <v-col cols="6">
                 <v-text-field
                   v-model="editedItem.vaccination_schedule"
+                  :rules="rules.vaccination_schedule"
                   label="Vaccination Schedule" required/>
               </v-col>
               <v-col cols="6">
@@ -94,6 +101,7 @@
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
                       v-model="editedItem.date_recieved"
+                      :rules="rules.date_recieved"
                       label="Date"
                       hint="YYYY/MM/DD format"
                       persistent-hint
@@ -114,16 +122,19 @@
               <v-col cols="6">
                 <v-text-field
                   v-model="editedItem.person_in_charge"
+                  :rules="rules.person_in_charge"
                   label="Person in-Charge" required/>
               </v-col>
               <v-col cols="6">
                 <v-text-field
-                  v-model="editedItem.section_assigned"
+                  v-model="editedItem.section"
+                  :rules="rules.section"
                   label="Section Assigned" required/>
               </v-col>
               <v-col cols="6">
                 <v-text-field
-                  v-model="editedItem.building_assigned"
+                  v-model="editedItem.building"
+                  :rules="rules.building"
                   label="Building Assigned" required/>
               </v-col>
             </v-row>
@@ -139,6 +150,7 @@
             Close
           </v-btn>
           <v-btn
+            :disabled="!formIsValid"
             color="blue darken-1"
             text
             @click="save()"
@@ -168,8 +180,8 @@
 
 <script>
 import PageTemplate from '@/components/PageTemplate.vue';
-import ChickensData from '@/models/chickens.json';
 import Navbar from '@/components/layout/Navbar.vue';
+import axios from 'axios';
 
 export default {
   components: {
@@ -185,6 +197,20 @@ export default {
     tableTitle: 'Chickens',
     showDialog: false,
     componentData: [],
+    headers: [
+      { text: 'Breed', value: 'breed' },
+      { text: 'Chicken Type', value: 'chicken_type', sortable: false },
+      { text: 'Population', value: 'population', sortable: false },
+      { text: 'Mortality Rate', value: 'mortality_rate', sortable: false },
+      { text: 'Morbidity Rate', value: 'morbidity_rate' },
+      { text: 'Feed Requirement', value: 'feed_requirement' },
+      { text: 'Vaccination Schedule', value: 'vaccination_schedule', sortable: false },
+      { text: 'Date Received', value: 'date_received', sortable: false },
+      { text: 'Person In Charge', value: 'person_in_charge' },
+      { text: 'Section', value: 'section' },
+      { text: 'Building', value: 'building', sortable: false },
+      { text: 'Actions', value: 'actions', sortable: false },
+    ],
     editedIndex: -1,
     editedItem: {
       /*
@@ -200,8 +226,8 @@ export default {
       vaccination_schedule: '',
       date_recieved: new Date().toISOString().substr(0, 10),
       person_in_charge: '',
-      section_assigned: '',
-      building_assigned: '',
+      section: '',
+      building: '',
     },
     defaultItem: {
       /*
@@ -217,8 +243,22 @@ export default {
       vaccination_schedule: '',
       date_recieved: new Date().toISOString().substr(0, 10),
       person_in_charge: '',
-      section_assigned: '',
-      building_assigned: '',
+      section: '',
+      building: '',
+    },
+    rules: {
+      /* eslint arrow-parens: 0 */
+      breed: [val => (val || '').length > 0 || 'This field is required'],
+      chicken_type: [val => (val || '').length > 0 || 'This field is required'],
+      population: [val => (val || '').length > 0 || 'This field is required'],
+      mortality_rate: [val => (val || '').length > 0 || 'This field is required'],
+      morbidity_rate: [val => (val || '').length > 0 || 'This field is required'],
+      feed_requirement: [val => (val || '').length > 0 || 'This field is required'],
+      vaccination_schedule: [val => (val || '').length > 0 || 'This field is required'],
+      date_received: [val => (val || '').length > 0 || 'This field is required'],
+      person_in_charge: [val => (val || '').length > 0 || 'This field is required'],
+      section: [val => (val || '').length > 0 || 'This field is required'],
+      building: [val => (val || '').length > 0 || 'This field is required'],
     },
     date: new Date().toISOString().substr(0, 10),
     menu_date_recieved: false,
@@ -227,6 +267,24 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
     },
+    /*
+      Button for Save will be disabled if at least one field is empty
+    */
+    formIsValid() {
+      return (
+        this.editedItem.breed
+        && this.editedItem.chicken_type
+        && this.editedItem.population
+        && this.editedItem.mortality_rate
+        && this.editedItem.morbidity_rate
+        && this.editedItem.feed_requirement
+        && this.editedItem.vaccination_schedule
+        && this.editedItem.date_received
+        && this.editedItem.person_in_charge
+        && this.editedItem.section
+        && this.editedItem.building
+      );
+    },
   },
   watch: {
     showDialog(val) {
@@ -234,16 +292,15 @@ export default {
       val || this.close();
     },
   },
-  created() {
-    this.initialize();
+  /*
+    switched created to mounted based on reference
+    this just loads the suppliers into componentData
+  */
+  async mounted() {
+    const response = await axios.get('/api/chickens/');
+    this.componentData = response.data;
   },
   methods: {
-    /*
-      Loads dummy data into table above
-    */
-    initialize() {
-      this.componentData = ChickensData;
-    },
     /*
       Fetches data from a row and loads them into
       the edit form modal
@@ -257,10 +314,10 @@ export default {
           4. then displays the dialog/modal
       */
 
-      this.editedIndex = this.componentData[0].data.indexOf(item);
+      this.editedIndex = this.componentData.indexOf(item);
       this.editedItem = { ...item };
-      this.editedItem.date_recieved = new
-      Date(this.editedItem.date_recieved).toISOString().substr(0, 10);
+      this.editedItem.date_received = new Date(this.editedItem.date_received)
+        .toISOString().substr(0, 10);
       this.showDialog = true;
     },
     /*
@@ -272,19 +329,29 @@ export default {
       this.$nextTick(() => {
         this.editedItem = { ...this.defaultItem };
         this.editedIndex = -1;
+        this.$refs.form.reset();
       });
     },
     /*
       Creates a new row based on new input data
       appends newly created row into the existing table
     */
-    save() {
+    async save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.componentData[0].data[this.editedIndex], this.editedItem);
+        /*
+          this sends the _id to api/suppliers/:id to update
+        */
+        const param = this.componentData[this.editedIndex]._id;
+        /* eslint no-underscore-dangle: 0 */
+        /* eslint prefer-template: 0 */
+
+        const response = await axios.put('/api/chickens/' + param, this.editedItem);
+        Object.assign(this.componentData[this.editedIndex], response.data);
       } else {
         // eslint-disable-next-line prefer-template
-        this.editedItem.batch_num = '0' + (this.componentData[0].data.length + 1).toString();
-        this.componentData[0].data.push(this.editedItem);
+
+        const response = await axios.post('/api/chickens/', this.editedItem);
+        this.componentData.push(response.data);
       }
       this.close();
     },
