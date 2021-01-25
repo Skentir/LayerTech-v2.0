@@ -13,7 +13,7 @@
             <div id="user">
                 {{first_name}} {{last_name}}
             </div>
-            <v-btn to ="/" id="logout">
+            <v-btn @click="logout" id="logout">
                 Log Out
             </v-btn>
         </v-col>
@@ -28,6 +28,13 @@ export default {
       last_name: 'Lapis',
     };
   },
+  methods: {
+    logout() {
+      // remove user from local storage to log user out
+      localStorage.removeItem('auth-token');
+      this.$router.push('/'); // redirect to login page
+    },
+  }
 };
 </script>
 
