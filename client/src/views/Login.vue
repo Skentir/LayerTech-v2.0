@@ -101,6 +101,11 @@ export default {
         && this.password
       );
     },
+  },
+  created() {
+    if (JSON.parse(localStorage.getItem('auth-token'))) { // if logged in
+      this.$router.push('/home');
+    }
   }
 };
 </script>
