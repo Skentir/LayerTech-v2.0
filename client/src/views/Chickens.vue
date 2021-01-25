@@ -40,13 +40,21 @@
                 </v-btn>
               </v-col>
             </template>
-            <v-card>
+        <v-card>
+        <v-form ref="form">
         <v-card-title>
           <span class="headline">Add a new Chicken</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
+                <v-col cols="12">
+                <v-select
+                  v-model="editedItem.supplier_name"
+                  :rules="rules.supplier_name"
+                  :items="supplier_names"
+                  label="Supplier Name" required/>
+              </v-col>
               <v-col cols="6">
                 <v-text-field
                   v-model="editedItem.breed"
@@ -54,9 +62,10 @@
                   label="Breed" required/>
               </v-col>
               <v-col cols="6">
-                <v-text-field
+                <v-select
                   v-model="editedItem.chicken_type"
                   :rules="rules.chicken_type"
+                  :items="chicken_types"
                   label="Chicken Type" required/>
               </v-col>
               <v-col cols="4">
@@ -150,15 +159,15 @@
             Close
           </v-btn>
           <v-btn
-            :disabled="!formIsValid"
             color="blue darken-1"
             text
-            @click="save()"
+            @click="submit"
           >
             Save
           </v-btn>
         </v-card-actions>
-            </v-card>
+        </v-form>
+        </v-card>
             </v-dialog>
           </v-toolbar>
         </template>
@@ -197,6 +206,7 @@ export default {
     tableTitle: 'Chickens',
     showDialog: false,
     componentData: [],
+    supplier_names: [],
     headers: [
       { text: 'Breed', value: 'breed' },
       { text: 'Chicken Type', value: 'chicken_type', sortable: false },
@@ -206,6 +216,7 @@ export default {
       { text: 'Feed Requirement', value: 'feed_requirement' },
       { text: 'Vaccination Schedule', value: 'vaccination_schedule', sortable: false },
       { text: 'Date Received', value: 'date_received', sortable: false },
+      { text: 'Supplier Name', value: 'supplier_name' },
       { text: 'Person In Charge', value: 'person_in_charge' },
       { text: 'Section', value: 'section' },
       { text: 'Building', value: 'building', sortable: false },
@@ -217,6 +228,7 @@ export default {
         Below are temporary data that will be filled in
         for the edit form
       */
+      supplier_name: '',
       breed: '',
       chicken_type: '',
       population: 0,
@@ -234,6 +246,7 @@ export default {
         Below are temporary data that will be filled in
         for the create form
       */
+      supplier_name: '',
       breed: '',
       chicken_type: '',
       population: 0,
@@ -248,42 +261,33 @@ export default {
     },
     rules: {
       /* eslint arrow-parens: 0 */
-      breed: [val => (val || '').length > 0 || 'This field is required'],
-      chicken_type: [val => (val || '').length > 0 || 'This field is required'],
-      population: [val => (val || '').length > 0 || 'This field is required'],
-      mortality_rate: [val => (val || '').length > 0 || 'This field is required'],
-      morbidity_rate: [val => (val || '').length > 0 || 'This field is required'],
-      feed_requirement: [val => (val || '').length > 0 || 'This field is required'],
-      vaccination_schedule: [val => (val || '').length > 0 || 'This field is required'],
-      date_received: [val => (val || '').length > 0 || 'This field is required'],
-      person_in_charge: [val => (val || '').length > 0 || 'This field is required'],
-      section: [val => (val || '').length > 0 || 'This field is required'],
-      building: [val => (val || '').length > 0 || 'This field is required'],
+      supplier_name: [val => !!val || 'This field is required'],
+      breed: [val => !!val || 'This field is required'],
+      chicken_type: [val => !!val || 'This field is required'],
+      population: [
+        val => !!val || 'This field is required',
+        val => /^[1-9][0-9]*$/.test(val) || 'Integer must be valid.',
+      ],
+      mortality_rate: [
+        val => !!val || 'This field is required',
+        val => /^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$/.test(val) || 'Integer or float must be valid.'],
+      morbidity_rate: [
+        val => !!val || 'This field is required',
+        val => /^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$/.test(val) || 'Integer or float must be valid.'],
+      feed_requirement: [val => !!val || 'This field is required'],
+      vaccination_schedule: [val => !!val || 'This field is required'],
+      date_received: [val => !!val || 'This field is required'],
+      person_in_charge: [val => !!val || 'This field is required'],
+      section: [val => !!val || 'This field is required'],
+      building: [val => !!val || 'This field is required'],
     },
     date: new Date().toISOString().substr(0, 10),
     menu_date_recieved: false,
+    chicken_types: ['Adult', 'Pullet'],
   }),
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
-    },
-    /*
-      Button for Save will be disabled if at least one field is empty
-    */
-    formIsValid() {
-      return (
-        this.editedItem.breed
-        && this.editedItem.chicken_type
-        && this.editedItem.population
-        && this.editedItem.mortality_rate
-        && this.editedItem.morbidity_rate
-        && this.editedItem.feed_requirement
-        && this.editedItem.vaccination_schedule
-        && this.editedItem.date_received
-        && this.editedItem.person_in_charge
-        && this.editedItem.section
-        && this.editedItem.building
-      );
     },
   },
   watch: {
@@ -294,11 +298,15 @@ export default {
   },
   /*
     switched created to mounted based on reference
-    this just loads the suppliers into componentData
+    this just loads the chickens into componentData
   */
   async mounted() {
     const response = await axios.get('/api/chickens/');
     this.componentData = response.data;
+    // Gets the supplier names from the backend
+    const suppliers = await axios.get('/api/suppliers/');
+    suppliers.data.forEach(supplier => this.supplier_names.push(supplier.supplier_name));
+    console.log(this.supplier_names);
   },
   methods: {
     /*
@@ -336,24 +344,26 @@ export default {
       Creates a new row based on new input data
       appends newly created row into the existing table
     */
-    async save() {
-      if (this.editedIndex > -1) {
-        /*
-          this sends the _id to api/suppliers/:id to update
-        */
-        const param = this.componentData[this.editedIndex]._id;
-        /* eslint no-underscore-dangle: 0 */
-        /* eslint prefer-template: 0 */
+    async submit() {
+      if (this.$refs.form.validate()) {
+        if (this.editedIndex > -1) {
+          /*
+            this sends the _id to api/chickens/:id to update
+          */
+          const param = this.componentData[this.editedIndex]._id;
+          /* eslint no-underscore-dangle: 0 */
+          /* eslint prefer-template: 0 */
 
-        const response = await axios.put('/api/chickens/' + param, this.editedItem);
-        Object.assign(this.componentData[this.editedIndex], response.data);
-      } else {
-        // eslint-disable-next-line prefer-template
+          const response = await axios.put('/api/chickens/' + param, this.editedItem);
+          Object.assign(this.componentData[this.editedIndex], response.data);
+        } else {
+          // eslint-disable-next-line prefer-template
 
-        const response = await axios.post('/api/chickens/', this.editedItem);
-        this.componentData.push(response.data);
+          const response = await axios.post('/api/chickens/', this.editedItem);
+          this.componentData.push(response.data);
+        }
+        this.close();
       }
-      this.close();
     },
   },
 };

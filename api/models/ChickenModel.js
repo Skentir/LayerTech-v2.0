@@ -3,6 +3,7 @@ const { Schema, model } = require('mongoose')
 const ChickenSchema = new Schema({
     //batch_num(PK) = automatic
     //supplier: {type: Schema.Types.ObjectId, ref: 'suppliers', required: [true, "no supplier id provided"]}, 
+    supplier_name: {type: String, required: [true, "No supplier_name provided"]},
     breed: {type: String, required: [true, "No breed provided"]},
     chicken_type: {type: String, required: [true, "No title provided"]},
     population: {type: Number, min: 0, required: [true, "No title provided"]},
