@@ -183,6 +183,7 @@ export default {
       company_name: '',
       position: '',
     },
+    validEmail: false,
     rules: {
       /* eslint arrow-parens: 0 */
       name: [val => (val || '').length > 0 || 'This field is required'],
@@ -191,8 +192,7 @@ export default {
       ],
       contact_num: [val => (val || '').length > 0 || 'This field is required'],
       email: [
-        val => (val || '').length > 0 || 'This field is required',
-        val => /.+@.+/.test(val) || 'E-mail must be valid',
+        v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
       ],
       company_name: [val => (val || '').length > 0 || 'This field is required'],
       position: [val => (val || '').length > 0 || 'This field is required'],
@@ -213,7 +213,7 @@ export default {
         this.editedItem.supplier_name
         && this.editedItem.files_link
         && this.editedItem.contact_num
-        && this.editedItem.email
+        && this.validEmail
         && this.editedItem.company_name
         && this.editedItem.position
       );
