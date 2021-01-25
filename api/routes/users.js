@@ -95,7 +95,11 @@ router.post('/login', (req, res) => {
                 jwt.sign(payload, secret, {
                     expiresIn: 604800
                 }, (err, token) => {
-                    res.header('auth-token', token).send(token);
+                    console.log("login success.");
+                    return res.header('auth-token', token).json({
+                        msg: "Login success.",
+                        success: true
+                    });
                 })
             } else {
                 return res.status(404).json({   // token is undefined since it doesn't exist

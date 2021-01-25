@@ -2,7 +2,7 @@
   <div>
     <div id="login">
       <div class="loginWidget">
-        <v-form @submit.prevent="login">
+        <v-form @submit.prevent="login(username, password)">
           <img id="company-logo" src="../assets/undraw_nature_m5ll 1.png" />
           <h1 id="company-name">LayerTech</h1>
           <br />
@@ -10,8 +10,18 @@
             An inventory and stock management web application for your farm
           </h3>
           <br />
+          <!-- Error message container -->
+          <v-alert
+            dense
+            v-show="hasError"
+            type="error"
+          >
+            Incorrect credentials.
+          </v-alert>
+
           <v-text-field
             id="username_tfield"
+            :rules="rules.required"
             class="tField"
             v-model="username"
             background-color="rgba(255,255,255,1)"
@@ -20,6 +30,7 @@
           ></v-text-field>
           <v-text-field
             id="password_tfield"
+            :rules="rules.required"
             class="tField"
             :type="'password'"
             v-model="password"
@@ -28,6 +39,7 @@
             placeholder="Password"
           ></v-text-field>
           <v-btn
+            :disabled="!formIsValid"
             type="submit"
             id="login-btn"
             color="rgba(4,35,178,1)"
@@ -38,10 +50,6 @@
           </v-btn>
           <br />
           <br />
-          <!-- Error message container -->
-          <h3 id="error-msg" v-if="hasError">
-            {{ errorMsg }}
-          </h3>
         </v-form>
       </div>
     </div>
@@ -65,30 +73,35 @@ export default {
       accounts: employeesData,
       account: null, // hardcoded admin account
       errorMsg: 'The username and password you entered did not match our records. Please double-check and try again.',
+      rules: {
+        /* eslint arrow-parens: 0 */
+        required: [val => (val || '').length > 0 || 'This field is required'],
+      },
+      showErrorMsg: false
     };
   },
   methods: {
-    handleSubmit() {
-      // get hardcoded account
-      // eslint-disable-next-line prefer-destructuring
-      this.account = this.accounts[0].data[5];
-
-      // if correct credentials
-      if (this.username === this.account.username && this.password === this.account.password) {
-        this.authenticated = true;
-        this.$router.push('/home'); // redirect to /home
-      } else {
-        // if  incorrect credentials
-        this.hasError = true;
-      }
-    },
-    async login() {
-      LoginService.login()
-        .then(
-          console.log('login done.')
-        );
+    async login(username, password) {
+      const credentials = { username, password };
+      LoginService.login(credentials)
+        .then(() => {
+          console.log('login done.');
+          this.$router.push('/home');
+        })
+        .catch((err) => {
+          console.log(`login failed with ERROR: ${err}`);
+          this.hasError = true;
+        });
     },
   },
+  computed: {
+    formIsValid() {
+      return ( // fields must be filled
+        this.username
+        && this.password
+      );
+    },
+  }
 };
 </script>
 

@@ -32,10 +32,10 @@ mongoose.connect(mongoURI, options)
     console.log(`Database connected successfully ${mongoURI}`)
 }).catch(err => {
     console.log(`Unable to connect with the database ${err}`)
-});;
+});
 
 // temporary 
-app.use('/users', users);
+app.use('/api/users', users);
 
 // add routes
 app.use('/api/chickens', chickenRoutes)
