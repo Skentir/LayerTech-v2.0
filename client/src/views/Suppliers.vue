@@ -97,10 +97,9 @@
             Close
           </v-btn>
           <v-btn
-            :disabled="!formIsValid"
             color="blue darken-1"
             text
-            @click="save()"
+            @click="submit"
           >
             Save
           </v-btn>
@@ -148,9 +147,8 @@ export default {
     componentData: [],
     headers: [
       {
-        text: 'id', align: 'start', sortable: false, value: 'supplier_id',
+        text: 'Supplier Name', align: 'start', value: 'supplier_name',
       },
-      { text: 'Supplier Name', value: 'supplier_name' },
       { text: 'Suppliers Files Link', value: 'files_link', sortable: false },
       { text: 'Contact Number', value: 'contact_num', sortable: false },
       { text: 'Email', value: 'email', sortable: false },
@@ -194,6 +192,7 @@ export default {
         val => /^[0-9]*$/.test(val) || 'No characters allowed',
       ],
       email: [
+        val => (val || '').length > 0 || 'This field is required',
         v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
       ],
       company_name: [val => (val || '').length > 0 || 'This field is required'],
@@ -210,18 +209,6 @@ export default {
       To-do:
         1. button is still disabled if one field is showing an error
     */
-    formIsValid() {
-      return (
-        this.editedItem.supplier_name
-        && this.editedItem.files_link
-        && this.editedItem.contact_num
-        && /^[0-9]*$/.test(this.editedItem.contact_num)
-        && this.editedItem.email
-        && /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(this.editedItem.email)
-        && this.editedItem.company_name
-        && this.editedItem.position
-      );
-    },
   },
   watch: {
     showDialog(val) {
@@ -281,43 +268,38 @@ export default {
       I just reused the save function to minimize additional functions
       its now aync to accomodate api calls
     */
-    async save() {
-      if (this.editedIndex > -1) {
-        /*
-          this sends the _id to api/suppliers/:id to update
-        */
-        const param = this.componentData[this.editedIndex]._id;
-        /* eslint no-underscore-dangle: 0 */
-        /* eslint prefer-template: 0 */
-        /*
-          I found that sending the entire this.edited item is acceptable
+    async submit() {
+      if (this.$refs.form.validate()) {
+        if (this.editedIndex > -1) {
+          /*
+            this sends the _id to api/suppliers/:id to update
+          */
+          const param = this.componentData[this.editedIndex]._id;
+          /* eslint no-underscore-dangle: 0 */
+          /* eslint prefer-template: 0 */
+          /*
+            I found that sending the entire this.edited item is acceptable
 
-          returns the updated supplier/row
-        */
-        const response = await axios.put('/api/suppliers/' + param, this.editedItem);
-        /*
-          Reused the the line under to 'refresh' the table with the updated row
-        */
-        Object.assign(this.componentData[this.editedIndex], response.data);
-      } else {
-        /*
-          To follow:
-          remove this supplier_id and other X_id
-        */
-        // eslint-disable-next-line prefer-template
-        this.editedItem.supplier_id = '0' + (this.componentData.length + 1).toString();
-        /*
-          ****Throws Error 500 when all fields are not filled in
-        */
+            returns the updated supplier/row
+          */
+          const response = await axios.put('/api/suppliers/' + param, this.editedItem);
+          /*
+            Reused the the line under to 'refresh' the table with the updated row
+          */
+          Object.assign(this.componentData[this.editedIndex], response.data);
+        } else {
+          /*
+            ****Throws Error 500 when all fields are not filled in
+          */
 
-        const response = await axios.post('/api/suppliers/', this.editedItem);
-        /*
-          returns newly created suppliers then pushing it in the table
-        */
-        this.componentData.push(response.data);
+          const response = await axios.post('/api/suppliers/', this.editedItem);
+          /*
+            returns newly created suppliers then pushing it in the table
+          */
+          this.componentData.push(response.data);
+        }
+        this.close();
       }
-
-      this.close();
     },
   },
 };
