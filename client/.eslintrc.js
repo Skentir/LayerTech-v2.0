@@ -17,6 +17,7 @@ module.exports = {
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'linebreak-style': 0,
     'comma-dangle': 'off',
+    'eslint no-underscore-dangle': 0,
   },
   overrides: [
     {
