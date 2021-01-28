@@ -3,26 +3,33 @@ const Schema = mongoose.Schema;
 
 // Create the User Schema
 const UserSchema = new Schema({
-    name: {
-        type: String,
-        required: true
-    },
     username: {
         type: String,
         required: true
     },
-    /*
-    email: {
-        type: String,
-        required: true
-    },*/
     password: {
         type: String,
         required: true
     },
-    date: {
-        type: Date,
-        default: Date.now
+    first_name: {
+        type: String,
+        required: true
+    },
+    last_name: {
+        type: String,
+        required: true
+    },
+    contact_num: {
+        type: String,
+        required: true
+    },
+    role: {
+        type: String,
+        required: true
+    },
+    department: {
+        type: String,
+        required: true
     }
 });
 

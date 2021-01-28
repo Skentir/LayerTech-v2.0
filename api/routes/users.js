@@ -13,10 +13,14 @@ const verifyToken = require('./verifyToken');
  */
 router.post('/register', (req, res) => {
     let {
-        name,
         username,
         password,
-        confirm_password
+        confirm_password,
+        first_name,
+        last_name,
+        contact_num,
+        role,
+        department
     } = req.body
 
     if (password !== confirm_password) {
@@ -34,21 +38,14 @@ router.post('/register', (req, res) => {
             });
         }
     })
-    /*
-    // Check for the Unique Email
-    User.findOne({
-        email: email
-    }).then(user => {
-        if (user) {
-            return res.status(400).json({
-                msg: "Email is already registred. Did you forgot your password."
-            });
-        }
-    });*/
 
     // The data is valid and new we can register the user
     let newUser = new User({
-        name,
+        first_name,
+        last_name,
+        contact_num,
+        role,
+        department,
         username,
         password
     });
@@ -111,12 +108,13 @@ router.post('/login', (req, res) => {
     });
 });
 
-/**
+/** FOR TESTING PURPOSES ONLY
+ * 
  * @route POST api/users/profile
  * @desc Return the User's Data
  * @access Private
  */
-router.get('/profile', verifyToken, (req,res) => {
+router.get('/profile', verifyToken, (req,res) => { 
     // return profile details
     res.json({
         name: 'Dan'
