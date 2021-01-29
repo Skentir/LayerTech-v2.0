@@ -5,6 +5,7 @@ const MongoStore = require('connect-mongo')(session);
 const mongoose = require('mongoose');
 const suppliers_routes = require('./routes/suppliers');
 const chickenRoutes = require('./routes/chickens')
+const warehouse_routes = require('./routes/warehouse')
 const cors = require('cors') // will allow us to make ajax requests from frontend to backend
 const morgan = require('morgan') //http requests automatic logger
 
@@ -46,6 +47,7 @@ app.use(morgan('tiny'));
 app.use(express.static('public')); 
 app.use('/api/suppliers', suppliers_routes);
 app.use('/api/chickens', chickenRoutes)
+app.use('/api/warehouse', warehouse_routes);
 
 // listen on port
 app.listen(port, () => console.log(`Listening to ${port}`));
