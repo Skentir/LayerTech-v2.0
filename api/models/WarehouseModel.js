@@ -18,6 +18,6 @@ const WarehouseSchema = new Schema({
     status: {type: String, required: true},
 })
 
-const WarehousModel = model('warehouse', WarehouseSchema);
+const WarehouseModel = model('warehouse', WarehouseSchema);
 
 module.exports = WarehouseModel;
