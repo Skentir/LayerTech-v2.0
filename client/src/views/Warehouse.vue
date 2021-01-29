@@ -276,8 +276,8 @@
 
 <script>
 import PageTemplate from '@/components/PageTemplate.vue';
-import warehouseData from '@/models/warehouse.json';
 import Navbar from '@/components/layout/Navbar.vue';
+import axios from 'axios';
 
 export default {
   components: {
@@ -331,6 +331,9 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
     },
+    /*
+      TODO: form validation
+    */
   },
 
   watch: {
@@ -340,24 +343,19 @@ export default {
     },
   },
 
-  created() {
-    this.initialize();
+  async mounted() {
+    const response = axios.get('/api/warehouse')
+    this.componentData = response.data
   },
 
   methods: {
-    /*
-      Assigns fetched data to local reference inside the component
-    */
-    initialize() {
-      this.componentData = warehouseData;
-    },
     /*
       Copies the data to editedItem to display on dialog.
       showDialog triggers the dialog view of the form.
     */
     editItem(item) {
       // get index of item
-      this.editedIndex = this.componentData[0].data.indexOf(item);
+      this.editedIndex = this.componentData.data.indexOf(item);
       // assign item to editedItem obj
       this.editedItem = { ...item };
       // format string to date
@@ -380,13 +378,15 @@ export default {
       Pushers the object to the source data
       or update the existing object with new data.
     */
-    save() {
+    async save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.componentData[0].data[this.editedIndex], this.editedItem);
+        const param = this.componentData[this.editedIndex]._id
+        const response = axios.put('api/warehouse/' + param, this.editedItem)
+        Object.assign(this.componentData[this.editedIndex], response.data);
       } else {
         // eslint-disable-next-line prefer-template
-        this.editedItem.item_id = '0' + (this.componentData[0].data.length + 1).toString();
-        this.componentData[0].data.push(this.editedItem);
+        //this.editedItem.item_id = '0' + (this.componentData[0].data.length + 1).toString();
+        //this.componentData[0].data.push(this.editedItem);
       }
       this.close();
     },
