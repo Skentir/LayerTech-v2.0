@@ -249,7 +249,7 @@
             </v-dialog>
           </v-toolbar>
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template v-slot:[`item.actions`]="{ item }">
           <v-icon
             id="edit_item_btn"
             small
@@ -344,8 +344,8 @@ export default {
   },
 
   async mounted() {
-    const response = axios.get('/api/warehouse')
-    this.componentData = response.data
+    const response = axios.get('/api/warehouse', { headers: { 'Content-Type': 'application/json' } });
+    this.componentData = response.data;
   },
 
   methods: {
@@ -380,13 +380,16 @@ export default {
     */
     async save() {
       if (this.editedIndex > -1) {
-        const param = this.componentData[this.editedIndex]._id
-        const response = axios.put('api/warehouse/' + param, this.editedItem)
+        const param = this.componentData[this.editedIndex].id;
+        const response = axios.put(`api/warehouse/${param}${this.editedItem}`);
         Object.assign(this.componentData[this.editedIndex], response.data);
       } else {
-        // eslint-disable-next-line prefer-template
-        //this.editedItem.item_id = '0' + (this.componentData[0].data.length + 1).toString();
-        //this.componentData[0].data.push(this.editedItem);
+        console.log('hi');
+        /*
+        * eslint-disable-next-line prefer-template
+        * this.editedItem.item_id = '0' + (this.componentData[0].data.length + 1).toString();
+        * this.componentData[0].data.push(this.editedItem);
+        */
       }
       this.close();
     },

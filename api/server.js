@@ -12,7 +12,7 @@ const morgan = require('morgan') //http requests automatic logger
 
 // create express app
 const app = express();
-const port = envPort || 3000;
+const port = envPort;
 
 // setup mongoose
 const options = { 
