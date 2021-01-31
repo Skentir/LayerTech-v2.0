@@ -7,7 +7,6 @@ const SuppliersSchema = new Schema({
     email: {type: String, required: true}, 
     company_name: {type: String, required: true}, 
     position: {type: String, required: true},
-    supplier_id: {type: String, required: true}, 
 })
 
 const SupplierItem = model('suppliers', SuppliersSchema);
