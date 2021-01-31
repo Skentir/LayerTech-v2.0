@@ -45,9 +45,9 @@ app.use(morgan('tiny'));
 
 // serve static files 
 app.use(express.static('public')); 
-app.use('/api/suppliers', suppliers_routes);
-app.use('/api/chickens', chickenRoutes)
-app.use('/api/warehouse', warehouse_routes);
+app.use('/suppliers', suppliers_routes);
+app.use('/chickens', chickenRoutes)
+app.use('/warehouse', warehouse_routes);
 
 // listen on port
 app.listen(port, () => console.log(`Listening to ${port}`));
