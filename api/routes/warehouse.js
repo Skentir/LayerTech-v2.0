@@ -8,7 +8,8 @@ router.get('/', async (req, res) => {
     try{
         console.log('Tried');
         const warehouse_items_list = await Warehouse.find();
-        if(!swarehouse_items_list) throw new Error('No Warehouse Items')
+        console.log(warehouse_items_list);
+        if(!warehouse_items_list) throw new Error('No Warehouse Items')
         
         res.status(200).json(warehouse_items_list);
 

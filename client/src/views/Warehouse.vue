@@ -5,8 +5,8 @@
       <PageTemplate :pageInfo="pageInfo"/>
       <!-- table, may add scrollbar/overflow if too tight -->
       <v-data-table
-        :headers="this.componentData[0].headers"
-        :items="this.componentData[0].data"
+        :headers="this.headers"
+        :items="this.componentData"
         :search="search"
         sort-by="date_received"
         class="elevation-1"
@@ -262,7 +262,7 @@
         <template v-slot:no-data>
           <v-btn
             color="primary"
-            @click="initialize"
+            @click="close"
           >
             Reset
           </v-btn>
@@ -294,6 +294,27 @@ export default {
     showDialog: false,
     dialogDelete: false,
     componentData: [],
+    headers: [
+      {
+        text: 'serial id', value: 'serial_id',
+      },
+      { text: 'product title', value: 'product_title' },
+      { text: 'Product Type', value: 'product_type' },
+      { text: 'Product Code', value: 'product_code' },
+      { text: 'Dosage', value: 'dosage' },
+      { text: 'Received Date', value: 'received_date' },
+      { text: 'Expiration Date', value: 'expiration_date' },
+      { text: 'Stock Quantity', value: 'stock_quantity' },
+      { text: 'Critical Volume', value: 'critical_volume' },
+      { text: 'Unit', value: 'unit' },
+      { text: 'Packaging', value: 'packaging' },
+      { text: 'Batch Number', value: 'batch_number' },
+      { text: 'Batch Status', value: 'batch_status' },
+      { text: 'Product Status', value: 'product_status' },
+      { text: 'Pulled Out Quantity', value: 'pulled_out_quantity' },
+      { text: 'Liquidated Quantity', value: 'liquidated_quantity' },
+      { text: 'Actions', value: 'actions', sortable: false },
+    ],
     editedIndex: -1,
     select_options_status: ['In Stock', 'Out of Stock', 'Pulled Out', 'Liquidated'],
     editedItem: {
@@ -344,8 +365,9 @@ export default {
   },
 
   async mounted() {
-    const response = axios.get('/api/warehouse', { headers: { 'Content-Type': 'application/json' } });
+    const response = axios.get('/api/warehouse/');
     this.componentData = response.data;
+    console.log(this.componentData);
   },
 
   methods: {
