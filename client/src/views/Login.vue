@@ -12,11 +12,12 @@
           <br />
           <!-- Error message container -->
           <v-alert
+            id="error-msg"
             dense
             v-show="hasError"
             type="error"
           >
-            Incorrect credentials.
+            {{errorMsg}}
           </v-alert>
 
           <v-text-field
@@ -72,7 +73,7 @@ export default {
       authenticated: false,
       accounts: employeesData,
       account: null, // hardcoded admin account
-      errorMsg: 'The username and password you entered did not match our records. Please double-check and try again.',
+      errorMsg: 'The username or password you entered did not match our records. Please double-check and try again.',
       rules: {
         /* eslint arrow-parens: 0 */
         required: [val => (val || '').length > 0 || 'This field is required'],
