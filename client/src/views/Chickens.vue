@@ -192,6 +192,9 @@ import PageTemplate from '@/components/PageTemplate.vue';
 import Navbar from '@/components/layout/Navbar.vue';
 import axios from 'axios';
 
+const url = process.env.VUE_APP_API_URL;
+
+
 export default {
   components: {
     PageTemplate,
@@ -301,10 +304,10 @@ export default {
     this just loads the chickens into componentData
   */
   async mounted() {
-    const response = await axios.get('/api/chickens/');
+    const response = await axios.get(`${url}/chickens/`);
     this.componentData = response.data;
     // Gets the supplier names from the backend
-    const suppliers = await axios.get('/api/suppliers/');
+    const suppliers = await axios.get(`${url}/suppliers/`);
     suppliers.data.forEach(supplier => this.supplier_names.push(supplier.supplier_name));
     console.log(this.supplier_names);
   },
@@ -354,12 +357,12 @@ export default {
           /* eslint no-underscore-dangle: 0 */
           /* eslint prefer-template: 0 */
 
-          const response = await axios.put('/api/chickens/' + param, this.editedItem);
+          const response = await axios.put(`${url}/chickens/${param}`, this.editedItem);
           Object.assign(this.componentData[this.editedIndex], response.data);
         } else {
           // eslint-disable-next-line prefer-template
 
-          const response = await axios.post('/api/chickens/', this.editedItem);
+          const response = await axios.post(`${url}/chickens/`, this.editedItem);
           this.componentData.push(response.data);
         }
         this.close();

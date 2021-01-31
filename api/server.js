@@ -37,8 +37,8 @@ mongoose.connect(mongoURI, options)
 
 // add routes
 app.use('/users', users);
-app.use('/api/suppliers', suppliers_routes);
-app.use('/api/chickens', chickenRoutes)
+app.use('/suppliers', suppliers_routes);
+app.use('/chickens', chickenRoutes)
 
 // listen on port
 app.listen(port, () => console.log(`Listening to ${port}`));
