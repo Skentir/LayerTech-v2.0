@@ -3,7 +3,7 @@ const { Schema, model} = require('mongoose');
 const WarehouseSchema = new Schema({
     //attributes present in add item modal
     serial_id: {type: String, unique: true, required: true},
-    supplier: {type: ObjectId, ref: 'suppliers', required: true},
+    supplier: {type: Schema.Types.ObjectId, ref: 'suppliers', required: true},
     product_title: {type: String, required: true},
     product_type: {type: String, required: true},
     product_code: {type: String, required: true},
@@ -18,11 +18,10 @@ const WarehouseSchema = new Schema({
     batch_number: {type: Number, min: 0, required: true},
     batch_status: {type: String, required: true},
     product_status: {type: String, required: true},
-    product_status: {type: String, required: true},
     pulled_out_quantity: {type: Number, min: 0, required: true},
     liquidated_quantity: {type: Number, min: 0, required: true},
 })
 
-const WarehouseModel = model('warehouse', WarehouseSchema);
+const WarehouseModel = model('warehouses', WarehouseSchema);
 
 module.exports = WarehouseModel;
