@@ -6,7 +6,6 @@ const chickenRoutes = require('./routes/chickens')
 const cors = require('cors') // will allow us to make ajax requests from frontend to backend
 const morgan = require('morgan') //http requests automatic logger
 const users = require('./routes/users');
-const chickenRoutes = require('./routes/chickens')
 
 // create express app
 const app = express();
@@ -37,7 +36,7 @@ mongoose.connect(mongoURI, options)
 });
 
 // add routes
-app.use('/api/users', users);
+app.use('/users', users);
 app.use('/api/suppliers', suppliers_routes);
 app.use('/api/chickens', chickenRoutes)
 
