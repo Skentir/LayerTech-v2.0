@@ -365,7 +365,8 @@ export default {
   },
 
   async mounted() {
-    const response = axios.get('/api/warehouse/');
+    const url = process.env.VUE_APP_API_URL;
+    const response = await axios.get(`${url}/warehouse/`);
     this.componentData = response.data;
     console.log(this.componentData);
   },
@@ -402,8 +403,9 @@ export default {
     */
     async save() {
       if (this.editedIndex > -1) {
+        const url = process.env.VUE_APP_API_URL;
         const param = this.componentData[this.editedIndex].id;
-        const response = axios.put(`api/warehouse/${param}${this.editedItem}`);
+        const response = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
         Object.assign(this.componentData[this.editedIndex], response.data);
       } else {
         console.log('hi');

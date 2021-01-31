@@ -235,7 +235,8 @@ export default {
 
       this just loads the suppliers into componentData
     */
-    const response = await axios.get('/api/suppliers/');
+    const url = process.env.VUE_APP_API_URL;
+    const response = await axios.get(`${url}/suppliers/`);
     this.componentData = response.data;
   },
   methods: {
@@ -282,6 +283,7 @@ export default {
       its now aync to accomodate api calls
     */
     async save() {
+      const url = process.env.VUE_APP_API_URL;
       if (this.editedIndex > -1) {
         /*
           this sends the _id to api/suppliers/:id to update
@@ -294,7 +296,7 @@ export default {
 
           returns the updated supplier/row
         */
-        const response = await axios.put('/api/suppliers/' + param, this.editedItem);
+        const response = await axios.put(`${url}/suppliers/${param}`, this.editedItem);
         /*
           Reused the the line under to 'refresh' the table with the updated row
         */
@@ -310,7 +312,7 @@ export default {
           ****Throws Error 500 when all fields are not filled in
         */
 
-        const response = await axios.post('/api/suppliers/', this.editedItem);
+        const response = await axios.post(`${url}/suppliers/`, this.editedItem);
         /*
           returns newly created suppliers then pushing it in the table
         */
