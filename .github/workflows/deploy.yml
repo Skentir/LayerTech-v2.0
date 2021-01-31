@@ -1,9 +1,9 @@
-name: Deploy
+name: Deploy main branch to Heroku
 
 on:
   push:
     branches:
-      - ci-pipeline-update
+      - main
 
 jobs:
   build:
