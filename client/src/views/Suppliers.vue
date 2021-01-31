@@ -4,10 +4,9 @@
     <div class="page-container">
       <PageTemplate :pageInfo="pageInfo"/>
       <v-data-table
-        :headers="this.componentData[0].headers"
-        :items="this.componentData[0].data"
+        :headers="this.headers"
+        :items="this.componentData"
         :search="search"
-        sort-by="calories"
         class="elevation-1"
       >
         <template v-slot:top>
@@ -45,40 +44,48 @@
           <span class="headline">Add a new Supplier</span>
         </v-card-title>
         <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="editedItem.supplier_name"
-                  label="Supplier Name" required/>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="editedItem.files_link"
-                  label="Supplier Files Link" required/>
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  v-model="editedItem.contact_num"
-                  label="Contact Number" required/>
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  v-model="editedItem.email"
-                  label="Email" required/>
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  v-model="editedItem.company_name"
-                  label="Company Name" required/>
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  v-model="editedItem.position"
-                  label="Position in Company" required/>
-              </v-col>
-            </v-row>
-          </v-container>
+          <v-form ref="form">
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="editedItem.supplier_name"
+                    :rules="rules.name"
+                    label="Supplier Name" required />
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="editedItem.files_link"
+                    :rules="rules.link"
+                    label="Supplier Files Link" required />
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field
+                    v-model="editedItem.contact_num"
+                    :rules="rules.contact_num"
+                    label="Contact Number" required />
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field
+                    v-model="editedItem.email"
+                    :rules="rules.email"
+                    label="Email" required />
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field
+                    v-model="editedItem.company_name"
+                    :rules="rules.company_name"
+                    label="Company Name" required />
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field
+                    v-model="editedItem.position"
+                    :rules="rules.position"
+                    label="Position in Company" required />
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -90,6 +97,7 @@
             Close
           </v-btn>
           <v-btn
+            :disabled="!formIsValid"
             color="blue darken-1"
             text
             @click="save()"
@@ -120,8 +128,8 @@
 <script>
 
 import PageTemplate from '@/components/PageTemplate.vue';
-import SuppliersData from '@/models/suppliers.json';
 import Navbar from '@/components/layout/Navbar.vue';
+import axios from 'axios';
 
 // @ is an alias to /src
 export default {
@@ -138,6 +146,18 @@ export default {
     tableTitle: 'Suppliers',
     showDialog: false,
     componentData: [],
+    headers: [
+      {
+        text: 'id', align: 'start', sortable: false, value: 'supplier_id',
+      },
+      { text: 'Supplier Name', value: 'supplier_name' },
+      { text: 'Suppliers Files Link', value: 'files_link', sortable: false },
+      { text: 'Contact Number', value: 'contact_num', sortable: false },
+      { text: 'Email', value: 'email', sortable: false },
+      { text: 'Company Name', value: 'company_name' },
+      { text: 'Position in Company', value: 'position' },
+      { text: 'Actions', value: 'actions', sortable: false },
+    ],
     editedIndex: -1,
     editedItem: {
       /*
@@ -163,10 +183,44 @@ export default {
       company_name: '',
       position: '',
     },
+    rules: {
+      /* eslint arrow-parens: 0 */
+      name: [val => (val || '').length > 0 || 'This field is required'],
+      link: [
+        val => (val || '').length > 0 || 'This field is required',
+      ],
+      contact_num: [
+        val => (val || '').length > 0 || 'This field is required',
+        val => /^[0-9]*$/.test(val) || 'No characters allowed',
+      ],
+      email: [
+        v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+      ],
+      company_name: [val => (val || '').length > 0 || 'This field is required'],
+      position: [val => (val || '').length > 0 || 'This field is required'],
+    },
   }),
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
+    },
+    /*
+      Button for Save will be disabled if at least one field is empty
+
+      To-do:
+        1. button is still disabled if one field is showing an error
+    */
+    formIsValid() {
+      return (
+        this.editedItem.supplier_name
+        && this.editedItem.files_link
+        && this.editedItem.contact_num
+        && /^[0-9]*$/.test(this.editedItem.contact_num)
+        && this.editedItem.email
+        && /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(this.editedItem.email)
+        && this.editedItem.company_name
+        && this.editedItem.position
+      );
     },
   },
   watch: {
@@ -175,16 +229,16 @@ export default {
       val || this.close();
     },
   },
-  created() {
-    this.initialize();
+  async mounted() {
+    /*
+      switched created to mounted based on reference
+
+      this just loads the suppliers into componentData
+    */
+    const response = await axios.get('/api/suppliers/');
+    this.componentData = response.data;
   },
   methods: {
-    /*
-      Loads dummy data into table above
-    */
-    initialize() {
-      this.componentData = SuppliersData;
-    },
     /*
       Fetches data from a row and loads them into
       the edit form modal
@@ -196,7 +250,7 @@ export default {
           2. loads said item into editedItem object
           3. then displays the dialog/modal
       */
-      this.editedIndex = this.componentData[0].data.indexOf(item);
+      this.editedIndex = this.componentData.indexOf(item);
       this.editedItem = { ...item };
       this.showDialog = true;
     },
@@ -209,20 +263,60 @@ export default {
       this.$nextTick(() => {
         this.editedItem = { ...this.defaultItem };
         this.editedIndex = -1;
+        /*
+          I encased the text field in a v-form
+          why:
+          error messages dont reset after closing the
+          dialog box, based on docs can only 'reset'
+          if encased in a v-form
+        */
+        this.$refs.form.reset();
       });
     },
     /*
       Creates a new row based on new input data
       appends newly created row into the existing table
     */
-    save() {
+    /*
+      I just reused the save function to minimize additional functions
+      its now aync to accomodate api calls
+    */
+    async save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.componentData[0].data[this.editedIndex], this.editedItem);
+        /*
+          this sends the _id to api/suppliers/:id to update
+        */
+        const param = this.componentData[this.editedIndex]._id;
+        /* eslint no-underscore-dangle: 0 */
+        /* eslint prefer-template: 0 */
+        /*
+          I found that sending the entire this.edited item is acceptable
+
+          returns the updated supplier/row
+        */
+        const response = await axios.put('/api/suppliers/' + param, this.editedItem);
+        /*
+          Reused the the line under to 'refresh' the table with the updated row
+        */
+        Object.assign(this.componentData[this.editedIndex], response.data);
       } else {
+        /*
+          To follow:
+          remove this supplier_id and other X_id
+        */
         // eslint-disable-next-line prefer-template
-        this.editedItem.supplier_id = '0' + (this.componentData[0].data.length + 1).toString();
-        this.componentData[0].data.push(this.editedItem);
+        this.editedItem.supplier_id = '0' + (this.componentData.length + 1).toString();
+        /*
+          ****Throws Error 500 when all fields are not filled in
+        */
+
+        const response = await axios.post('/api/suppliers/', this.editedItem);
+        /*
+          returns newly created suppliers then pushing it in the table
+        */
+        this.componentData.push(response.data);
       }
+
       this.close();
     },
   },
