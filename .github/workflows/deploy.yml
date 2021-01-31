@@ -16,3 +16,4 @@ jobs:
           heroku_app_name: "layertech-client" #Must be unique in Heroku
           heroku_email: "dan_velasco@dlsu.edu.ph"
           appdir: "client" # <- This will point to the api folder in your project
+          branch: "main" # push to branch "main" of heroku
