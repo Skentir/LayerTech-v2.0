@@ -1,4 +1,4 @@
-name: [CLIENT] Deploy main branch to Heroku
+name: (CLIENT) Deploy main branch to Heroku
 
 on:
   push:
