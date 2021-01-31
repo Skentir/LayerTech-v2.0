@@ -1,0 +1,19 @@
+name: [CLIENT] Deploy main branch to Heroku
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.9.9 # This is the action
+        with:
+          heroku_api_key: "67c067ee-543b-4f5a-b083-4d10f058a8fa"
+          heroku_app_name: "layertech-client" #Must be unique in Heroku
+          heroku_email: "dan_velasco@dlsu.edu.ph"
+          appdir: "client" # <- This will point to the client folder in your project
+          remote_branch: "master"
