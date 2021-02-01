@@ -291,9 +291,6 @@ export default {
       Confirms the deletion of an item and updates the table.
     */
     async deleteItemConfirm() {
-      /*
-        this sends the _id to api/suppliers/:id to update
-      */
       const param = this.componentData[this.editedIndex]._id;
       console.log(this.componentData[this.editedIndex]);
       /* eslint no-underscore-dangle: 0 */
@@ -304,7 +301,7 @@ export default {
         returns the updated supplier/row
       */
       await axios.delete('/api/employees/' + param);
-
+      this.componentData.splice(this.editedIndex, 1);
       this.closeDelete();
     },
     /*
