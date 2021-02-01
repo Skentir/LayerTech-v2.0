@@ -43,6 +43,16 @@ router.put('/:id', async (req, res) => {
     }
 })   
 
-//to follow delete
+// delete
+router.delete('/:id', async (req, res) => {
+    try{
+        const removed = await Employee.findByIdAndDelete(req.params.id);
+        if(!removed) throw Error('Something went wrong')
+        res.status(200).json(removed);
+    }catch(error){
+        console.log(error.message)
+        res.status(500).json({ message: error.message })
+    }
+})   
 
 module.exports = router;

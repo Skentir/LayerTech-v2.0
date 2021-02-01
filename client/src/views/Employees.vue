@@ -52,9 +52,17 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
-                        id="username_text_field"
                         v-model="editedItem.username"
                         label="Username"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.password"
+                        label="Password"
                         required
                       ></v-text-field>
                     </v-col>
@@ -66,7 +74,6 @@
                       md="6"
                     >
                       <v-text-field
-                        id="first_name_text_field"
                         v-model="editedItem.first_name"
                         label="First Name"
                         required
@@ -78,7 +85,6 @@
                       md="6"
                     >
                       <v-text-field
-                        id="last_name_text_field"
                         v-model="editedItem.last_name"
                         label="Last Name"
                         required
@@ -88,8 +94,7 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
-                        id="number_text_field"
-                        v-model="editedItem.number"
+                        v-model="editedItem.contact_number"
                         label="Contact Number"
                         required
                       ></v-text-field>
@@ -102,9 +107,8 @@
                       md="6"
                     >
                       <v-select
-                        id="department_text_field"
                         v-model="editedItem.department"
-                        :items="['Logistics', 'Operations']"
+                        :items="['Purchaser', 'Sales', 'Warehouse', 'Operations']"
                         label="Department"
                         required
                       ></v-select>
@@ -114,12 +118,12 @@
                       sm="6"
                       md="6"
                     >
-                      <v-text-field
-                        id="role_text_field"
+                      <v-select
                         v-model="editedItem.role"
+                        :items="['Purchaser', 'Sales', 'Warehouse', 'Operations']"
                         label="Role"
                         required
-                      ></v-text-field>
+                      ></v-select>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -174,14 +178,6 @@
             mdi-delete
           </v-icon>
         </template>
-        <template v-slot:no-data>
-          <v-btn
-            color="primary"
-            @click="save"
-          >
-            Reset
-          </v-btn>
-        </template>
       </v-data-table>
     </div>
     <v-footer id="footer">
@@ -225,17 +221,19 @@ export default {
     editedIndex: -1,
     editedItem: {
       username: '',
+      password: '',
       first_name: '',
       last_name: '',
-      number: '',
+      contact_number: '',
       department: '',
       role: '',
     },
     defaultItem: {
       username: '',
+      password: '',
       first_name: '',
       last_name: '',
-      number: '',
+      contact_number: '',
       department: '',
       role: '',
     },
@@ -274,7 +272,7 @@ export default {
     */
     editItem(item) {
       // get index of item
-      this.editedIndex = this.componentData[0].data.indexOf(item);
+      this.editedIndex = this.componentData.indexOf(item);
       // assign item to editedItem obj
       this.editedItem = { ...item };
       // set true to show dialog view
@@ -285,15 +283,28 @@ export default {
       Open the delete dialog.
     */
     deleteItem(item) {
-      this.editedIndex = this.componentData[0].data.indexOf(item);
+      this.editedIndex = this.componentData.indexOf(item);
       this.editedItem = { ...item };
       this.dialogDelete = true;
     },
     /*
       Confirms the deletion of an item and updates the table.
     */
-    deleteItemConfirm() {
-      this.componentData[0].data.splice(this.editedIndex, 1);
+    async deleteItemConfirm() {
+      /*
+        this sends the _id to api/suppliers/:id to update
+      */
+      const param = this.componentData[this.editedIndex]._id;
+      console.log(this.componentData[this.editedIndex]);
+      /* eslint no-underscore-dangle: 0 */
+      /* eslint prefer-template: 0 */
+      /*
+        I found that sending the entire this.edited item is acceptable
+
+        returns the updated supplier/row
+      */
+      await axios.delete('/api/employees/' + param);
+
       this.closeDelete();
     },
     /*
@@ -322,13 +333,25 @@ export default {
       Pushers the object to the source data
       or update the existing object with new data.
     */
-    save() {
+    async save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.componentData[0].data[this.editedIndex], this.editedItem);
+        /*
+          this sends the _id to api/suppliers/:id to update
+        */
+        const param = this.componentData[this.editedIndex]._id;
+        /* eslint no-underscore-dangle: 0 */
+        /* eslint prefer-template: 0 */
+        /*
+          I found that sending the entire this.edited item is acceptable
+
+          returns the updated supplier/row
+        */
+        const response = await axios.put('/api/employees/' + param, this.editedItem);
+        Object.assign(this.componentData[this.editedIndex], response.data);
       } else {
         // eslint-disable-next-line prefer-template
-        this.editedItem.item_id = '0' + (this.componentData[0].data.length + 1).toString();
-        this.componentData[0].data.push(this.editedItem);
+        const response = await axios.post('/api/employees/', this.editedItem);
+        this.componentData.push(response.data);
       }
       this.close();
     },
