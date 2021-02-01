@@ -5,8 +5,8 @@
       <PageTemplate :pageInfo="pageInfo"/>
       <!-- table, may add scrollbar/overflow if too tight -->
       <v-data-table
-        :headers="this.componentData[0].headers"
-        :items="this.componentData[0].data"
+        :headers="this.headers"
+        :items="this.componentData"
         :search="search"
         sort-by="date_received"
         class="elevation-1"
@@ -249,7 +249,7 @@
             </v-dialog>
           </v-toolbar>
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template v-slot:[`item.actions`]="{ item }">
           <v-icon
             id="edit_item_btn"
             small
@@ -262,7 +262,7 @@
         <template v-slot:no-data>
           <v-btn
             color="primary"
-            @click="initialize"
+            @click="close"
           >
             Reset
           </v-btn>
@@ -276,8 +276,8 @@
 
 <script>
 import PageTemplate from '@/components/PageTemplate.vue';
-import warehouseData from '@/models/warehouse.json';
 import Navbar from '@/components/layout/Navbar.vue';
+import axios from 'axios';
 
 export default {
   components: {
@@ -294,6 +294,27 @@ export default {
     showDialog: false,
     dialogDelete: false,
     componentData: [],
+    headers: [
+      {
+        text: 'serial id', value: 'serial_id',
+      },
+      { text: 'product title', value: 'product_title' },
+      { text: 'Product Type', value: 'product_type' },
+      { text: 'Product Code', value: 'product_code' },
+      { text: 'Dosage', value: 'dosage' },
+      { text: 'Received Date', value: 'received_date' },
+      { text: 'Expiration Date', value: 'expiration_date' },
+      { text: 'Stock Quantity', value: 'stock_quantity' },
+      { text: 'Critical Volume', value: 'critical_volume' },
+      { text: 'Unit', value: 'unit' },
+      { text: 'Packaging', value: 'packaging' },
+      { text: 'Batch Number', value: 'batch_number' },
+      { text: 'Batch Status', value: 'batch_status' },
+      { text: 'Product Status', value: 'product_status' },
+      { text: 'Pulled Out Quantity', value: 'pulled_out_quantity' },
+      { text: 'Liquidated Quantity', value: 'liquidated_quantity' },
+      { text: 'Actions', value: 'actions', sortable: false },
+    ],
     editedIndex: -1,
     select_options_status: ['In Stock', 'Out of Stock', 'Pulled Out', 'Liquidated'],
     editedItem: {
@@ -331,6 +352,9 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
     },
+    /*
+      TODO: form validation
+    */
   },
 
   watch: {
@@ -340,24 +364,21 @@ export default {
     },
   },
 
-  created() {
-    this.initialize();
+  async mounted() {
+    const url = process.env.VUE_APP_API_URL;
+    const response = await axios.get(`${url}/warehouse/`);
+    this.componentData = response.data;
+    console.log(this.componentData);
   },
 
   methods: {
-    /*
-      Assigns fetched data to local reference inside the component
-    */
-    initialize() {
-      this.componentData = warehouseData;
-    },
     /*
       Copies the data to editedItem to display on dialog.
       showDialog triggers the dialog view of the form.
     */
     editItem(item) {
       // get index of item
-      this.editedIndex = this.componentData[0].data.indexOf(item);
+      this.editedIndex = this.componentData.data.indexOf(item);
       // assign item to editedItem obj
       this.editedItem = { ...item };
       // format string to date
@@ -380,13 +401,19 @@ export default {
       Pushers the object to the source data
       or update the existing object with new data.
     */
-    save() {
+    async save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.componentData[0].data[this.editedIndex], this.editedItem);
+        const url = process.env.VUE_APP_API_URL;
+        const param = this.componentData[this.editedIndex].id;
+        const response = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
+        Object.assign(this.componentData[this.editedIndex], response.data);
       } else {
-        // eslint-disable-next-line prefer-template
-        this.editedItem.item_id = '0' + (this.componentData[0].data.length + 1).toString();
-        this.componentData[0].data.push(this.editedItem);
+        console.log('hi');
+        /*
+        * eslint-disable-next-line prefer-template
+        * this.editedItem.item_id = '0' + (this.componentData[0].data.length + 1).toString();
+        * this.componentData[0].data.push(this.editedItem);
+        */
       }
       this.close();
     },
