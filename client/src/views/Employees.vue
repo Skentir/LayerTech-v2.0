@@ -48,85 +48,94 @@
                 <span id="form_title" class="headline">Add new employee</span>
               </v-card-title>
               <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.username"
-                        label="Username"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.password"
-                        label="Password"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="6"
-                    >
-                      <v-text-field
-                        v-model="editedItem.first_name"
-                        label="First Name"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="6"
-                    >
-                      <v-text-field
-                        v-model="editedItem.last_name"
-                        label="Last Name"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.contact_number"
-                        label="Contact Number"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="6"
-                    >
-                      <v-select
-                        v-model="editedItem.department"
-                        :items="['Purchaser', 'Sales', 'Warehouse', 'Operations']"
-                        label="Department"
-                        required
-                      ></v-select>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="6"
-                    >
-                      <v-select
-                        v-model="editedItem.role"
-                        :items="['Purchaser', 'Sales', 'Warehouse', 'Operations']"
-                        label="Role"
-                        required
-                      ></v-select>
-                    </v-col>
-                  </v-row>
-                </v-container>
+                <v-form ref="form">
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="editedItem.username"
+                          label="Username"
+                          :rules="rules.username"
+                          required
+                          :disabled="edit_username"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="editedItem.password"
+                          label="Password"
+                          :rules="rules.password"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6"
+                      >
+                        <v-text-field
+                          v-model="editedItem.first_name"
+                          label="First Name"
+                          :rules="rules.first_name"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6"
+                      >
+                        <v-text-field
+                          v-model="editedItem.last_name"
+                          label="Last Name"
+                          :rules="rules.last_name"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="editedItem.contact_number"
+                          label="Contact Number"
+                          :rules="rules.contact_num"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6"
+                      >
+                        <v-select
+                          v-model="editedItem.department"
+                          :items="['Purchaser', 'Sales', 'Warehouse', 'Operations']"
+                          label="Department"
+                          :rules="rules.department"
+                        ></v-select>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6"
+                      >
+                        <v-select
+                          v-model="editedItem.role"
+                          :items="['Purchaser', 'Sales', 'Warehouse', 'Operations']"
+                          label="Role"
+                          :rules="rules.role"
+                          required
+                        ></v-select>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-form>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -140,7 +149,7 @@
                 <v-btn
                   color="blue darken-1"
                   text
-                  @click="save()"
+                  @click="save"
                 >
                   Save
                 </v-btn>
@@ -237,6 +246,20 @@ export default {
       department: '',
       role: '',
     },
+    rules: {
+      /* eslint arrow-parens: 0 */
+      username: [val => (val || '').length > 0 || 'This field is required'],
+      password: [val => (val || '').length > 0 || 'This field is required'],
+      first_name: [val => (val || '').length > 0 || 'This field is required'],
+      last_name: [val => (val || '').length > 0 || 'This field is required'],
+      contact_num: [
+        val => (val || '').length > 0 || 'This field is required',
+        val => /^[0-9]*$/.test(val) || 'No characters allowed',
+      ],
+      department: [val => (val || '').length > 0 || 'This field is required'],
+      role: [val => (val || '').length > 0 || 'This field is required'],
+    },
+    edit_username: false,
   }),
 
   computed: {
@@ -276,7 +299,10 @@ export default {
       // assign item to editedItem obj
       this.editedItem = { ...item };
       // set true to show dialog view
+      console.log(this.componentData[this.editedIndex].password);
+      this.editedItem.password = this.componentData[this.editedIndex].password;
       this.showDialog = true;
+      this.edit_username = true;
     },
     /*
       Deletes an item from the table with regards to the data.
@@ -314,6 +340,10 @@ export default {
         this.editedItem = { ...this.defaultItem };
         this.editedIndex = -1;
       });
+      if (this.edit_username) {
+        this.edit_username = false;
+      }
+      this.$refs.form.reset();
     },
     /*
       Closes the dialog for deleting an item and resets editedItem
@@ -331,26 +361,28 @@ export default {
       or update the existing object with new data.
     */
     async save() {
-      if (this.editedIndex > -1) {
-        /*
-          this sends the _id to api/suppliers/:id to update
-        */
-        const param = this.componentData[this.editedIndex]._id;
-        /* eslint no-underscore-dangle: 0 */
-        /* eslint prefer-template: 0 */
-        /*
-          I found that sending the entire this.edited item is acceptable
+      if (this.$refs.form.validate()) {
+        if (this.editedIndex > -1) {
+          /*
+            this sends the _id to api/suppliers/:id to update
+          */
+          const param = this.componentData[this.editedIndex]._id;
+          /* eslint no-underscore-dangle: 0 */
+          /* eslint prefer-template: 0 */
+          /*
+            I found that sending the entire this.edited item is acceptable
 
-          returns the updated supplier/row
-        */
-        const response = await axios.put('/api/employees/' + param, this.editedItem);
-        Object.assign(this.componentData[this.editedIndex], response.data);
-      } else {
-        // eslint-disable-next-line prefer-template
-        const response = await axios.post('/api/employees/', this.editedItem);
-        this.componentData.push(response.data);
+            returns the updated supplier/row
+          */
+          const response = await axios.put('/api/employees/' + param, this.editedItem);
+          Object.assign(this.componentData[this.editedIndex], response.data);
+        } else {
+          // eslint-disable-next-line prefer-template
+          const response = await axios.post('/api/employees/', this.editedItem);
+          this.componentData.push(response.data);
+        }
+        this.close();
       }
-      this.close();
     },
   },
 };
