@@ -4,8 +4,8 @@
     <div class="page-container">
       <PageTemplate :pageInfo="pageInfo"/>
       <v-data-table
-        :headers="this.componentData[0].headers"
-        :items="this.componentData[0].data"
+        :headers="this.headers"
+        :items="this.componentData"
         :search="search"
         sort-by="username"
         class="elevation-1"
@@ -177,7 +177,7 @@
         <template v-slot:no-data>
           <v-btn
             color="primary"
-            @click="initialize"
+            @click="save"
           >
             Reset
           </v-btn>
@@ -193,8 +193,8 @@
 // @ is an alias to /src
 
 import PageTemplate from '@/components/PageTemplate.vue';
-import employeesData from '@/models/employees.json';
 import Navbar from '@/components/layout/Navbar.vue';
+import axios from 'axios';
 
 export default {
   components: {
@@ -211,6 +211,17 @@ export default {
     showDialog: false,
     dialogDelete: false,
     componentData: [],
+    headers: [
+      {
+        text: 'Username', align: 'start', value: 'username',
+      },
+      { text: 'First Name', value: 'first_name', sortable: false },
+      { text: 'Last Name', value: 'last_name', sortable: false },
+      { text: 'Contact Number', value: 'contact_number', sortable: false },
+      { text: 'Role', value: 'role', sortable: true },
+      { text: 'Department', value: 'department', sortable: true },
+      { text: 'Actions', value: 'actions', sortable: false },
+    ],
     editedIndex: -1,
     editedItem: {
       username: '',
@@ -247,17 +258,16 @@ export default {
     },
   },
 
-  created() {
-    this.initialize();
+  async mounted() {
+    const response = await axios.get('/api/employees/');
+    this.componentData = response.data;
+    console.log(this.componentData);
   },
 
   methods: {
     /*
       Assigns fetched data to local reference inside the component
     */
-    initialize() {
-      this.componentData = employeesData;
-    },
     /*
       Copies the data to editedItem to display on dialog.
       showDialog triggers the dialog view of the form.
