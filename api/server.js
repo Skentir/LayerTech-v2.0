@@ -1,13 +1,12 @@
 const express = require('express');
-const { envPort, sessionKey, dbURL } = require('./config');
-const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
+const { envPort, mongoURI } = require('./config');
 const mongoose = require('mongoose');
 const suppliers_routes = require('./routes/suppliers');
 const chickenRoutes = require('./routes/chickens')
 const cors = require('cors') // will allow us to make ajax requests from frontend to backend
 const morgan = require('morgan') //http requests automatic logger
-
+const users = require('./routes/users');
+const chickenRoutes = require('./routes/chickens')
 
 // create express app
 const app = express();
@@ -21,29 +20,24 @@ const options = {
   useFindAndModify: false 
 };
 
-mongoose.connect(dbURL, options)
-.then(() => console.log('MongoDB database Connected...'))
-.catch((err) => console.log(err))
-
-// Sessions
-/*
-app.use(session({
-  secret: sessionKey,
-  store: new MongoStore({ mongooseConnection: mongoose.connection }),
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 }
-}));
-*/
 // Setup middlewares
 app.use(express.json()); // support json encoded bodies
 app.use(express.urlencoded({ extended: true })); // support encoded bodies
-
-app.use(cors());
-app.use(morgan('tiny'));
+app.use(cors()); // allow access to API from difference sources
+app.use(morgan('tiny')) // logs HTTP requests
 
 // serve static files 
-app.use(express.static('public')); 
+app.use(express.static('public'));
+
+mongoose.connect(mongoURI, options)
+.then(() => {
+    console.log(`Database connected successfully ${mongoURI}`)
+}).catch(err => {
+    console.log(`Unable to connect with the database ${err}`)
+});
+
+// add routes
+app.use('/api/users', users);
 app.use('/api/suppliers', suppliers_routes);
 app.use('/api/chickens', chickenRoutes)
 
