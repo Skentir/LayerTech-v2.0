@@ -59,14 +59,26 @@
                           required
                           :disabled="edit_username"
                         ></v-text-field>
+                         <v-alert
+                            dense
+                            :value="unique"
+                            text
+                            type="error"
+                            transition="scale-transition"
+                          >
+                          Username is not unique!
+                          </v-alert>
                       </v-col>
                     </v-row>
                     <v-row>
                       <v-col cols="12">
                         <v-text-field
                           v-model="editedItem.password"
+                          :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
                           label="Password"
+                          :type="show_password ? 'text' : 'password'"
                           :rules="rules.password"
+                           @click:append="show_password = !show_password"
                           required
                         ></v-text-field>
                       </v-col>
@@ -260,6 +272,8 @@ export default {
       role: [val => (val || '').length > 0 || 'This field is required'],
     },
     edit_username: false,
+    show_password: false,
+    unique: false,
   }),
 
   computed: {
@@ -282,7 +296,6 @@ export default {
   async mounted() {
     const response = await axios.get('/api/employees/');
     this.componentData = response.data;
-    console.log(this.componentData);
   },
 
   methods: {
@@ -299,7 +312,6 @@ export default {
       // assign item to editedItem obj
       this.editedItem = { ...item };
       // set true to show dialog view
-      console.log(this.componentData[this.editedIndex].password);
       this.editedItem.password = this.componentData[this.editedIndex].password;
       this.showDialog = true;
       this.edit_username = true;
@@ -318,7 +330,6 @@ export default {
     */
     async deleteItemConfirm() {
       const param = this.componentData[this.editedIndex]._id;
-      console.log(this.componentData[this.editedIndex]);
       /* eslint no-underscore-dangle: 0 */
       /* eslint prefer-template: 0 */
       /*
@@ -344,6 +355,7 @@ export default {
         this.edit_username = false;
       }
       this.$refs.form.reset();
+      this.unique = false;
     },
     /*
       Closes the dialog for deleting an item and resets editedItem
@@ -376,12 +388,18 @@ export default {
           */
           const response = await axios.put('/api/employees/' + param, this.editedItem);
           Object.assign(this.componentData[this.editedIndex], response.data);
+          this.close();
         } else {
           // eslint-disable-next-line prefer-template
           const response = await axios.post('/api/employees/', this.editedItem);
-          this.componentData.push(response.data);
+          if (response.data.success) {
+            this.componentData.push(response.data.list);
+            this.unique = false;
+            this.close();
+          } else {
+            this.unique = true;
+          }
         }
-        this.close();
       }
     },
   },

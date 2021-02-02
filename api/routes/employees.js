@@ -21,10 +21,17 @@ router.post('/', async (req, res) => {
     try{
         const employees_list = await new_employee.save()
         if(!employees_list) throw new Error('something went wrong')
-    
-        res.status(200).json(employees_list);
+        
+        const response = {
+            list: employees_list,
+            success: true,
+        }
+        res.status(200).json(response);
     }catch(error) {
-        res.status(500).json({ message: error.message })
+        const error_ret = {
+            success: false,
+        }
+        res.status(200).json(error_ret);
         
     } 
 })
