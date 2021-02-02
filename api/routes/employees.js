@@ -28,10 +28,23 @@ router.post('/', async (req, res) => {
         }
         res.status(200).json(response);
     }catch(error) {
-        const error_ret = {
-            success: false,
+        if (error.name === 'MongoError' && error.code === 11000){
+            /*
+                Code 11000 is for duplicate unique element found
+            */
+            const error_ret = {
+                success: false,
+            }
+            res.status(200).json(error_ret);
         }
-        res.status(200).json(error_ret);
+        else {
+            /*
+                Any other error
+            */
+            console.log(error.message)
+            res.status(500).json({ message: error.message })
+        }
+        
         
     } 
 })
