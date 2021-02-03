@@ -53,7 +53,7 @@
                   v-model="editedItem.supplier_name"
                   :rules="rules.supplier_name"
                   :items="supplier_names"
-                  label="Supplier Name" required/>
+                  label="Supplier Name" :disabled="editedIndex > -1" required/>
               </v-col>
               <v-col cols="6">
                 <v-text-field
@@ -72,7 +72,7 @@
                 <v-text-field
                   v-model="editedItem.population"
                   :rules="rules.population"
-                  label="Population" required/>
+                  label="Population" :disabled="editedIndex > -1" required/>
               </v-col>
               <v-col cols="4">
                 <v-text-field
@@ -110,6 +110,7 @@
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
                       v-model="editedItem.date_recieved"
+                      :disabled="editedIndex > -1"
                       :rules="rules.date_recieved"
                       label="Date"
                       hint="YYYY/MM/DD format"
@@ -210,19 +211,21 @@ export default {
     componentData: [],
     supplier_names: [],
     headers: [
+      { text: 'Batch Number', value: 'batch_number' },
       { text: 'Breed', value: 'breed' },
-      { text: 'Chicken Type', value: 'chicken_type', sortable: false },
-      { text: 'Population', value: 'population', sortable: false },
-      { text: 'Mortality Rate', value: 'mortality_rate', sortable: false },
+      { text: 'Chicken Type', value: 'chicken_type' },
+      { text: 'Population', value: 'population' },
+      { text: 'Called Out Quantity', value: 'called_out_quantity' },
+      { text: 'Mortality Rate', value: 'mortality_rate' },
       { text: 'Morbidity Rate', value: 'morbidity_rate' },
       { text: 'Feed Requirement', value: 'feed_requirement' },
-      { text: 'Vaccination Schedule', value: 'vaccination_schedule', sortable: false },
-      { text: 'Date Received', value: 'date_received', sortable: false },
+      { text: 'Vaccination Schedule', value: 'vaccination_schedule' },
+      { text: 'Date Received', value: 'date_received' },
       { text: 'Supplier Name', value: 'supplier_name' },
       { text: 'Person In Charge', value: 'person_in_charge' },
       { text: 'Section', value: 'section' },
-      { text: 'Building', value: 'building', sortable: false },
-      { text: 'Actions', value: 'actions', sortable: false },
+      { text: 'Building', value: 'building' },
+      { text: 'Actions', value: 'actions' },
     ],
     editedIndex: -1,
     editedItem: {
@@ -230,10 +233,12 @@ export default {
         Below are temporary data that will be filled in
         for the edit form
       */
+      batch_number: 0,
       supplier_name: '',
       breed: '',
       chicken_type: '',
       population: 0,
+      called_out_quantity: 0,
       mortality_rate: 0,
       morbidity_rate: 0,
       feed_requirement: '',
@@ -355,12 +360,13 @@ export default {
           const param = this.componentData[this.editedIndex]._id;
           /* eslint no-underscore-dangle: 0 */
           /* eslint prefer-template: 0 */
-
           const response = await axios.put(`${url}/chickens/${param}`, this.editedItem);
           Object.assign(this.componentData[this.editedIndex], response.data);
         } else {
           // eslint-disable-next-line prefer-template
-
+          // update the batch number here
+          const chickens = await axios.get(`${url}/chickens/`);
+          this.editedItem.batch_number = chickens.data.length + 1;
           const response = await axios.post(`${url}/chickens/`, this.editedItem);
           this.componentData.push(response.data);
         }
