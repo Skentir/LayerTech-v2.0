@@ -271,6 +271,7 @@ export default {
       its now aync to accomodate api calls
     */
     async submit() {
+      const url = process.env.VUE_APP_API_URL;
       if (this.$refs.form.validate()) {
         if (this.editedIndex > -1) {
           /*
