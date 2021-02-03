@@ -93,7 +93,8 @@ router.post('/login', (req, res) => {
                     expiresIn: 604800
                 }, (err, token) => {
                     console.log("login success.");
-                    return res.header('auth-token', token).json({
+                    return res.status(200).json({
+                        "auth-token": token,
                         msg: "Login success.",
                         success: true
                     });

@@ -184,7 +184,6 @@ export default {
   },
   created() {
     this.initialize();
-    console.log(JSON.parse(localStorage.getItem('auth-token'))); // get auth-token
   },
   methods: {
     /*

@@ -62,6 +62,8 @@
 import employeesData from '@/models/employees.json';
 import LoginService from '../../services/LoginService';
 
+const url = process.env.VUE_APP_API_URL;
+
 export default {
   name: 'Login',
   components: {},
@@ -107,6 +109,7 @@ export default {
     if (JSON.parse(localStorage.getItem('auth-token'))) { // if logged in
       this.$router.push('/home');
     }
+    console.log(url); // localhost8080 if dev
   }
 };
 </script>

@@ -1,4 +1,4 @@
-name: Continuous Integration
+name: Client Workflow
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ defaults:
     working-directory: client
 
 jobs:
-  test_pull_request:
+  client-unit-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2 # This action checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it.
