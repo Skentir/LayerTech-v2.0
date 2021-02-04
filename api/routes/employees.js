@@ -69,10 +69,24 @@ router.post('/register', (req, res) => {
 //Update
 router.put('/:id', async (req, res) => {
     try{
-        const response = await Employee.findByIdAndUpdate(req.body);
-        if(!response) throw Error('Something went wrong')
-        const updated = { ...response._doc, ...req.body}
-        res.status(200).json(updated);
+        let newPassword = req.body.password;
+        // Hash the password
+        bcrypt.genSalt(10, (err, salt) => {     
+            bcrypt.hash(newPassword, salt, async (err, hash) => {
+                if (err) return res.status(400).json({error: err})
+                req.body.password = hash;
+                console.log(req.body.password);
+                // Find and update
+                const response = await Employee.findByIdAndUpdate(req.params.id, req.body);
+                if(!response) throw Error('Failed to update employee.')
+                const updated = { ...response._doc, ...req.body}
+                res.status(200).json(updated);
+                
+            });
+        });
+
+
+        
     }catch(error){
         console.log(error.message)
         res.status(500).json({ message: error.message })

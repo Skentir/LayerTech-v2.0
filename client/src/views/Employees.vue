@@ -83,7 +83,7 @@
                         ></v-text-field>
                       </v-col>
                     </v-row>
-                    <v-row>
+                    <v-row v-if="editedIndex == -1"> <!-- if not editing -->
                       <v-col cols="12">
                         <v-text-field
                           v-model="confirm_password"
@@ -395,7 +395,7 @@ export default {
           /*
             this sends the _id to api/suppliers/:id to update
           */
-          const param = this.componentData[this.editedIndex]._id;
+          const id = this.componentData[this.editedIndex]._id;
           /* eslint no-underscore-dangle: 0 */
           /* eslint prefer-template: 0 */
           /*
@@ -403,7 +403,7 @@ export default {
 
             returns the updated supplier/row
           */
-          const response = await axios.put(`${url}/employees/${param}`, this.editedItem);
+          const response = await axios.put(`${url}/employees/${id}`, this.editedItem);
           Object.assign(this.componentData[this.editedIndex], response.data);
           this.close();
         } else {
