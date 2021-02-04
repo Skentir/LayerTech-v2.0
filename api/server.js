@@ -1,12 +1,15 @@
 const express = require('express');
 const { envPort, mongoURI } = require('./config');
 const mongoose = require('mongoose');
+const cors = require('cors') // will allow us to make ajax requests from frontend to backend
+const morgan = require('morgan') //http requests automatic logger
+
+// import routes
 const suppliers_routes = require('./routes/suppliers');
 const chickenRoutes = require('./routes/chickens')
 const warehouse_routes = require('./routes/warehouse')
 const operations_routes = require('./routes/operations')
-const cors = require('cors') // will allow us to make ajax requests from frontend to backend
-const morgan = require('morgan') //http requests automatic logger
+const employees_routes = require('./routes/employees')
 const users = require('./routes/users');
 
 // create express app
@@ -28,6 +31,7 @@ app.use(cors()); // allow access to API from difference sources
 app.use(morgan('tiny')) // logs HTTP requests
 
 // serve static files 
+<<<<<<< HEAD
 app.use(express.static('public'));
 mongoose.connect(mongoURI, options)
 .then(() => {
@@ -42,6 +46,12 @@ app.use('/suppliers', suppliers_routes);
 app.use('/chickens', chickenRoutes)
 app.use('/warehouse', warehouse_routes);
 app.use('/operations', operations_routes);
+=======
+app.use(express.static('public')); 
+app.use('/api/suppliers', suppliers_routes);
+app.use('/api/chickens', chickenRoutes)
+app.use('/api/employees', employees_routes);
+>>>>>>> 20504cdb749087b1bc4e9f81083918f3316e21c2
 
 // listen on port
 app.listen(port, () => console.log(`Listening to ${port}`));
