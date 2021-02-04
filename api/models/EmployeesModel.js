@@ -2,7 +2,6 @@ const { Schema, model} = require('mongoose');
 
 const EmployeesSchema = new Schema({
     username: {type: String, unique: true, required: true}, 
-    //to follow password encryption
     password: {type: String, required: true}, 
     first_name: {type: String, required: true}, 
     last_name: {type: String, required: true}, 

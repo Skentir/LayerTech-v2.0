@@ -10,7 +10,6 @@ const chickenRoutes = require('./routes/chickens')
 const warehouse_routes = require('./routes/warehouse')
 const operations_routes = require('./routes/operations')
 const employees_routes = require('./routes/employees')
-const users = require('./routes/users');
 
 // create express app
 const app = express();
@@ -40,7 +39,6 @@ mongoose.connect(mongoURI, options)
 });
 
 // add routes
-app.use('/users', users);
 app.use('/suppliers', suppliers_routes);
 app.use('/chickens', chickenRoutes)
 app.use('/warehouse', warehouse_routes);

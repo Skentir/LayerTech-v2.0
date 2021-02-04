@@ -84,6 +84,20 @@
                       </v-col>
                     </v-row>
                     <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="confirm_password"
+                          :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
+                          label="Confirm Password"
+                          :type="show_password ? 'text' : 'password'"
+                          :rules="[(editedItem.password === confirm_password) ||
+                          'Password do not match']"
+                           @click:append="show_password = !show_password"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
                       <v-col
                         cols="12"
                         sm="6"
@@ -127,7 +141,7 @@
                       >
                         <v-select
                           v-model="editedItem.department"
-                          :items="['Purchaser', 'Sales', 'Warehouse', 'Operations']"
+                          :items="['Purchaser', 'Sales', 'Warehouse', 'Operations', 'Admin']"
                           label="Department"
                           :rules="rules.department"
                         ></v-select>
@@ -139,7 +153,7 @@
                       >
                         <v-select
                           v-model="editedItem.role"
-                          :items="['Purchaser', 'Sales', 'Warehouse', 'Operations']"
+                          :items="['Purchaser', 'Sales', 'Warehouse', 'Operations', 'Admin']"
                           label="Role"
                           :rules="rules.role"
                           required
@@ -241,6 +255,7 @@ export default {
       { text: 'Department', value: 'department', sortable: true },
       { text: 'Actions', value: 'actions', sortable: false },
     ],
+    confirm_password: '',
     editedIndex: -1,
     editedItem: {
       username: '',
@@ -393,9 +408,9 @@ export default {
           this.close();
         } else {
           // eslint-disable-next-line prefer-template
-          const response = await axios.post(`${url}/employees/`, this.editedItem);
+          const response = await axios.post(`${url}/employees/register/`, this.editedItem);
           if (response.data.success) {
-            this.componentData.push(response.data.list);
+            this.componentData.push(response.data.user);
             this.unique = false;
             this.close();
           } else {
