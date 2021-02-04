@@ -188,7 +188,7 @@
                       <v-col cols="12">
                         <v-text-field
                           v-model="addCallItem.called_out_quantity"
-                          :rules="rules.call_out"
+                          :rules="rule_call_out"
                           label="Call out chickens" type="number"
                           required/>
                       </v-col>
@@ -235,7 +235,6 @@ import Navbar from '@/components/layout/Navbar.vue';
 import axios from 'axios';
 
 const url = process.env.VUE_APP_API_URL;
-
 export default {
   components: {
     PageTemplate,
@@ -345,15 +344,17 @@ export default {
       person_in_charge: [val => !!val || 'This field is required'],
       section: [val => !!val || 'This field is required'],
       building: [val => !!val || 'This field is required'],
-      call_out: [
-        val => /^[0-9][0-9]*$/.test(val) || 'Integer must be valid',
-        val => val <= this.editedItem.population || 'Call out chickens number should be less than or equal to population'// population is updated on click (HOW TO FIX??????)
-      ],
     },
   }),
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
+    },
+    rule_call_out() {
+      return [
+        val => /^[0-9][0-9]*$/.test(val) || 'Integer must be valid',
+        val => val <= this.editedItem.population || 'Call out chickens number should be less than or equal to population'// population is updated on click (HOW TO FIX??????)
+      ];
     },
   },
   watch: {
@@ -411,26 +412,28 @@ export default {
       Confirms the add population and/or pull off a chicken batch and updates the table.
     */
     async pullAddConfirm() {
-      const param = this.componentData[this.editedIndex]._id;
-      /* eslint no-underscore-dangle: 0 */
-      /* eslint prefer-template: 0 */
-      /*
-        Arithmetic operations here for the population and called out quantity
-      */
-      console.log('addCallItem.population: ' + this.addCallItem.population);
-      console.log('editedItem.population: ' + this.editedItem.population);
-      let tempPop = Number(this.editedItem.population);
-      let tempCall = Number(this.editedItem.called_out_quantity);
-      tempPop += Number(this.addCallItem.population);
-      tempCall += Number(this.addCallItem.called_out_quantity);
-      tempPop -= Number(this.addCallItem.called_out_quantity);
-      const obj = {
-        population: tempPop,
-        called_out_quantity: tempCall,
-      };
-      const response = await axios.put(`${url}/chickens/${param}`, obj);
-      Object.assign(this.componentData[this.editedIndex], response.data);
-      this.closePullAdd();
+      if (this.$refs.addPull.validate()) {
+        const param = this.componentData[this.editedIndex]._id;
+        /* eslint no-underscore-dangle: 0 */
+        /* eslint prefer-template: 0 */
+        /*
+          Arithmetic operations here for the population and called out quantity
+        */
+        console.log('addCallItem.population: ' + this.addCallItem.population);
+        console.log('editedItem.population: ' + this.editedItem.population);
+        let tempPop = Number(this.editedItem.population);
+        let tempCall = Number(this.editedItem.called_out_quantity);
+        tempPop += Number(this.addCallItem.population);
+        tempCall += Number(this.addCallItem.called_out_quantity);
+        tempPop -= Number(this.addCallItem.called_out_quantity);
+        const obj = {
+          population: tempPop,
+          called_out_quantity: tempCall,
+        };
+        const response = await axios.put(`${url}/chickens/${param}`, obj);
+        Object.assign(this.componentData[this.editedIndex], response.data);
+        this.closePullAdd();
+      }
     },
     /*
       Closes the dialog/modal then wipes the data from
