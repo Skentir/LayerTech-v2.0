@@ -28,46 +28,54 @@ router.get('/', async (req, res) => {
  * @desc Register the Employee
  * @access Public
  */
-router.post('/register', (req, res) => {
-    // To ensure that you only get the following properties
-    let user = {
-        username,
-        password,
-        first_name,
-        last_name,
-        contact_num,
-        role,
-        department
-    } = req.body
+router.post('/register', async (req, res) => {
+    let new_user = new Employee(req.body)
+    try{
+        /*
+            had to mirror your functions using await since we are using await/async promises (iirc thats the term)
+            for the routes
 
-    // Check for the unique Username
-    Employee.findOne({
-        username: req.body.username
-    }).then(user => {
-        if (user) {
-            return res.status(400).json({
-                msg: "Username is already taken."
-            });
+            1. Generates 'salt'
+            2. hashes password
+            3. assign new hashed password to new_user
+            4. new_user.save() to db
+            5. return new_user with success: true
+        */
+        const salt = await bcrypt.genSalt(10);
+        const hashed_pass = await bcrypt.hash(new_user.password, salt);
+        new_user.password = hashed_pass;
+
+        const user_list = await new_user.save()
+        if(!user_list) throw new Error('something went wrong')
+                
+        const response = {
+            list: user_list,
+            success: true,
         }
-    })
-
-    // The data is valid and new we can register the user
-    let newUser = new Employee(req.body);
-
-    // Hash the password
-    bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newUser.password, salt, (err, hash) => {
-            if (err) return res.status(400).json({error: err})
-            newUser.password = hash;
-            newUser.save().then(user => {
-                return res.status(200).json({
-                    user: user,
-                    success: true,
-                    msg: "User is now registered."
-                });
-            });
-        });
-    });
+        res.status(200).json(response);
+    }catch(error) {
+        /*
+            We can handle non-unique usernames by not returning an error
+            but handling the issue properly by sending a success: false
+            if and only if try/catch detects error code 11000 = non-uniqueness found
+        */
+        if (error.name === 'MongoError' && error.code === 11000){
+            /*
+                Code 11000 is for duplicate unique element found
+            */
+            const error_ret = {
+                success: false,
+            }
+            res.status(200).json(error_ret);
+        }
+        else {
+            /*
+                Any other error we cannot or will not handle
+            */
+            console.log(error.message)
+            res.status(500).json({ message: error.message })
+        }
+    }
 });
 
 /**
