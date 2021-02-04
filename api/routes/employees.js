@@ -7,7 +7,11 @@ const { secret } = require('../config');
 const verifyToken = require('./verifyToken');
 
 
-// Get
+/**
+ * @route POST /employees/
+ * @desc Get Employees Collection
+ * @access Public
+ */
 router.get('/', async (req, res) => {
     try{
         const employees_list = await Employee.find()
@@ -20,8 +24,8 @@ router.get('/', async (req, res) => {
 })
 
 /**
- * @route POST /users/register
- * @desc Register the User
+ * @route POST /employees/register
+ * @desc Register the Employee
  * @access Public
  */
 router.post('/register', (req, res) => {
@@ -66,7 +70,11 @@ router.post('/register', (req, res) => {
     });
 });
 
-//Update
+/**
+ * @route POST /employees/:id
+ * @desc Update Employee data
+ * @access Public
+ */
 router.put('/:id', async (req, res) => {
     try{
         let newPassword = req.body.password;
@@ -93,7 +101,11 @@ router.put('/:id', async (req, res) => {
     }
 })   
 
-// delete
+/**
+ * @route DELETE /employees/:id
+ * @desc Delete Employee data
+ * @access Public
+ */
 router.delete('/:id', async (req, res) => {
     try{
         const removed = await Employee.findByIdAndDelete(req.params.id);
@@ -107,7 +119,7 @@ router.delete('/:id', async (req, res) => {
 
 // Login
 /**
- * @route POST api/users/login
+ * @route POST /employees/login
  * @desc Authenticate user
  * @access Public
  */
@@ -152,7 +164,7 @@ router.post('/login', (req, res) => {
 
 /** FOR TESTING PURPOSES ONLY and example use case of private server-side routes
  * 
- * @route POST api/users/profile 
+ * @route POST /employees/profile 
  * @desc Return the User's Data
  * @access Private
  */
