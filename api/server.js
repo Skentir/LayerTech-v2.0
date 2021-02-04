@@ -31,7 +31,6 @@ app.use(cors()); // allow access to API from difference sources
 app.use(morgan('tiny')) // logs HTTP requests
 
 // serve static files 
-<<<<<<< HEAD
 app.use(express.static('public'));
 mongoose.connect(mongoURI, options)
 .then(() => {
@@ -46,12 +45,7 @@ app.use('/suppliers', suppliers_routes);
 app.use('/chickens', chickenRoutes)
 app.use('/warehouse', warehouse_routes);
 app.use('/operations', operations_routes);
-=======
-app.use(express.static('public')); 
-app.use('/api/suppliers', suppliers_routes);
-app.use('/api/chickens', chickenRoutes)
-app.use('/api/employees', employees_routes);
->>>>>>> 20504cdb749087b1bc4e9f81083918f3316e21c2
+app.use('/employees', employees_routes);
 
 // listen on port
 app.listen(port, () => console.log(`Listening to ${port}`));

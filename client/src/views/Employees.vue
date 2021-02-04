@@ -213,6 +213,8 @@ import PageTemplate from '@/components/PageTemplate.vue';
 import Navbar from '@/components/layout/Navbar.vue';
 import axios from 'axios';
 
+const url = process.env.VUE_APP_API_URL;
+
 export default {
   components: {
     PageTemplate,
@@ -294,7 +296,7 @@ export default {
   },
 
   async mounted() {
-    const response = await axios.get('/api/employees/');
+    const response = await axios.get(`${url}/employees/`);
     this.componentData = response.data;
   },
 
@@ -337,7 +339,7 @@ export default {
 
         returns the updated supplier/row
       */
-      await axios.delete('/api/employees/' + param);
+      await axios.delete(`${url}/employees/${param}`);
       this.componentData.splice(this.editedIndex, 1);
       this.closeDelete();
     },
@@ -386,12 +388,12 @@ export default {
 
             returns the updated supplier/row
           */
-          const response = await axios.put('/api/employees/' + param, this.editedItem);
+          const response = await axios.put(`${url}/employees/${param}`, this.editedItem);
           Object.assign(this.componentData[this.editedIndex], response.data);
           this.close();
         } else {
           // eslint-disable-next-line prefer-template
-          const response = await axios.post('/api/employees/', this.editedItem);
+          const response = await axios.post(`${url}/employees/`, this.editedItem);
           if (response.data.success) {
             this.componentData.push(response.data.list);
             this.unique = false;
