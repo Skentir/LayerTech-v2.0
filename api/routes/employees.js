@@ -49,7 +49,7 @@ router.post('/register', async (req, res) => {
         if(!user_list) throw new Error('something went wrong')
                 
         const response = {
-            list: user_list,
+            user: user_list,
             success: true,
         }
         res.status(200).json(response);
