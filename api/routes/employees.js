@@ -136,12 +136,12 @@ router.post('/login', (req, res) => {
         // If there is user we are now going to compare the password
         bcrypt.compare(req.body.password, user.password).then(isMatch => {
             if (isMatch) {
-                const name = user.first_name + ' ' + user.last_name;
                 // User's password is correct and we need to send the JSON Token for that user
                 const payload = {
                     _id: user._id,
                     username: user.username,
-                    name: name,
+                    first_name: user.first_name,
+                    last_name: user.last_name,
                     role: user.role,
                     department: user.department
                 }
