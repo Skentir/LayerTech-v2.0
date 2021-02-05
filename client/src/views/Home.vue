@@ -174,34 +174,39 @@ export default {
     Navbar,
   },
   computed: {
+    // updates user role
+    role() {
+      return this.user.role;
+    },
     // role identifiers used for conditional rendering
     isAdmin() {
-      return this.role === 'admin';
+      return this.role === 'Admin';
     },
     isOperations() {
-      return this.role === 'admin' || this.role === 'operations';
+      return this.role === 'Admin' || this.role === 'Operations';
     },
     isLogistics() {
-      return this.role === 'admin' || this.role === 'logistics';
+      return this.role === 'Admin' || this.role === 'Logistics';
     },
     isSales() {
-      return this.role === 'admin' || this.role === 'sales';
+      return this.role === 'Admin' || this.role === 'Sales';
     },
   },
   data() {
     return {
-      role: null,
       farmName: 'Guyun Stone Forest',
       farmAddress: 'Sea of Clouds, Liyue',
       accountingAlerts: [],
       warehouseAlerts: [],
       operationsAlerts: [],
+      user: null,
     };
   },
   created() {
     this.initialize();
     // store role of the current user
-    this.role = JSON.parse(localStorage.getItem('role'));
+    this.user = JSON.parse(localStorage.getItem('user'));
+    console.log(this.user);
     console.log(this.role);
     console.log(this.isAdmin);
   },

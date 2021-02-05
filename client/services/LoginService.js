@@ -8,7 +8,7 @@ export default {
     const res = await axios.post(`${url}/employees/login/`, credentials);
     // store JWT to localstorage
     localStorage.setItem('auth-token', JSON.stringify(res.data['auth-token']));
-    // store role to localstorage
-    localStorage.setItem('role', JSON.stringify(res.data.role).toLowerCase());
+    // store user object to localstorage
+    localStorage.setItem('user', JSON.stringify(res.data.user));
   },
 };

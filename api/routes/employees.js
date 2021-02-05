@@ -126,7 +126,7 @@ router.delete('/:id', async (req, res) => {
 router.post('/login', (req, res) => {
     Employee.findOne({
         username: req.body.username
-    }).then(user => {
+    }).then(user => {        
         if (!user) {
             return res.status(404).json({
                 msg: "Username is not found.",
@@ -136,11 +136,14 @@ router.post('/login', (req, res) => {
         // If there is user we are now going to compare the password
         bcrypt.compare(req.body.password, user.password).then(isMatch => {
             if (isMatch) {
+                const name = user.first_name + ' ' + user.last_name;
                 // User's password is correct and we need to send the JSON Token for that user
                 const payload = {
                     _id: user._id,
                     username: user.username,
-                    name: user.name
+                    name: name,
+                    role: user.role,
+                    department: user.department
                 }
                 jwt.sign(payload, secret, {
                     expiresIn: 604800
@@ -148,7 +151,7 @@ router.post('/login', (req, res) => {
                     console.log("login success.");
                     return res.status(200).json({
                         "auth-token": token,
-                        "role": user.role,
+                        "user": payload,
                         msg: "Login success.",
                         success: true
                     });
