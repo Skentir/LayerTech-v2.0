@@ -30,7 +30,7 @@
             >
               <template v-slot:activator="{ on, attrs }">
               <v-col class="text-right pr-0">
-                <v-btn
+                <v-btn id="create-btn"
                   color="primary"
                   dark
                   v-bind="attrs"
@@ -152,14 +152,14 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
+          <v-btn id="close-create-btn"
             color="blue darken-1"
             text
             @click="showDialog=false"
           >
             Close
           </v-btn>
-          <v-btn
+          <v-btn id="submit-create-btn"
             color="blue darken-1"
             text
             @click="submit"
@@ -174,7 +174,7 @@
               <v-form ref="addPull">
                 <v-card>
                   <v-card-title class="headline">
-                    Add to chickens/Pull-out chickens
+                    Add to chickens/Call-out chickens
                   </v-card-title>
                   <v-card-text>
                   <v-container>
@@ -198,8 +198,16 @@
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="closePullAdd">Cancel</v-btn>
-                    <v-btn color="blue darken-1" text @click="pullAddConfirm">OK</v-btn>
+                    <v-btn
+                    id="close-call-btn"
+                    color="blue darken-1"
+                    text
+                    @click="closePullAdd">Cancel</v-btn>
+                    <v-btn
+                    id="submit-call-btn"
+                    color="blue darken-1"
+                    text
+                    @click="pullAddConfirm">OK</v-btn>
                     <v-spacer></v-spacer>
                   </v-card-actions>
                 </v-card>
