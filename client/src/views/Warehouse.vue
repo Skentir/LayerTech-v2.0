@@ -1227,10 +1227,37 @@ export default {
         }
       } else if (this.showPullOutDialog) {
         if (this.$refs.pullOutForm.validate()) {
+          console.log('Pulling item out to operations!');
           /*
             Code segment for pull-out
           */
-          console.log('Pulling item out to operations!');
+          /*
+            TODO: Query Operations
+          */
+          const newOperationsItem = { ...this.editedItem };
+          delete newOperationsItem.pulled_out_quantity;
+          delete newOperationsItem.liquidated_quantity;
+          delete newOperationsItem.stock_quantity;
+          delete newOperationsItem.critical_volume;
+          delete newOperationsItem.batch_status;
+          newOperationsItem.quantity = parseInt(this.pull_out_quantity, 10);
+          if (newOperationsItem.product_type === 'Item') {
+            delete newOperationsItem.dosage;
+            newOperationsItem.entry = 'In';
+          } else if (newOperationsItem.product_type === 'Vaccine') {
+            newOperationsItem.entry = 'In';
+          } else if (newOperationsItem.product_type === 'Egg') {
+            delete newOperationsItem.dosage;
+            newOperationsItem.entry = 'Out';
+            newOperationsItem.original_quantity = 0;
+            newOperationsItem.eggs_sold_s = 0;
+            newOperationsItem.eggs_sold_m = 0;
+            newOperationsItem.eggs_sold_l = 0;
+          }
+          // eslint-disable-next-line no-unused-vars
+          const response3 = await axios.post(`${url}/operations/pullOut`, newOperationsItem);
+          console.log('Successfully queried Operations!');
+          // Update existing warehouse item
           this.editedItem.pulled_out_quantity += parseInt(this.pull_out_quantity, 10);
           this.editedItem.stock_quantity -= parseInt(this.pull_out_quantity, 10);
           const param = this.componentData[this.editedIndex]._id;
