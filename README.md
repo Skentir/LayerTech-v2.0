@@ -1,26 +1,27 @@
 # layertech
 
-## To STSWENG testers
-### Project Setup
-```
-git clone --branch main https://github.com/Skentir/LayerTech-v2.0.git
-cd LayerTech-v2.0
-cd client
-npm install
-npm run serve
-```
-
 ### Login Credentials
 
 ```
-username: admin123
-password: correctPassword
+username: root
+password: 1
 ```
 
 ## Project setup
 ```
+cd api
+npm install
+cd ../client
 npm install
 ```
+
+## Run both Back-end and Front end concurrently
+```
+cd api
+npm run dev
+```
+
+## Old commands (for archival purposes)
 
 ### Compiles and hot-reloads for development
 ```

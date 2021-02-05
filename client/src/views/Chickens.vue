@@ -100,8 +100,8 @@
               </v-col>
               <v-col cols="6">
                 <v-menu
-                  ref="menu_date_recieved"
-                  v-model="menu_date_recieved"
+                  ref="menu_date_received"
+                  v-model="menu_date_received"
                   :close-on-content-click="false"
                   transition="scale-transition"
                   offset-y
@@ -109,9 +109,9 @@
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                      v-model="editedItem.date_recieved"
+                      v-model="editedItem.date_received"
                       :disabled="editedIndex > -1"
-                      :rules="rules.date_recieved"
+                      :rules="rules.date_received"
                       label="Date"
                       hint="YYYY/MM/DD format"
                       persistent-hint
@@ -123,9 +123,9 @@
                     ></v-text-field>
                   </template>
                   <v-date-picker
-                    v-model="editedItem.date_recieved"
+                    v-model="editedItem.date_received"
                     no-title
-                    @input="menu_date_recieved = false"
+                    @input="menu_date_received = false"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -284,7 +284,7 @@ export default {
       morbidity_rate: 0,
       feed_requirement: '',
       vaccination_schedule: '',
-      date_recieved: new Date().toISOString().substr(0, 10),
+      date_received: new Date().toISOString().substr(0, 10),
       person_in_charge: '',
       section: '',
       building: '',
@@ -312,7 +312,7 @@ export default {
       morbidity_rate: 0,
       feed_requirement: '',
       vaccination_schedule: '',
-      date_recieved: new Date().toISOString().substr(0, 10),
+      date_received: new Date().toISOString().substr(0, 10),
       person_in_charge: '',
       section: '',
       building: '',
