@@ -13,7 +13,7 @@ const OperationsSchema = new Schema({
     expiration_date: {type: Date, required: true, default: Date.now},
     unit: {type: String, required: true},
     packaging: {type: String, required: true},
-    entry: {type: String, required: true, enum: ["IN", "OUT"]},
+    entry: {type: String, required: true, enum: ["In", "Out"]},
     dosage: {type: String, required: false},
     quantity: {type: Number, required: true, min: 0},
     original_quantity: {type: Number, required: false, min: 0},
