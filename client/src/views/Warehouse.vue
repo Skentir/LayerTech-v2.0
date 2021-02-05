@@ -25,10 +25,9 @@
               single-line
               hide-details
             ></v-text-field>
-            <!-- main dialog -->
+            <!-- add item dialog -->
             <v-dialog
-              id="form"
-              v-model="showDialog"
+              v-model="showAddItemDialog"
               max-width="500px"
             >
               <template v-slot:activator="{ on, attrs }">
@@ -43,197 +42,165 @@
                   Add item
                 </v-btn>
               </v-col>
-            </template>
-            <v-card>
-              <v-card-title>
-                <span id="form_title" class="headline">Add item to inventory</span>
-              </v-card-title>
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="8"
-                    >
-                      <v-text-field
-                        id="item_name_text_field"
-                        v-model="editedItem.item_name"
-                        label="Item Name"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                    >
-                      <v-text-field
-                        id="product_type_text_field"
-                        v-model="editedItem.product_type"
-                        label="Product Type"
-                        hint="e.g. vaccine, feeds, etc."
-                        persistent-hint
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col
-                      cols="3"
-                      sm="3"
-                      md="3"
-                    >
-                      <v-text-field
-                        id="stock_quantity_text_field"
-                        v-model="editedItem.stock_quantity"
-                        label="In Stock Quantity"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                      cols="3"
-                      sm="3"
-                      md="3"
-                    >
-                      <v-text-field
-                        id="pulled_out_quantity_text_field"
-                        v-model="editedItem.pulled_out_quantity"
-                        label="Pulled Out Quantity"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                      cols="3"
-                      sm="3"
-                      md="3"
-                    >
-                      <v-text-field
-                        id="liquidated_quantity_text_field"
-                        v-model="editedItem.liquidated_quantity"
-                        label="Liquidated Quantity"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                      cols="3"
-                      sm="3"
-                      md="3"
-                    >
-                      <v-text-field
-                        id="critical_volume_text_field"
-                        v-model="editedItem.critical_volume"
-                        label="Critical Volume"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col
-                      cols="6"
-                      sm="6"
-                      md="6"
-                    >
-                      <v-text-field
-                        id="unit_text_field"
-                        v-model="editedItem.unit"
-                        label="Unit"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                      cols="6"
-                      sm="6"
-                      md="6"
-                    >
-                      <v-select
-                        id="status_select_field"
-                        v-model="editedItem.status"
-                        :items="select_options_status"
-                        label="Status"
-                        required
-                      ></v-select>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="6"
-                    >
-                      <v-menu
-                        ref="menu_date_exp"
-                        v-model="menu_date_exp"
-                        :close-on-content-click="false"
-                        transition="scale-transition"
-                        offset-y
-                        max-width="290px"
-                        min-width="290px"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
+              </template>
+              <v-card>
+                <v-card-title>
+                  <span id="add_item_title" class="headline">Add item to inventory</span>
+                </v-card-title>
+                <v-card-text>
+                  <v-form ref="addItemForm">
+                    <v-container>
+                      <v-row>
+                        <v-col cols="6">
                           <v-text-field
-                            id="date_exp_text_field"
-                            v-model="editedItem.date_exp"
-                            label="Expiration Date"
-                            hint="YYYY/MM/DD format"
-                            persistent-hint
-                            v-bind="attrs"
-                            @blur="date = parseDate(dateFormatted)"
-                            v-on="on"
-                            required
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker
-                          id="date_exp_datepicker"
-                          v-model="editedItem.date_exp"
-                          no-title
-                          @input="menu_date_exp = false"
-                        ></v-date-picker>
-                      </v-menu>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="6"
-                    >
-                      <v-menu
-                        ref="menu_date_received"
-                        v-model="menu_date_received"
-                        :close-on-content-click="false"
-                        transition="scale-transition"
-                        offset-y
-                        max-width="290px"
-                        min-width="290px"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
+                            label="Serial Code"
+                            v-model="editedItem.serial_id"
+                          >
+                          </v-text-field>
+                        </v-col>
+                        <v-col cols="6">
+                          <v-select
+                            label="Supplier"
+                            :items="suppliersList"
+                            v-model="editedItem.supplier"
+                          >
+                          </v-select>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="12">
                           <v-text-field
-                            id="date_received_text_field"
-                            v-model="editedItem.date_received"
-                            label="Received Date"
-                            hint="YYYY/MM/DD format"
-                            persistent-hint
-                            v-bind="attrs"
-                            @blur="date = parseDate(dateFormatted)"
-                            v-on="on"
-                            required
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker
-                          id="date_received_datepicker"
-                          v-model="editedItem.date_received"
-                          no-title
-                          @input="menu_date_received = false"
-                        ></v-date-picker>
-                      </v-menu>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-              <v-card-actions>
+                            label="Product Title"
+                            v-model="editedItem.product_title"
+                          >
+                          </v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="4">
+                          <v-text-field
+                            label="Product Code"
+                            v-model="editedItem.product_code"
+                          >
+                          </v-text-field>
+                        </v-col>
+                        <v-col cols="4">
+                          <v-select
+                            label="Product Type"
+                            v-model="editedItem.product_type"
+                            :items="productTypes"
+                          >
+                          </v-select>
+                        </v-col>
+                        <v-col cols="4">
+                          <v-text-field
+                            label="Dosage"
+                            v-model="editedItem.dosage"
+                          >
+                          </v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="6">
+                          <v-menu
+                            ref="menu_date_received"
+                            v-model="add_menu_date_received"
+                            :close-on-content-click="false"
+                            transition="scale-transition"
+                            offset-y
+                            min-width="290px"
+                          >
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-text-field
+                                v-model="editedItem.received_date"
+                                label="Date Received"
+                                hint="YYYY/MM/DD format"
+                                persistent-hint
+                                prepend-icon="mdi-calendar"
+                                v-bind="attrs"
+                                @blur="date = parseDate(dateFormatted)"
+                                v-on="on"
+                                required
+                              ></v-text-field>
+                            </template>
+                            <v-date-picker
+                              v-model="editedItem.received_date"
+                              no-title
+                              @input="add_menu_date_received = false"
+                            ></v-date-picker>
+                          </v-menu>
+                        </v-col>
+                        <v-col cols="6">
+                          <v-menu
+                            ref="menu_date_expired"
+                            v-model="add_menu_date_exp"
+                            :close-on-content-click="false"
+                            transition="scale-transition"
+                            offset-y
+                            min-width="290px"
+                          >
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-text-field
+                                v-model="editedItem.expiration_date"
+                                label="Expiration Date"
+                                hint="YYYY/MM/DD format"
+                                persistent-hint
+                                prepend-icon="mdi-calendar"
+                                v-bind="attrs"
+                                @blur="date = parseDate(dateFormatted)"
+                                v-on="on"
+                                required
+                              ></v-text-field>
+                            </template>
+                            <v-date-picker
+                              v-model="editedItem.expiration_date"
+                              no-title
+                              @input="add_menu_date_exp = false"
+                            ></v-date-picker>
+                          </v-menu>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="3">
+                          <v-text-field
+                            label="Stock Quantity"
+                            v-model="editedItem.stock_quantity"
+                            type="number"
+                          >
+                          </v-text-field>
+                        </v-col>
+                        <v-col cols="3">
+                          <v-text-field
+                            label="Critical Volume"
+                            v-model="editedItem.critical_volume"
+                            type="number"
+                          >
+                          </v-text-field>
+                        </v-col>
+                        <v-col cols="3">
+                          <v-text-field
+                            label="Unit"
+                            v-model="editedItem.unit"
+                          >
+                          </v-text-field>
+                        </v-col>
+                        <v-col cols="3">
+                          <v-text-field
+                            label="Packaging"
+                            v-model="editedItem.packaging"
+                          >
+                          </v-text-field>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-form>
+                </v-card-text>
+                <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
                   color="blue darken-1"
                   text
-                  @click="showDialog = false"
+                  @click="showAddItemDialog = false"
                 >
                   Close
                 </v-btn>
@@ -242,22 +209,617 @@
                   text
                   @click="save()"
                 >
-                  Save
+                  Add Item
                 </v-btn>
               </v-card-actions>
-            </v-card>
+              </v-card>
             </v-dialog>
           </v-toolbar>
         </template>
+        <template v-slot:[`item.received_date`]="{ item }">
+          {{convertDate(item.received_date)}}
+        </template>
+        <template v-slot:[`item.expiration_date`]="{ item }">
+          {{convertDate(item.expiration_date)}}
+        </template>
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon
-            id="edit_item_btn"
-            small
-            class="mr-2"
-            @click="editItem(item)"
-          >
-            mdi-pencil
-          </v-icon>
+          <v-menu>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon
+                small
+                class="mr-2"
+                v-bind="attrs"
+                v-on="on"
+              >
+                mdi-pencil
+              </v-icon>
+            </template>
+            <v-list>
+              <v-list-item
+              >
+                <!-- edit item dialog -->
+                <v-dialog
+                id="editForm"
+                v-model="showEditDialog"
+                max-width="500px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      id="edit_item_btn"
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="editItem(item)"
+                    >
+                      Edit/Update
+                    </v-btn>
+                  </template>
+                  <v-card>
+                    <v-card-title>
+                      <span id="edit_item_title" class="headline">Edit Item</span>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-form ref="editItemForm">
+                        <v-container>
+                          <v-row>
+                            <v-col cols="6">
+                              <v-text-field
+                                label="Serial Code"
+                                v-model="editedItem.serial_id"
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="6">
+                              <v-select
+                                label="Supplier"
+                                :items="suppliersList"
+                                v-model="editedItem.supplier"
+                                readonly
+                              >
+                              </v-select>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-text-field
+                                label="Product Title"
+                                v-model="editedItem.product_title"
+                                readonly
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="4">
+                              <v-text-field
+                                label="Product Code"
+                                v-model="editedItem.product_code"
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="4">
+                              <v-select
+                                label="Product Type"
+                                v-model="editedItem.product_type"
+                                :items="productTypes"
+                                readonly
+                              >
+                              </v-select>
+                            </v-col>
+                            <v-col cols="4">
+                              <v-text-field
+                                label="Dosage"
+                                v-model="editedItem.dosage"
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="6">
+                              <v-menu
+                                ref="menu_date_received"
+                                v-model="edit_menu_date_received"
+                                :close-on-content-click="false"
+                                transition="scale-transition"
+                                offset-y
+                                min-width="290px"
+                                readonly
+                              >
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-text-field
+                                    v-model="editedItem.received_date"
+                                    label="Date Received"
+                                    hint="YYYY/MM/DD format"
+                                    persistent-hint
+                                    prepend-icon="mdi-calendar"
+                                    v-bind="attrs"
+                                    @blur="date = parseDate(dateFormatted)"
+                                    v-on="on"
+                                    required
+                                    readonly
+                                  ></v-text-field>
+                                </template>
+                                <v-date-picker
+                                  v-model="editedItem.received_date"
+                                  no-title
+                                  @input="edit_menu_date_received = false"
+                                  readonly
+                                ></v-date-picker>
+                              </v-menu>
+                            </v-col>
+                            <v-col cols="6">
+                              <v-menu
+                                ref="menu_date_expired"
+                                v-model="edit_menu_date_exp"
+                                :close-on-content-click="false"
+                                transition="scale-transition"
+                                offset-y
+                                min-width="290px"
+                              >
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-text-field
+                                    v-model="editedItem.expiration_date"
+                                    label="Expiration Date"
+                                    hint="YYYY/MM/DD format"
+                                    persistent-hint
+                                    prepend-icon="mdi-calendar"
+                                    v-bind="attrs"
+                                    @blur="date = parseDate(dateFormatted)"
+                                    v-on="on"
+                                    required
+                                  ></v-text-field>
+                                </template>
+                                <v-date-picker
+                                  v-model="editedItem.expiration_date"
+                                  no-title
+                                  @input="edit_menu_date_exp = false"
+                                ></v-date-picker>
+                              </v-menu>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="3">
+                              <v-text-field
+                                label="Stock Quantity"
+                                v-model="editedItem.stock_quantity"
+                                type="number"
+                                readonly
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="3">
+                              <v-text-field
+                                label="Critical Volume"
+                                v-model="editedItem.critical_volume"
+                                type="number"
+                                readonly
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="3">
+                              <v-text-field
+                                label="Unit"
+                                v-model="editedItem.unit"
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="3">
+                              <v-text-field
+                                label="Packaging"
+                                v-model="editedItem.packaging"
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-form>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                      color="blue darken-1"
+                      text
+                      @click="showEditDialog=false"
+                      >
+                        Close
+                      </v-btn>
+                      <v-btn
+                      color="blue darken-1"
+                      text
+                      @click="showEditDialog=false"
+                      >
+                        Save Changes
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-list-item>
+              <v-list-item
+              >
+                <!-- add batch dialog -->
+                <v-dialog
+                id="addBatchForm"
+                v-model="showAddBatchDialog"
+                max-width="500px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      id="add_batch_btn"
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="addNewBatch(item)"
+                    >
+                      Add New Batch
+                    </v-btn>
+                  </template>
+                  <v-card>
+                    <v-card-title>
+                      <span id="add_batch_title" class="headline">Add New Batch of Item</span>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-form ref="addBatchForm">
+                        <v-container>
+                          <v-row>
+                            <v-col cols="6">
+                              <v-text-field
+                                label="Serial Code"
+                                v-model="editedItem.serial_id"
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="6">
+                              <v-select
+                                label="Supplier"
+                                :items="suppliersList"
+                                v-model="editedItem.supplier"
+                                readonly
+                              >
+                              </v-select>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-text-field
+                                label="Product Title"
+                                v-model="editedItem.product_title"
+                                readonly
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="4">
+                              <v-text-field
+                                label="Product Code"
+                                v-model="editedItem.product_code"
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="4">
+                              <v-select
+                                label="Product Type"
+                                v-model="editedItem.product_type"
+                                :items="productTypes"
+                                readonly
+                              >
+                              </v-select>
+                            </v-col>
+                            <v-col cols="4">
+                              <v-text-field
+                                label="Dosage"
+                                v-model="editedItem.dosage"
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="6">
+                              <v-menu
+                                ref="menu_date_received"
+                                v-model="batch_menu_date_received"
+                                :close-on-content-click="false"
+                                transition="scale-transition"
+                                offset-y
+                                min-width="290px"
+                              >
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-text-field
+                                    v-model="editedItem.received_date"
+                                    label="Date Received"
+                                    hint="YYYY/MM/DD format"
+                                    persistent-hint
+                                    prepend-icon="mdi-calendar"
+                                    v-bind="attrs"
+                                    @blur="date = parseDate(dateFormatted)"
+                                    v-on="on"
+                                    required
+                                  ></v-text-field>
+                                </template>
+                                <v-date-picker
+                                  v-model="editedItem.received_date"
+                                  no-title
+                                  @input="batch_menu_date_received = false"
+                                ></v-date-picker>
+                              </v-menu>
+                            </v-col>
+                            <v-col cols="6">
+                              <v-menu
+                                ref="menu_date_expired"
+                                v-model="batch_menu_date_exp"
+                                :close-on-content-click="false"
+                                transition="scale-transition"
+                                offset-y
+                                min-width="290px"
+                              >
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-text-field
+                                    v-model="editedItem.expiration_date"
+                                    label="Expiration Date"
+                                    hint="YYYY/MM/DD format"
+                                    persistent-hint
+                                    prepend-icon="mdi-calendar"
+                                    v-bind="attrs"
+                                    @blur="date = parseDate(dateFormatted)"
+                                    v-on="on"
+                                    required
+                                  ></v-text-field>
+                                </template>
+                                <v-date-picker
+                                  v-model="editedItem.expiration_date"
+                                  no-title
+                                  @input="batch_menu_date_exp = false"
+                                ></v-date-picker>
+                              </v-menu>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="3">
+                              <v-text-field
+                                label="Stock Quantity"
+                                v-model="editedItem.stock_quantity"
+                                type="number"
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="3">
+                              <v-text-field
+                                label="Critical Volume"
+                                v-model="editedItem.critical_volume"
+                                type="number"
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="3">
+                              <v-text-field
+                                label="Unit"
+                                v-model="editedItem.unit"
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="3">
+                              <v-text-field
+                                label="Packaging"
+                                v-model="editedItem.packaging"
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-form>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                      color="blue darken-1"
+                      text
+                      @click="showAddBatchDialog=false"
+                      >
+                        Close
+                      </v-btn>
+                      <v-btn
+                      color="blue darken-1"
+                      text
+                      @click="showAddBatchDialog=false"
+                      >
+                        Add Batch
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-list-item>
+              <v-list-item
+              >
+                <!-- pull out dialog -->
+                <v-dialog
+                id="pullOutForm"
+                v-model="showPullOutDialog"
+                max-width="500px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      id="pull_out_item_btn"
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="pullItemOut(item)"
+                    >
+                      Pull Out
+                    </v-btn>
+                  </template>
+                  <v-card>
+                    <v-card-title>
+                      <span id="pull_out_title" class="headline">Pull Item Out to Operations</span>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-form ref="pullOutForm">
+                        <v-container>
+                          <v-row>Pulling out item:
+                          </v-row>
+                          <v-row>
+                            <v-col cols="4">
+                              <v-text-field
+                                label="Serial Code"
+                                v-model="editedItem.serial_id"
+                                readonly
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="4">
+                              <v-text-field
+                                label="Product Code"
+                                v-model="editedItem.product_code"
+                                readonly
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="4">
+                              <v-text-field
+                                label="Product Type"
+                                v-model="editedItem.product_type"
+                                readonly
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-text-field
+                                label="Product Title"
+                                v-model="editedItem.product_title"
+                                readonly
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-text-field
+                                type="number"
+                                v-model="pull_out_quantity"
+                                label="Pull Out Quantity"
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-form>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                      color="blue darken-1"
+                      text
+                      @click="showPullOutDialog=false"
+                      >
+                        Close
+                      </v-btn>
+                      <v-btn
+                      color="blue darken-1"
+                      text
+                      @click="showPullOutDialog=false"
+                      >
+                        Pull Out
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-list-item>
+              <v-list-item
+              >
+                <!-- liquidate dialog -->
+                <v-dialog
+                id="liquidateForm"
+                v-model="showLiquidateDialog"
+                max-width="500px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      id="liquidate_item_btn"
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="liquidateItem(item)"
+                    >
+                      Liquidate
+                    </v-btn>
+                  </template>
+                  <v-card>
+                    <v-card-title>
+                      <span id="liquidate_title" class="headline">Liquidate Item</span>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-form ref="liquidateItemForm">
+                        <v-container>
+                          <v-row>Liquidating item:
+                          </v-row>
+                          <v-row>
+                            <v-col cols="4">
+                              <v-text-field
+                                label="Serial Code"
+                                v-model="editedItem.serial_id"
+                                readonly
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="4">
+                              <v-text-field
+                                label="Product Code"
+                                v-model="editedItem.product_code"
+                                readonly
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="4">
+                              <v-text-field
+                                label="Product Type"
+                                v-model="editedItem.product_type"
+                                readonly
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-text-field
+                                label="Product Title"
+                                v-model="editedItem.product_title"
+                                readonly
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-text-field
+                                type="number"
+                                v-model="liquidate_quantity"
+                                label="Liquidate Quantity"
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-form>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                      color="blue darken-1"
+                      text
+                      @click="showLiquidateDialog=false"
+                      >
+                        Close
+                      </v-btn>
+                      <v-btn
+                      color="blue darken-1"
+                      text
+                      @click="showLiquidateDialog=false"
+                      >
+                        Liquidate
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </template>
         <template v-slot:no-data>
           <v-btn
@@ -279,6 +841,8 @@ import PageTemplate from '@/components/PageTemplate.vue';
 import Navbar from '@/components/layout/Navbar.vue';
 import axios from 'axios';
 
+const url = process.env.VUE_APP_API_URL;
+
 export default {
   components: {
     PageTemplate,
@@ -291,13 +855,18 @@ export default {
     },
     search: '',
     tableTitle: 'Inventory',
-    showDialog: false,
+    showAddItemDialog: false,
+    showEditDialog: false,
+    showAddBatchDialog: false,
+    showPullOutDialog: false,
+    showLiquidateDialog: false,
     dialogDelete: false,
     componentData: [],
+    suppliersList: [],
+    productTypes: ['Vaccine', 'Item', 'Egg'],
     headers: [
-      {
-        text: 'serial id', value: 'serial_id',
-      },
+      { text: 'Serial Id', value: 'serial_id' },
+      { text: 'Supplier', value: 'supplier' },
       { text: 'product title', value: 'product_title' },
       { text: 'Product Type', value: 'product_type' },
       { text: 'Product Code', value: 'product_code' },
@@ -318,34 +887,52 @@ export default {
     editedIndex: -1,
     select_options_status: ['In Stock', 'Out of Stock', 'Pulled Out', 'Liquidated'],
     editedItem: {
-      item_name: '',
+      serial_id: '',
+      supplier: '',
+      product_title: '',
+      product_code: '',
       product_type: '',
+      dosage: '',
+      received_date: new Date().toISOString().substr(0, 10),
+      expiration_date: new Date().toISOString().substr(0, 10),
       stock_quantity: 0,
+      critical_volume: 0,
+      unit: '',
+      packaging: '',
+      batch_number: 0,
+      batch_status: 'Current',
+      product_status: 'In Stock',
       pulled_out_quantity: 0,
       liquidated_quantity: 0,
-      critical_volume: 0,
-      unit: 0,
-      status: '',
-      date_exp: new Date().toISOString().substr(0, 10),
-      date_received: new Date().toISOString().substr(0, 10),
-      dosage: '',
     },
     defaultItem: {
-      item_name: '',
+      serial_id: '',
+      supplier: '',
+      product_title: '',
+      product_code: '',
       product_type: '',
+      dosage: '',
+      received_date: new Date().toISOString().substr(0, 10),
+      expiration_date: new Date().toISOString().substr(0, 10),
       stock_quantity: 0,
+      critical_volume: 0,
+      unit: '',
+      packaging: '',
+      batch_number: 1,
+      batch_status: 'Current',
+      product_status: 'In Stock',
       pulled_out_quantity: 0,
       liquidated_quantity: 0,
-      critical_volume: 0,
-      unit: 0,
-      status: '',
-      date_exp: new Date().toISOString().substr(0, 10),
-      date_received: new Date().toISOString().substr(0, 10),
-      dosage: '',
     },
     date: new Date().toISOString().substr(0, 10),
-    menu_date_exp: false,
-    menu_date_received: false,
+    add_menu_date_exp: false,
+    add_menu_date_received: false,
+    edit_menu_date_exp: false,
+    edit_menu_date_received: false,
+    batch_menu_date_exp: false,
+    batch_menu_date_received: false,
+    pull_out_quantity: 0,
+    liquidate_quantity: 0,
   }),
 
   computed: {
@@ -358,44 +945,113 @@ export default {
   },
 
   watch: {
-    showDialog(val) {
+    showAddItemDialog(val) {
+      // eslint-disable-next-line no-unused-expressions
+      val || this.close();
+    },
+    showEditDialog(val) {
+      // eslint-disable-next-line no-unused-expressions
+      val || this.close();
+    },
+    showAddBatchDialog(val) {
+      // eslint-disable-next-line no-unused-expressions
+      val || this.close();
+    },
+    showPullOutDialog(val) {
+      // eslint-disable-next-line no-unused-expressions
+      val || this.close();
+    },
+    showLiquidateDialog(val) {
       // eslint-disable-next-line no-unused-expressions
       val || this.close();
     },
   },
 
   async mounted() {
-    const url = process.env.VUE_APP_API_URL;
     const response = await axios.get(`${url}/warehouse/`);
     this.componentData = response.data;
     console.log(this.componentData);
+    const suppliers = await axios.get(`${url}/suppliers/`);
+    // eslint-disable-next-line arrow-parens
+    suppliers.data.forEach(supplier => this.suppliersList.push(supplier.supplier_name));
   },
 
   methods: {
     /*
-      Copies the data to editedItem to display on dialog.
-      showDialog triggers the dialog view of the form.
+      For proper date formatting within the table
     */
-    editItem(item) {
-      // get index of item
-      this.editedIndex = this.componentData.data.indexOf(item);
-      // assign item to editedItem obj
-      this.editedItem = { ...item };
-      // format string to date
-      this.editedItem.date_exp = new Date(this.editedItem.date_exp).toISOString().substr(0, 10);
-      // set true to show dialog view
-      this.showDialog = true;
+    convertDate(date) {
+      return new Date(date).toISOString().substr(0, 10);
     },
     /*
       Closes the dialog and resets editedItem
       to defaultItem. Also resets editedIndex to -1.
     */
     close() {
-      this.showDialog = false;
+      this.showAddItemDialog = false;
+      this.showEditDialog = false;
+      this.showAddBatchDialog = false;
+      this.showPullOutDialog = false;
+      this.showLiquidateDialog = false;
       this.$nextTick(() => {
         this.editedItem = { ...this.defaultItem };
         this.editedIndex = -1;
       });
+    },
+    /*
+      For initializing the forms
+      mainly for reducing code clutter
+    */
+    initializeForms(item) {
+      // get index of item
+      this.editedIndex = this.componentData.indexOf(item);
+      // assign item to editedItem obj
+      this.editedItem = { ...item };
+      // format string to date
+      let tempDate = new Date(this.editedItem.expiration_date).toISOString().substr(0, 10);
+      this.editedItem.expiration_date = tempDate;
+      tempDate = new Date(this.editedItem.received_date).toISOString().substr(0, 10);
+      this.editedItem.received_date = tempDate;
+      // set true to show dialog view
+    },
+    /*
+      Copies the data to editedItem to display on dialog.
+      showDialog triggers the dialog view of the form.
+    */
+    editItem(item) {
+      console.log('Editing item!');
+      console.log(item);
+      this.initializeForms(item);
+    },
+    /*
+      For adding a new batch to warehouse
+    */
+    addNewBatch(item) {
+      console.log('Adding new batch!');
+      console.log(item);
+      this.initializeForms(item);
+      this.editedItem.serial_id = '';
+      this.editedItem.product_code = '';
+      this.editedItem.received_date = '';
+      this.editedItem.expiration_date = '';
+    },
+    /*
+      For pulling out item into operations
+      creates Operations item
+    */
+    pullItemOut(item) {
+      console.log('Pulling out!');
+      console.log(item);
+      this.initializeForms(item);
+      this.pull_out_quantity = 0;
+    },
+    /*
+      For item liquidation
+    */
+    liquidateItem(item) {
+      console.log('Liquidating!');
+      console.log(item);
+      this.initializeForms(item);
     },
     /*
       Pushers the object to the source data
@@ -403,7 +1059,6 @@ export default {
     */
     async save() {
       if (this.editedIndex > -1) {
-        const url = process.env.VUE_APP_API_URL;
         const param = this.componentData[this.editedIndex].id;
         const response = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
         Object.assign(this.componentData[this.editedIndex], response.data);
@@ -414,6 +1069,25 @@ export default {
         * this.editedItem.item_id = '0' + (this.componentData[0].data.length + 1).toString();
         * this.componentData[0].data.push(this.editedItem);
         */
+      }
+      this.close();
+    },
+    /*
+      Pushes editItem back into database, either creating new or updating
+
+      TODO: Operations stuff
+    */
+    async submit() {
+      if (this.showAddItemDialog) {
+        console.log('here');
+      } else if (this.showEditDialog) {
+        console.log('here');
+      } else if (this.showAddBatchDialog) {
+        console.log('here');
+      } else if (this.showPullOutDialog) {
+        console.log('here');
+      } else if (this.showLiquidateDialog) {
+        console.log('here');
       }
       this.close();
     },
