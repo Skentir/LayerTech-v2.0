@@ -207,7 +207,7 @@
                 <v-btn
                   color="blue darken-1"
                   text
-                  @click="save()"
+                  @click="submit()"
                 >
                   Add Item
                 </v-btn>
@@ -425,7 +425,7 @@
                       <v-btn
                       color="blue darken-1"
                       text
-                      @click="showEditDialog=false"
+                      @click="submit()"
                       >
                         Save Changes
                       </v-btn>
@@ -618,7 +618,7 @@
                       <v-btn
                       color="blue darken-1"
                       text
-                      @click="showAddBatchDialog=false"
+                      @click="submit()"
                       >
                         Add Batch
                       </v-btn>
@@ -692,9 +692,9 @@
                           <v-row>
                             <v-col cols="12">
                               <v-text-field
-                                type="number"
                                 v-model="pull_out_quantity"
                                 label="Pull Out Quantity"
+                                type="number"
                               >
                               </v-text-field>
                             </v-col>
@@ -714,7 +714,7 @@
                       <v-btn
                       color="blue darken-1"
                       text
-                      @click="showPullOutDialog=false"
+                      @click="submit()"
                       >
                         Pull Out
                       </v-btn>
@@ -788,9 +788,9 @@
                           <v-row>
                             <v-col cols="12">
                               <v-text-field
-                                type="number"
                                 v-model="liquidate_quantity"
                                 label="Liquidate Quantity"
+                                type="number"
                               >
                               </v-text-field>
                             </v-col>
@@ -810,7 +810,7 @@
                       <v-btn
                       color="blue darken-1"
                       text
-                      @click="showLiquidateDialog=false"
+                      @click="submit()"
                       >
                         Liquidate
                       </v-btn>
@@ -899,7 +899,7 @@ export default {
       critical_volume: 0,
       unit: '',
       packaging: '',
-      batch_number: 0,
+      batch_number: 1,
       batch_status: 'Current',
       product_status: 'In Stock',
       pulled_out_quantity: 0,
@@ -933,6 +933,7 @@ export default {
     batch_menu_date_received: false,
     pull_out_quantity: 0,
     liquidate_quantity: 0,
+    prevSerialID: '',
   }),
 
   computed: {
@@ -1030,6 +1031,7 @@ export default {
       console.log('Adding new batch!');
       console.log(item);
       this.initializeForms(item);
+      this.prevSerialID = this.editedItem.serial_id;
       this.editedItem.serial_id = '';
       this.editedItem.product_code = '';
       this.editedItem.received_date = '';
@@ -1054,40 +1056,77 @@ export default {
       this.initializeForms(item);
     },
     /*
-      Pushers the object to the source data
-      or update the existing object with new data.
-    */
-    async save() {
-      if (this.editedIndex > -1) {
-        const param = this.componentData[this.editedIndex].id;
-        const response = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
-        Object.assign(this.componentData[this.editedIndex], response.data);
-      } else {
-        console.log('hi');
-        /*
-        * eslint-disable-next-line prefer-template
-        * this.editedItem.item_id = '0' + (this.componentData[0].data.length + 1).toString();
-        * this.componentData[0].data.push(this.editedItem);
-        */
-      }
-      this.close();
-    },
-    /*
       Pushes editItem back into database, either creating new or updating
 
       TODO: Operations stuff
     */
     async submit() {
       if (this.showAddItemDialog) {
-        console.log('here');
+        /*
+          Code segment for adding new warehouse batch/item
+        */
+        console.log('Adding new item to database!');
+        const response = await axios.post(`${url}/warehouse/`, this.editedItem);
+        this.componentData.push(response.data);
       } else if (this.showEditDialog) {
-        console.log('here');
+        /*
+          Code segment for editing existing warehouse item
+        */
+        console.log('Updating selected item!');
+        /* eslint no-underscore-dangle: 0 */
+        /* eslint prefer-template: 0 */
+        const param = this.componentData[this.editedIndex]._id;
+        const response = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
+        Object.assign(this.componentData[this.editedIndex], response.data);
       } else if (this.showAddBatchDialog) {
-        console.log('here');
+        /*
+          Code segment for adding new batch from existing item
+        */
+        console.log('Adding new batch!');
+        delete this.editedItem._id;
+        delete this.editedItem.__v;
+        console.log(this.editedItem);
+        // assign current item to temporary
+        const tempItem = { ...this.editedItem };
+        tempItem.batch_status = 'Old';
+        tempItem.serial_id = this.prevSerialID;
+        /* eslint no-underscore-dangle: 0 */
+        /* eslint prefer-template: 0 */
+        const param = this.componentData[this.editedIndex]._id;
+        // Add new batch
+        console.log('Adding new batch to db!');
+        this.editedItem.batch_number += 1;
+        this.editedItem.product_status = 'In Stock';
+        this.editedItem.pulled_out_quantity = 0;
+        this.editedItem.liquidated_quantity = 0;
+        this.editedItem.batch_status = (tempItem.batch_status === 'Current') ? 'New' : 'Current';
+        const response1 = await axios.post(`${url}/warehouse/`, this.editedItem);
+        this.componentData.push(response1.data);
+        // Update old batch
+        console.log('Updating previous batch!');
+        const response2 = await axios.put(`${url}/warehouse/${param}`, tempItem);
+        Object.assign(this.componentData[this.editedIndex], response2.data);
+        this.prevSerialID = '';
       } else if (this.showPullOutDialog) {
-        console.log('here');
+        /*
+          Code segment for pull-out
+        */
+        console.log('Pulling item out to operations!');
+        this.editedItem.pulled_out_quantity += parseInt(this.pull_out_quantity, 10);
+        this.editedItem.stock_quantity -= parseInt(this.pull_out_quantity, 10);
+        const param = this.componentData[this.editedIndex]._id;
+        const response2 = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
+        Object.assign(this.componentData[this.editedIndex], response2.data);
       } else if (this.showLiquidateDialog) {
-        console.log('here');
+        /*
+          Code segment for liquidate
+        */
+        console.log('Liquidating item!');
+        this.editedItem.liquidated_quantity += parseInt(this.liquidate_quantity, 10);
+        this.editedItem.stock_quantity -= parseInt(this.liquidate_quantity, 10);
+        const param = this.componentData[this.editedIndex]._id;
+        const response2 = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
+        Object.assign(this.componentData[this.editedIndex], response2.data);
       }
       this.close();
     },
