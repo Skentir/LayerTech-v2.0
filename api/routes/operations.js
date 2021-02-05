@@ -50,4 +50,23 @@ router.delete('/:id', async (req, res) => {
     }
 })
 
+router.post('/pullOut', async (req, res) => {
+    try{
+        const retrieved = await Operations.findOne({batch_number: req.body.batch_number, product_title: req.body.product_title})
+        let response
+        if(!retrieved){
+            const new_operations_item = new Operations(req.body)
+            response = await new_operations_item.save()
+            if(!response) throw Error('Error in adding new Operations Item')
+        }else{
+            retrieved.quantity += req.body.quantity
+            response = await Operations.findByIdAndUpdate(retrieved)
+            if(!response) throw Error('Error in updating existing Operations Item')
+        }
+        res.status(200).json(response)
+    }catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+
 module.exports = router;
