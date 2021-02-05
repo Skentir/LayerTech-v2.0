@@ -286,8 +286,8 @@ export default {
       {
         text: 'Username', align: 'start', value: 'username',
       },
-      { text: 'First Name', value: 'first_name', sortable: false },
-      { text: 'Last Name', value: 'last_name', sortable: false },
+      { text: 'First Name', value: 'first_name', sortable: true },
+      { text: 'Last Name', value: 'last_name', sortable: true },
       { text: 'Contact Number', value: 'contact_number', sortable: false },
       { text: 'Role', value: 'role', sortable: true },
       { text: 'Department', value: 'department', sortable: true },
