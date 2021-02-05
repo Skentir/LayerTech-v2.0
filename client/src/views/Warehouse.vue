@@ -55,16 +55,18 @@
                           <v-text-field
                             label="Serial Code"
                             v-model="editedItem.serial_id"
-                          >
-                          </v-text-field>
+                            :rules="[ serial_id_validation ]"
+                            required
+                          />
                         </v-col>
                         <v-col cols="6">
                           <v-select
                             label="Supplier"
                             :items="suppliersList"
                             v-model="editedItem.supplier"
-                          >
-                          </v-select>
+                            :rules="rules.supplier"
+                            required
+                          />
                         </v-col>
                       </v-row>
                       <v-row>
@@ -72,8 +74,9 @@
                           <v-text-field
                             label="Product Title"
                             v-model="editedItem.product_title"
-                          >
-                          </v-text-field>
+                            :rules="rules.product_title"
+                            required
+                          />
                         </v-col>
                       </v-row>
                       <v-row>
@@ -81,23 +84,26 @@
                           <v-text-field
                             label="Product Code"
                             v-model="editedItem.product_code"
-                          >
-                          </v-text-field>
+                            :rules="rules.product_code"
+                            required
+                          />
                         </v-col>
                         <v-col cols="4">
                           <v-select
                             label="Product Type"
                             v-model="editedItem.product_type"
                             :items="productTypes"
-                          >
-                          </v-select>
+                            :rules="rules.product_type"
+                            required
+                          />
                         </v-col>
                         <v-col cols="4">
                           <v-text-field
                             label="Dosage"
                             v-model="editedItem.dosage"
-                          >
-                          </v-text-field>
+                            :rules="rules.dosage"
+                            required
+                          />
                         </v-col>
                       </v-row>
                       <v-row>
@@ -120,6 +126,7 @@
                                 v-bind="attrs"
                                 @blur="date = parseDate(dateFormatted)"
                                 v-on="on"
+                                :rules="rules.received_date"
                                 required
                               ></v-text-field>
                             </template>
@@ -150,6 +157,7 @@
                                 @blur="date = parseDate(dateFormatted)"
                                 v-on="on"
                                 required
+                                :rules="rules.expiration_date"
                               ></v-text-field>
                             </template>
                             <v-date-picker
@@ -166,30 +174,34 @@
                             label="Stock Quantity"
                             v-model="editedItem.stock_quantity"
                             type="number"
-                          >
-                          </v-text-field>
+                            :rules="rules.stock_quantity"
+                            required
+                          />
                         </v-col>
                         <v-col cols="3">
                           <v-text-field
                             label="Critical Volume"
                             v-model="editedItem.critical_volume"
                             type="number"
-                          >
-                          </v-text-field>
+                            required
+                            :rules="rules.critical_volume"
+                          />
                         </v-col>
                         <v-col cols="3">
                           <v-text-field
                             label="Unit"
                             v-model="editedItem.unit"
-                          >
-                          </v-text-field>
+                            :rules="rules.unit"
+                            required
+                          />
                         </v-col>
                         <v-col cols="3">
                           <v-text-field
                             label="Packaging"
                             v-model="editedItem.packaging"
-                          >
-                          </v-text-field>
+                            :rules="rules.packaging"
+                            required
+                          />
                         </v-col>
                       </v-row>
                     </v-container>
@@ -198,6 +210,7 @@
                 <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
+                  id="add_item_btn_close"
                   color="blue darken-1"
                   text
                   @click="showAddItemDialog = false"
@@ -205,6 +218,7 @@
                   Close
                 </v-btn>
                 <v-btn
+                  id="add_item_btn_submit"
                   color="blue darken-1"
                   text
                   @click="submit()"
@@ -265,8 +279,9 @@
                               <v-text-field
                                 label="Serial Code"
                                 v-model="editedItem.serial_id"
-                              >
-                              </v-text-field>
+                                :rules="[ serial_id_validation ]"
+                                required
+                              />
                             </v-col>
                             <v-col cols="6">
                               <v-select
@@ -274,8 +289,9 @@
                                 :items="suppliersList"
                                 v-model="editedItem.supplier"
                                 readonly
-                              >
-                              </v-select>
+                                :rules="rules.supplier"
+                                required
+                              />
                             </v-col>
                           </v-row>
                           <v-row>
@@ -284,8 +300,9 @@
                                 label="Product Title"
                                 v-model="editedItem.product_title"
                                 readonly
-                              >
-                              </v-text-field>
+                                :rules="rules.product_title"
+                                required
+                              />
                             </v-col>
                           </v-row>
                           <v-row>
@@ -293,8 +310,9 @@
                               <v-text-field
                                 label="Product Code"
                                 v-model="editedItem.product_code"
-                              >
-                              </v-text-field>
+                                :rules="rules.product_code"
+                                required
+                              />
                             </v-col>
                             <v-col cols="4">
                               <v-select
@@ -302,15 +320,17 @@
                                 v-model="editedItem.product_type"
                                 :items="productTypes"
                                 readonly
-                              >
-                              </v-select>
+                                :rules="rules.product_type"
+                                required
+                              />
                             </v-col>
                             <v-col cols="4">
                               <v-text-field
                                 label="Dosage"
                                 v-model="editedItem.dosage"
-                              >
-                              </v-text-field>
+                                :rules="rules.dosage"
+                                required
+                              />
                             </v-col>
                           </v-row>
                           <v-row>
@@ -336,6 +356,7 @@
                                     v-on="on"
                                     required
                                     readonly
+                                    :rules="rules.received_date"
                                   ></v-text-field>
                                 </template>
                                 <v-date-picker
@@ -366,6 +387,7 @@
                                     @blur="date = parseDate(dateFormatted)"
                                     v-on="on"
                                     required
+                                    :rules="rules.expiration_date"
                                   ></v-text-field>
                                 </template>
                                 <v-date-picker
@@ -383,8 +405,9 @@
                                 v-model="editedItem.stock_quantity"
                                 type="number"
                                 readonly
-                              >
-                              </v-text-field>
+                                :rules="rules.stock_quantity"
+                                required
+                              />
                             </v-col>
                             <v-col cols="3">
                               <v-text-field
@@ -392,22 +415,25 @@
                                 v-model="editedItem.critical_volume"
                                 type="number"
                                 readonly
-                              >
-                              </v-text-field>
+                                :rules="rules.critical_volume"
+                                requied
+                              />
                             </v-col>
                             <v-col cols="3">
                               <v-text-field
                                 label="Unit"
                                 v-model="editedItem.unit"
-                              >
-                              </v-text-field>
+                                :rules="rules.unit"
+                                required
+                              />
                             </v-col>
                             <v-col cols="3">
                               <v-text-field
                                 label="Packaging"
                                 v-model="editedItem.packaging"
-                              >
-                              </v-text-field>
+                                :rules="rules.packaging"
+                                required
+                              />
                             </v-col>
                           </v-row>
                         </v-container>
@@ -416,6 +442,7 @@
                     <v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn
+                      id="edit_item_btn_close"
                       color="blue darken-1"
                       text
                       @click="showEditDialog=false"
@@ -423,6 +450,7 @@
                         Close
                       </v-btn>
                       <v-btn
+                      id="edit_item_btn_submit"
                       color="blue darken-1"
                       text
                       @click="submit()"
@@ -463,8 +491,9 @@
                               <v-text-field
                                 label="Serial Code"
                                 v-model="editedItem.serial_id"
-                              >
-                              </v-text-field>
+                                required
+                                :rules="[ serial_id_validation ]"
+                              />
                             </v-col>
                             <v-col cols="6">
                               <v-select
@@ -472,8 +501,7 @@
                                 :items="suppliersList"
                                 v-model="editedItem.supplier"
                                 readonly
-                              >
-                              </v-select>
+                              />
                             </v-col>
                           </v-row>
                           <v-row>
@@ -482,8 +510,7 @@
                                 label="Product Title"
                                 v-model="editedItem.product_title"
                                 readonly
-                              >
-                              </v-text-field>
+                              />
                             </v-col>
                           </v-row>
                           <v-row>
@@ -491,8 +518,9 @@
                               <v-text-field
                                 label="Product Code"
                                 v-model="editedItem.product_code"
-                              >
-                              </v-text-field>
+                                required
+                                :rules="rules.product_code"
+                              />
                             </v-col>
                             <v-col cols="4">
                               <v-select
@@ -500,15 +528,15 @@
                                 v-model="editedItem.product_type"
                                 :items="productTypes"
                                 readonly
-                              >
-                              </v-select>
+                              />
                             </v-col>
                             <v-col cols="4">
                               <v-text-field
                                 label="Dosage"
                                 v-model="editedItem.dosage"
-                              >
-                              </v-text-field>
+                                :rules="rules.dosage"
+                                required
+                              />
                             </v-col>
                           </v-row>
                           <v-row>
@@ -532,6 +560,7 @@
                                     @blur="date = parseDate(dateFormatted)"
                                     v-on="on"
                                     required
+                                    :rules="rules.received_date"
                                   ></v-text-field>
                                 </template>
                                 <v-date-picker
@@ -561,6 +590,7 @@
                                     @blur="date = parseDate(dateFormatted)"
                                     v-on="on"
                                     required
+                                    :rules="rules.expiration_date"
                                   ></v-text-field>
                                 </template>
                                 <v-date-picker
@@ -577,30 +607,34 @@
                                 label="Stock Quantity"
                                 v-model="editedItem.stock_quantity"
                                 type="number"
-                              >
-                              </v-text-field>
+                                required
+                                :rules="rules.stock_quantity"
+                              />
                             </v-col>
                             <v-col cols="3">
                               <v-text-field
                                 label="Critical Volume"
                                 v-model="editedItem.critical_volume"
                                 type="number"
-                              >
-                              </v-text-field>
+                                required
+                                :rules="rules.critical_volume"
+                              />
                             </v-col>
                             <v-col cols="3">
                               <v-text-field
                                 label="Unit"
                                 v-model="editedItem.unit"
-                              >
-                              </v-text-field>
+                                required
+                                :rules="rules.unit"
+                              />
                             </v-col>
                             <v-col cols="3">
                               <v-text-field
                                 label="Packaging"
                                 v-model="editedItem.packaging"
-                              >
-                              </v-text-field>
+                                required
+                                :rules="rules.packaging"
+                              />
                             </v-col>
                           </v-row>
                         </v-container>
@@ -609,6 +643,7 @@
                     <v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn
+                      id="add_batch_btn_close"
                       color="blue darken-1"
                       text
                       @click="showAddBatchDialog=false"
@@ -616,6 +651,7 @@
                         Close
                       </v-btn>
                       <v-btn
+                      id="add_batch_btn_submit"
                       color="blue darken-1"
                       text
                       @click="submit()"
@@ -695,8 +731,9 @@
                                 v-model="pull_out_quantity"
                                 label="Pull Out Quantity"
                                 type="number"
-                              >
-                              </v-text-field>
+                                required
+                                :rules="rules.pull_out_quantity"
+                              />
                             </v-col>
                           </v-row>
                         </v-container>
@@ -705,6 +742,7 @@
                     <v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn
+                      id="pull_out_item_btn_close"
                       color="blue darken-1"
                       text
                       @click="showPullOutDialog=false"
@@ -712,6 +750,7 @@
                         Close
                       </v-btn>
                       <v-btn
+                      id="pull_out_item_btn_submit"
                       color="blue darken-1"
                       text
                       @click="submit()"
@@ -791,8 +830,9 @@
                                 v-model="liquidate_quantity"
                                 label="Liquidate Quantity"
                                 type="number"
-                              >
-                              </v-text-field>
+                                required
+                                :rules="rules.liquidate_quantity"
+                              />
                             </v-col>
                           </v-row>
                         </v-container>
@@ -801,6 +841,7 @@
                     <v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn
+                      id="liquidate_item_btn_close"
                       color="blue darken-1"
                       text
                       @click="showLiquidateDialog=false"
@@ -808,6 +849,7 @@
                         Close
                       </v-btn>
                       <v-btn
+                      id="liquidate_item_btn_submit"
                       color="blue darken-1"
                       text
                       @click="submit()"
@@ -823,6 +865,7 @@
         </template>
         <template v-slot:no-data>
           <v-btn
+            id="empty_reset_btn"
             color="primary"
             @click="close"
           >
@@ -924,6 +967,34 @@ export default {
       pulled_out_quantity: 0,
       liquidated_quantity: 0,
     },
+    rules: { // for clarity's sake, using same variable names
+      /* eslint arrow-parens: 0 */
+      serial_id: [
+        val => (val || '').length > 0 || 'This field is required',
+        val => val || this.serial_id_is_unique || 'Serial ID already exists'],
+      supplier: [val => (val || '').length > 0 || 'This field is required'],
+      product_title: [val => (val || '').length > 0 || 'This field is required'],
+      product_code: [val => (val || '').length > 0 || 'This field is required'],
+      product_type: [val => (val || '').length > 0 || 'This field is required'],
+      dosage: [val => (val || '').length > 0 || 'This field is required'],
+      received_date: [val => (val || '').length > 0 || 'This field is required'],
+      expiration_date: [val => (val || '').length > 0 || 'This field is required'],
+      stock_quantity: [
+        val => !!val || 'This field is required',
+        val => /^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$/.test(val) || 'Must be a valid number'],
+      critical_volume: [
+        val => !!val || 'This field is required',
+        val => /^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$/.test(val) || 'Integer or float must be valid.'],
+      unit: [val => (val || '').length > 0 || 'This field is required'],
+      packaging: [val => (val || '').length > 0 || 'This field is required'],
+      pull_out_quantity: [
+        val => !!val || 'This field is required',
+        val => /^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$/.test(val) || 'Integer or float must be valid.'],
+      liquidate_quantity: [
+        val => !!val || 'This field is required',
+        val => /^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$/.test(val) || 'Integer or float must be valid.'],
+    },
+    serial_id_list: [],
     date: new Date().toISOString().substr(0, 10),
     add_menu_date_exp: false,
     add_menu_date_received: false,
@@ -935,34 +1006,39 @@ export default {
     liquidate_quantity: 0,
     prevSerialID: '',
   }),
-
-  computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
-    },
-    /*
-      TODO: form validation
-    */
-  },
-
   watch: {
     showAddItemDialog(val) {
+      if (!val) {
+        this.$refs.addItemForm.reset();
+      }
       // eslint-disable-next-line no-unused-expressions
       val || this.close();
     },
     showEditDialog(val) {
+      if (!val) {
+        this.$refs.editItemForm.reset();
+      }
       // eslint-disable-next-line no-unused-expressions
       val || this.close();
     },
     showAddBatchDialog(val) {
+      if (!val) {
+        this.$refs.addBatchForm.reset();
+      }
       // eslint-disable-next-line no-unused-expressions
       val || this.close();
     },
     showPullOutDialog(val) {
+      if (!val) {
+        this.$refs.pullOutForm.reset();
+      }
       // eslint-disable-next-line no-unused-expressions
       val || this.close();
     },
     showLiquidateDialog(val) {
+      if (!val) {
+        this.$refs.liquidateItemForm.reset();
+      }
       // eslint-disable-next-line no-unused-expressions
       val || this.close();
     },
@@ -975,6 +1051,8 @@ export default {
     const suppliers = await axios.get(`${url}/suppliers/`);
     // eslint-disable-next-line arrow-parens
     suppliers.data.forEach(supplier => this.suppliersList.push(supplier.supplier_name));
+    // eslint-disable-next-line arrow-parens
+    this.componentData.forEach(data => this.serial_id_list.push(data.serial_id));
   },
 
   methods: {
@@ -989,11 +1067,26 @@ export default {
       to defaultItem. Also resets editedIndex to -1.
     */
     close() {
-      this.showAddItemDialog = false;
-      this.showEditDialog = false;
-      this.showAddBatchDialog = false;
-      this.showPullOutDialog = false;
-      this.showLiquidateDialog = false;
+      if (this.showAddItemDialog) {
+        this.$refs.addItemForm.reset();
+        this.showAddItemDialog = false;
+      }
+      if (this.showEditDialog) {
+        this.$refs.editItemForm.reset();
+        this.showEditDialog = false;
+      }
+      if (this.showAddBatchDialog) {
+        this.$refs.addBatchForm.reset();
+        this.showAddBatchDialog = false;
+      }
+      if (this.showPullOutDialog) {
+        this.$refs.pullOutForm.reset();
+        this.showPullOutDialog = false;
+      }
+      if (this.showLiquidateDialog) {
+        this.$refs.liquidateItemForm.reset();
+        this.showLiquidateDialog = false;
+      }
       this.$nextTick(() => {
         this.editedItem = { ...this.defaultItem };
         this.editedIndex = -1;
@@ -1013,7 +1106,21 @@ export default {
       this.editedItem.expiration_date = tempDate;
       tempDate = new Date(this.editedItem.received_date).toISOString().substr(0, 10);
       this.editedItem.received_date = tempDate;
-      // set true to show dialog view
+    },
+    /*
+      For validation/rules for Serial_ID
+      Checks whether if it's not empty and it's unique
+    */
+    serial_id_validation(value) {
+      if (this.showAddItemDialog || this.showEditDialog || this.showAddBatchDialog) {
+        if (value.length === 0) {
+          return 'This field is required';
+        } if (this.serial_id_list.includes(value)) {
+          return 'Serial ID already exists';
+        }
+      }
+      // eslint-disable-next-line no-else-return
+      return true;
     },
     /*
       Copies the data to editedItem to display on dialog.
@@ -1062,73 +1169,89 @@ export default {
     */
     async submit() {
       if (this.showAddItemDialog) {
-        /*
-          Code segment for adding new warehouse batch/item
-        */
-        console.log('Adding new item to database!');
-        const response = await axios.post(`${url}/warehouse/`, this.editedItem);
-        this.componentData.push(response.data);
+        if (this.$refs.addItemForm.validate()) {
+          /*
+            Code segment for adding new warehouse batch/item
+          */
+          console.log('Adding new item to database!');
+          const response = await axios.post(`${url}/warehouse/`, this.editedItem);
+          this.componentData.push(response.data);
+          this.serial_id_list.push(this.editedItem.serial_id);
+          this.close();
+        }
       } else if (this.showEditDialog) {
-        /*
-          Code segment for editing existing warehouse item
-        */
-        console.log('Updating selected item!');
-        /* eslint no-underscore-dangle: 0 */
-        /* eslint prefer-template: 0 */
-        const param = this.componentData[this.editedIndex]._id;
-        const response = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
-        Object.assign(this.componentData[this.editedIndex], response.data);
+        if (this.$refs.editItemForm.validate()) {
+          /*
+            Code segment for editing existing warehouse item
+          */
+          console.log('Updating selected item!');
+          /* eslint no-underscore-dangle: 0 */
+          /* eslint prefer-template: 0 */
+          const param = this.componentData[this.editedIndex]._id;
+          const response = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
+          Object.assign(this.componentData[this.editedIndex], response.data);
+          this.close();
+        }
       } else if (this.showAddBatchDialog) {
-        /*
-          Code segment for adding new batch from existing item
-        */
-        console.log('Adding new batch!');
-        delete this.editedItem._id;
-        delete this.editedItem.__v;
-        console.log(this.editedItem);
-        // assign current item to temporary
-        const tempItem = { ...this.editedItem };
-        tempItem.batch_status = 'Old';
-        tempItem.serial_id = this.prevSerialID;
-        /* eslint no-underscore-dangle: 0 */
-        /* eslint prefer-template: 0 */
-        const param = this.componentData[this.editedIndex]._id;
-        // Add new batch
-        console.log('Adding new batch to db!');
-        this.editedItem.batch_number += 1;
-        this.editedItem.product_status = 'In Stock';
-        this.editedItem.pulled_out_quantity = 0;
-        this.editedItem.liquidated_quantity = 0;
-        this.editedItem.batch_status = (tempItem.batch_status === 'Current') ? 'New' : 'Current';
-        const response1 = await axios.post(`${url}/warehouse/`, this.editedItem);
-        this.componentData.push(response1.data);
-        // Update old batch
-        console.log('Updating previous batch!');
-        const response2 = await axios.put(`${url}/warehouse/${param}`, tempItem);
-        Object.assign(this.componentData[this.editedIndex], response2.data);
-        this.prevSerialID = '';
+        if (this.$refs.addBatchForm.validate()) {
+          /*
+            Code segment for adding new batch from existing item
+          */
+          console.log('Adding new batch!');
+          delete this.editedItem._id;
+          delete this.editedItem.__v;
+          console.log(this.editedItem);
+          // assign current item to temporary
+          const tempItem = { ...this.editedItem };
+          tempItem.batch_status = 'Old';
+          tempItem.serial_id = this.prevSerialID;
+          /* eslint no-underscore-dangle: 0 */
+          /* eslint prefer-template: 0 */
+          const param = this.componentData[this.editedIndex]._id;
+          // Add new batch
+          console.log('Adding new batch to db!');
+          this.editedItem.batch_number += 1;
+          this.editedItem.product_status = 'In Stock';
+          this.editedItem.pulled_out_quantity = 0;
+          this.editedItem.liquidated_quantity = 0;
+          this.editedItem.batch_status = (tempItem.batch_status === 'Current') ? 'New' : 'Current';
+          const response1 = await axios.post(`${url}/warehouse/`, this.editedItem);
+          this.componentData.push(response1.data);
+          this.serial_id_list.push(this.editedItem.serial_id);
+          // Update old batch
+          console.log('Updating previous batch!');
+          const response2 = await axios.put(`${url}/warehouse/${param}`, tempItem);
+          Object.assign(this.componentData[this.editedIndex], response2.data);
+          this.prevSerialID = '';
+          this.close();
+        }
       } else if (this.showPullOutDialog) {
-        /*
-          Code segment for pull-out
-        */
-        console.log('Pulling item out to operations!');
-        this.editedItem.pulled_out_quantity += parseInt(this.pull_out_quantity, 10);
-        this.editedItem.stock_quantity -= parseInt(this.pull_out_quantity, 10);
-        const param = this.componentData[this.editedIndex]._id;
-        const response2 = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
-        Object.assign(this.componentData[this.editedIndex], response2.data);
+        if (this.$refs.pullOutForm.validate()) {
+          /*
+            Code segment for pull-out
+          */
+          console.log('Pulling item out to operations!');
+          this.editedItem.pulled_out_quantity += parseInt(this.pull_out_quantity, 10);
+          this.editedItem.stock_quantity -= parseInt(this.pull_out_quantity, 10);
+          const param = this.componentData[this.editedIndex]._id;
+          const response2 = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
+          Object.assign(this.componentData[this.editedIndex], response2.data);
+          this.close();
+        }
       } else if (this.showLiquidateDialog) {
-        /*
-          Code segment for liquidate
-        */
-        console.log('Liquidating item!');
-        this.editedItem.liquidated_quantity += parseInt(this.liquidate_quantity, 10);
-        this.editedItem.stock_quantity -= parseInt(this.liquidate_quantity, 10);
-        const param = this.componentData[this.editedIndex]._id;
-        const response2 = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
-        Object.assign(this.componentData[this.editedIndex], response2.data);
+        if (this.$refs.liquidateItemForm.validate()) {
+          /*
+            Code segment for liquidate
+          */
+          console.log('Liquidating item!');
+          this.editedItem.liquidated_quantity += parseInt(this.liquidate_quantity, 10);
+          this.editedItem.stock_quantity -= parseInt(this.liquidate_quantity, 10);
+          const param = this.componentData[this.editedIndex]._id;
+          const response2 = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
+          Object.assign(this.componentData[this.editedIndex], response2.data);
+          this.close();
+        }
       }
-      this.close();
     },
   },
 };
