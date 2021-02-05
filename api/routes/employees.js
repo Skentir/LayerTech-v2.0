@@ -8,15 +8,22 @@ const verifyToken = require('./verifyToken');
 
 
 /**
- * @route POST /employees/
+ * @route GET /employees/
  * @desc Get Employees Collection
  * @access Public
  */
 router.get('/', async (req, res) => {
     try{
-        const employees_list = await Employee.find()
+        // get employees collection excluding the password field
+        const employees_list = await Employee.find();
         if(!employees_list) throw new Error('No Employees')
-    
+        
+        // assign null to password to hide
+        employees_list.forEach((employee) => {
+            employee.password = null;
+        });
+
+        // respond with object of employee
         res.status(200).json(employees_list);
     }catch(error) {
         res.status(500).json({ message: error.message })
@@ -85,25 +92,31 @@ router.post('/register', async (req, res) => {
  */
 router.put('/:id', async (req, res) => {
     try{
-        let newPassword = req.body.password;
-        // Hash the password
-        bcrypt.genSalt(10, (err, salt) => {     
-            bcrypt.hash(newPassword, salt, async (err, hash) => {
-                if (err) return res.status(400).json({error: err})
-                req.body.password = hash;
-                console.log(req.body.password);
-                // Find and update
-                const response = await Employee.findByIdAndUpdate(req.params.id, req.body);
-                if(!response) throw Error('Failed to update employee.')
-                const updated = { ...response._doc, ...req.body}
-                res.status(200).json(updated);
-                
+        if (req.body.password === null) { // if not changing pass
+            // Find and update
+            console.log(req.body);
+            const response = await Employee.findByIdAndUpdate(req.params.id, req.body);
+            if(!response) throw Error('Failed to update employee.')
+            const updated = { ...response._doc, ...req.body}
+            res.status(200).json(updated);
+        } else { // if changing pass
+            let newPassword = req.body.password;
+            // Hash the password
+            bcrypt.genSalt(10, (err, salt) => {     
+                bcrypt.hash(newPassword, salt, async (err, hash) => {
+                    if (err) return res.status(400).json({error: err})
+                    req.body.password = hash;
+                    console.log(req.body.password);
+                    // Find and update
+                    const response = await Employee.findByIdAndUpdate(req.params.id, req.body);
+                    if(!response) throw Error('Failed to update employee.')
+                    const updated = { ...response._doc, ...req.body}
+                    res.status(200).json(updated);
+                    
+                });
             });
-        });
-
-
-        
-    }catch(error){
+        }  
+    } catch(error) {
         console.log(error.message)
         res.status(500).json({ message: error.message })
     }

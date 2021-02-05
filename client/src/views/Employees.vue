@@ -71,7 +71,7 @@
                       </v-col>
                     </v-row>
                     <v-row>
-                      <v-col cols="12">
+                      <v-col cols="12" v-if="editedIndex == -1">
                         <v-text-field
                           v-model="editedItem.password"
                           :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
@@ -160,6 +160,44 @@
                         ></v-select>
                       </v-col>
                     </v-row>
+                    <v-row v-if="editedIndex != -1">
+                      <v-col cols="3">
+                        <v-btn
+                          @click="showChangePassword = !showChangePassword"
+                        >
+                          Change Password
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                    <div v-if="showChangePassword">
+                      <v-row>
+                        <v-col cols="12">
+                          <!-- password field is not required -->
+                          <v-text-field
+                            v-model="editedItem.password"
+                            :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
+                            label="Password"
+                            :type="show_password ? 'text' : 'password'"
+                            @click:append="show_password = !show_password"
+                            required
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="12">
+                          <v-text-field
+                            v-model="confirm_password"
+                            :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
+                            label="Confirm Password"
+                            :type="show_password ? 'text' : 'password'"
+                            :rules="[(editedItem.password === confirm_password) ||
+                            'Password do not match']"
+                            @click:append="show_password = !show_password"
+                            required
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                    </div>
                   </v-container>
                 </v-form>
               </v-card-text>
@@ -291,6 +329,7 @@ export default {
     edit_username: false,
     show_password: false,
     unique: false,
+    showChangePassword: false,
   }),
 
   computed: {
@@ -328,6 +367,7 @@ export default {
       this.editedIndex = this.componentData.indexOf(item);
       // assign item to editedItem obj
       this.editedItem = { ...item };
+
       // set true to show dialog view
       this.editedItem.password = this.componentData[this.editedIndex].password;
       this.showDialog = true;
@@ -391,7 +431,7 @@ export default {
     */
     async save() {
       if (this.$refs.form.validate()) {
-        if (this.editedIndex > -1) {
+        if (this.editedIndex > -1) { // if new employee
           /*
             this sends the _id to api/suppliers/:id to update
           */
@@ -406,7 +446,7 @@ export default {
           const response = await axios.put(`${url}/employees/${id}`, this.editedItem);
           Object.assign(this.componentData[this.editedIndex], response.data);
           this.close();
-        } else {
+        } else { // if update/edit employee
           // eslint-disable-next-line prefer-template
           const response = await axios.post(`${url}/employees/register/`, this.editedItem);
           if (response.data.success) {
