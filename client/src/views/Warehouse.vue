@@ -493,6 +493,7 @@
                                 v-model="editedItem.serial_id"
                                 required
                                 :rules="[ serial_id_validation ]"
+                                readonly
                               />
                             </v-col>
                             <v-col cols="6">
