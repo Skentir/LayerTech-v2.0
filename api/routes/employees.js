@@ -169,6 +169,7 @@ router.post('/login', (req, res) => {
                     console.log("login success.");
                     return res.status(200).json({
                         "auth-token": token,
+                        "role": user.role,
                         msg: "Login success.",
                         success: true
                     });

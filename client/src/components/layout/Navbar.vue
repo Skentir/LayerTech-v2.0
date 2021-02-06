@@ -32,6 +32,7 @@ export default {
     logout() {
       // remove user from local storage to log user out
       localStorage.removeItem('auth-token');
+      localStorage.removeItem('role');
       this.$router.push('/'); // redirect to login page
     },
   }

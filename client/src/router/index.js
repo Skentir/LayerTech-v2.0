@@ -33,21 +33,25 @@ const routes = [
     path: '/employees',
     name: 'Employees',
     component: Employees,
+    meta: { requiresAuth: true, adminOnly: true },
   },
   {
     path: '/chickens',
     name: 'Chickens',
     component: Chickens,
+    meta: { requiresAuth: true },
   },
   {
     path: '/operations',
     name: 'Operations',
     component: Operations,
+    meta: { requiresAuth: true },
   },
   {
     path: '/warehouse',
     name: 'Warehouse',
     component: Warehouse,
+    meta: { requiresAuth: true },
   },
   {
     path: '*',
@@ -67,9 +71,17 @@ router.beforeEach((to, from, next) => {
     } else {
       next('/'); // Redirect the user to the main page
     }
-  } else {
-    next();
   }
+
+  if (to.meta.adminOnly) { // check the meta field
+    if (JSON.parse(localStorage.getItem('role')).toLowerCase() === 'admin') { // check if the user's role is admin
+      next(); // the next method allow the user to continue to the router
+    } else {
+      next('/'); // Redirect the user to the main page
+    }
+  }
+  // default move
+  next();
 });
 
 export default router;
