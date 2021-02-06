@@ -3,7 +3,8 @@ const { Schema, model} = require('mongoose');
 const WarehouseSchema = new Schema({
     //attributes present in add item modal
     serial_id: {type: String, unique: true, required: true},
-    supplier: {type: Schema.Types.ObjectId, ref: 'suppliers', required: true},
+    //supplier: {type: Schema.Types.ObjectId, ref: 'suppliers', required: true},
+    supplier: {type: String, required: true},
     product_title: {type: String, required: true},
     product_type: {type: String, required: true},
     product_code: {type: String, required: true},

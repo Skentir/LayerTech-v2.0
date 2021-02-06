@@ -146,7 +146,7 @@
                 <span class="nav-label">Chickens</span>
               </div>
             </a>
-            <a href="#/employees">
+            <a href="#/employees" v-if="isAdmin">
               <div id="nav-employees" class="nav-button">
                 <span class="nav-label">Manage Employees</span>
               </div>
@@ -173,6 +173,25 @@ export default {
   components: {
     Navbar,
   },
+  computed: {
+    // updates user role
+    role() {
+      return this.user.role;
+    },
+    // role identifiers used for conditional rendering
+    isAdmin() {
+      return this.role === 'Admin';
+    },
+    isOperations() {
+      return this.role === 'Admin' || this.role === 'Operations';
+    },
+    isLogistics() {
+      return this.role === 'Admin' || this.role === 'Logistics';
+    },
+    isSales() {
+      return this.role === 'Admin' || this.role === 'Sales';
+    },
+  },
   data() {
     return {
       farmName: 'Guyun Stone Forest',
@@ -180,10 +199,16 @@ export default {
       accountingAlerts: [],
       warehouseAlerts: [],
       operationsAlerts: [],
+      user: null,
     };
   },
   created() {
     this.initialize();
+    // store role of the current user
+    this.user = JSON.parse(localStorage.getItem('user'));
+    console.log(this.user);
+    console.log(this.role);
+    console.log(this.isAdmin);
   },
   methods: {
     /*

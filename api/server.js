@@ -6,7 +6,7 @@ const morgan = require('morgan') //http requests automatic logger
 
 // import routes
 const suppliers_routes = require('./routes/suppliers');
-const chickenRoutes = require('./routes/chickens')
+const chicken_routes = require('./routes/chickens')
 const warehouse_routes = require('./routes/warehouse')
 const operations_routes = require('./routes/operations')
 const employees_routes = require('./routes/employees')
@@ -40,7 +40,7 @@ mongoose.connect(mongoURI, options)
 
 // add routes
 app.use('/suppliers', suppliers_routes);
-app.use('/chickens', chickenRoutes)
+app.use('/chickens', chicken_routes)
 app.use('/warehouse', warehouse_routes);
 app.use('/operations', operations_routes);
 app.use('/employees', employees_routes);
