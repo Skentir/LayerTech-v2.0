@@ -147,7 +147,7 @@ router.delete('/:id', async (req, res) => {
 router.post('/login', (req, res) => {
     Employee.findOne({
         username: req.body.username
-    }).then(user => {
+    }).then(user => {        
         if (!user) {
             return res.status(404).json({
                 msg: "Username is not found.",
@@ -161,7 +161,10 @@ router.post('/login', (req, res) => {
                 const payload = {
                     _id: user._id,
                     username: user.username,
-                    name: user.name
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    role: user.role,
+                    department: user.department
                 }
                 jwt.sign(payload, secret, {
                     expiresIn: 604800
@@ -169,7 +172,7 @@ router.post('/login', (req, res) => {
                     console.log("login success.");
                     return res.status(200).json({
                         "auth-token": token,
-                        "role": user.role,
+                        "user": payload,
                         msg: "Login success.",
                         success: true
                     });
