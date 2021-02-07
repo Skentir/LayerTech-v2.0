@@ -866,6 +866,9 @@
               <v-list-item v-else>
                 <v-btn disabled>Liquidate</v-btn>
               </v-list-item>
+              <v-list-item>
+                <v-btn @click="deleteI(item)">Delete</v-btn>
+              </v-list-item>
             </v-list>
           </v-menu>
         </template>
@@ -1015,37 +1018,22 @@ export default {
   }),
   watch: {
     showAddItemDialog(val) {
-      if (!val) {
-        this.$refs.addItemForm.reset();
-      }
       // eslint-disable-next-line no-unused-expressions
       val || this.close();
     },
     showEditDialog(val) {
-      if (!val) {
-        this.$refs.editItemForm.reset();
-      }
       // eslint-disable-next-line no-unused-expressions
       val || this.close();
     },
     showAddBatchDialog(val) {
-      if (!val) {
-        this.$refs.addBatchForm.reset();
-      }
       // eslint-disable-next-line no-unused-expressions
       val || this.close();
     },
     showPullOutDialog(val) {
-      if (!val) {
-        this.$refs.pullOutForm.reset();
-      }
       // eslint-disable-next-line no-unused-expressions
       val || this.close();
     },
     showLiquidateDialog(val) {
-      if (!val) {
-        this.$refs.liquidateItemForm.reset();
-      }
       // eslint-disable-next-line no-unused-expressions
       val || this.close();
     },
@@ -1054,7 +1042,6 @@ export default {
   async mounted() {
     const response = await axios.get(`${url}/warehouse/`);
     this.componentData = response.data;
-    console.log(this.componentData);
     const suppliers = await axios.get(`${url}/suppliers/`);
     // eslint-disable-next-line arrow-parens
     suppliers.data.forEach(supplier => this.suppliersList.push(supplier.supplier_name));
@@ -1063,6 +1050,14 @@ export default {
   },
 
   methods: {
+    async deleteI(item) {
+      this.editedIndex = this.componentData.indexOf(item);
+      const param = this.componentData[this.editedIndex]._id;
+      // eslint-disable-next-line no-unused-vars
+      const response = await axios.delete(`${url}/warehouse/${param}`);
+      this.componentData.splice(this.editedIndex, 1);
+      this.editedIndex = -1;
+    },
     /*
       For proper date formatting within the table
     */
@@ -1075,22 +1070,21 @@ export default {
     */
     close() {
       if (this.showAddItemDialog) {
+        console.log('Resetting validations!');
         this.$refs.addItemForm.reset();
         this.showAddItemDialog = false;
-      }
-      if (this.showEditDialog) {
+      } else if (this.showEditDialog) {
         this.$refs.editItemForm.reset();
         this.showEditDialog = false;
-      }
-      if (this.showAddBatchDialog) {
+      } else if (this.showAddBatchDialog) {
+        console.log('Resetting validations!');
         this.$refs.addBatchForm.reset();
+        console.log('Resetting validations!');
         this.showAddBatchDialog = false;
-      }
-      if (this.showPullOutDialog) {
+      } else if (this.showPullOutDialog) {
         this.$refs.pullOutForm.reset();
         this.showPullOutDialog = false;
-      }
-      if (this.showLiquidateDialog) {
+      } else if (this.showLiquidateDialog) {
         this.$refs.liquidateItemForm.reset();
         this.showLiquidateDialog = false;
       }
@@ -1151,16 +1145,12 @@ export default {
       showDialog triggers the dialog view of the form.
     */
     editItem(item) {
-      console.log('Editing item!');
-      console.log(item);
       this.initializeForms(item);
     },
     /*
       For adding a new batch to warehouse
     */
     addNewBatch(item) {
-      console.log('Adding new batch!');
-      console.log(item);
       this.initializeForms(item);
       this.prevSerialID = this.editedItem.serial_id;
       this.editedItem.serial_id = '';
@@ -1173,8 +1163,6 @@ export default {
       creates Operations item
     */
     pullItemOut(item) {
-      console.log('Pulling out!');
-      console.log(item);
       this.initializeForms(item);
       this.pull_out_quantity = 0;
     },
@@ -1182,8 +1170,6 @@ export default {
       For item liquidation
     */
     liquidateItem(item) {
-      console.log('Liquidating!');
-      console.log(item);
       this.initializeForms(item);
     },
     /*
@@ -1197,7 +1183,6 @@ export default {
           /*
             Code segment for adding new warehouse batch/item
           */
-          console.log('Adding new item to database!');
           const response = await axios.post(`${url}/warehouse/`, this.editedItem);
           this.componentData.push(response.data);
           this.serial_id_list.push(this.editedItem.serial_id);
@@ -1208,7 +1193,6 @@ export default {
           /*
             Code segment for editing existing warehouse item
           */
-          console.log('Updating selected item!');
           /* eslint no-underscore-dangle: 0 */
           /* eslint prefer-template: 0 */
           const param = this.componentData[this.editedIndex]._id;
@@ -1221,19 +1205,31 @@ export default {
           /*
             Code segment for adding new batch from existing item
           */
-          console.log('Adding new batch!');
-          delete this.editedItem._id;
-          delete this.editedItem.__v;
-          console.log(this.editedItem);
           // assign current item to temporary
           const tempItem = { ...this.editedItem };
+          tempItem.stock_quantity = this.componentData[this.editedIndex].stock_quantity;
+          delete this.editedItem._id;
+          delete this.editedItem.__v;
           tempItem.serial_id = this.prevSerialID;
           /* eslint no-underscore-dangle: 0 */
           /* eslint prefer-template: 0 */
           const param = this.componentData[this.editedIndex]._id;
           // Add new batch
-          console.log('Adding new batch to db!');
-          this.editedItem.batch_number += 1;
+          // Check for other items in the batch
+          const filteredData = this.componentData.filter(
+            item => item.product_title === this.editedItem.product_title
+          );
+          filteredData.sort(
+            (item1, item2) => item2.batch_number - item1.batch_number
+          );
+          const latestBatchIndex = filteredData.findIndex(
+            item => item.batch_number > this.editedItem.batch_number
+          );
+          if (latestBatchIndex > -1) {
+            this.editedItem.batch_number = filteredData[latestBatchIndex].batch_number + 1;
+          } else {
+            this.editedItem.batch_number += 1;
+          }
           this.editedItem.product_status = 'In Stock';
           this.editedItem.pulled_out_quantity = 0;
           this.editedItem.liquidated_quantity = 0;
@@ -1242,7 +1238,6 @@ export default {
           this.componentData.push(response1.data);
           this.serial_id_list.push(this.editedItem.serial_id);
           // Update old batch
-          console.log('Updating previous batch!');
           const response2 = await axios.put(`${url}/warehouse/${param}`, tempItem);
           Object.assign(this.componentData[this.editedIndex], response2.data);
           this.prevSerialID = '';
@@ -1250,7 +1245,6 @@ export default {
         }
       } else if (this.showPullOutDialog) {
         if (this.$refs.pullOutForm.validate()) {
-          console.log('Pulling item out to operations!');
           /*
             Code segment for pull-out
           */
@@ -1279,7 +1273,6 @@ export default {
           }
           // eslint-disable-next-line no-unused-vars
           const response3 = await axios.post(`${url}/operations/pullOut`, newOperationsItem);
-          console.log('Successfully queried Operations!');
           // Update existing warehouse item
           this.editedItem.pulled_out_quantity += parseInt(this.pull_out_quantity, 10);
           this.editedItem.stock_quantity -= parseInt(this.pull_out_quantity, 10);
@@ -1330,9 +1323,43 @@ export default {
           console.log('Liquidating item!');
           this.editedItem.liquidated_quantity += parseInt(this.liquidate_quantity, 10);
           this.editedItem.stock_quantity -= parseInt(this.liquidate_quantity, 10);
-          const param = this.componentData[this.editedIndex]._id;
-          const response2 = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
-          Object.assign(this.componentData[this.editedIndex], response2.data);
+          // Check if item is out of stock
+          if (this.editedItem.stock_quantity === 0) {
+            this.editedItem.batch_status = 'Old';
+            this.editedItem.product_status = 'Out of Stock';
+            const param = this.componentData[this.editedIndex]._id;
+            const response2 = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
+            Object.assign(this.componentData[this.editedIndex], response2.data);
+            // Check if next batch exists
+            // Look for warehouse items with similar product name
+            const filteredData = this.componentData.filter(
+              item => item.product_title === this.editedItem.product_title
+            );
+            if (filteredData) {
+              filteredData.sort(
+                (item1, item2) => item1.batch_number - item2.batch_number
+              );
+              const nextBatchIndex = filteredData.findIndex(
+                item => item.batch_number > this.editedItem.batch_number
+                && item.batch_status === 'New'
+              );
+              if (nextBatchIndex > -1) {
+                const nextBatch = { ...filteredData[nextBatchIndex] };
+                const overallIndex = this.componentData.findIndex(
+                  item => item._id === nextBatch._id
+                );
+                const param2 = nextBatch._id;
+                delete nextBatch._id;
+                nextBatch.batch_status = 'Current';
+                const response4 = await axios.put(`${url}/warehouse/${param2}`, nextBatch);
+                Object.assign(this.componentData[overallIndex], response4.data);
+              }
+            }
+          } else {
+            const param = this.componentData[this.editedIndex]._id;
+            const response2 = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
+            Object.assign(this.componentData[this.editedIndex], response2.data);
+          }
           this.close();
         }
       }
