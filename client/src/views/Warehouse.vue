@@ -279,8 +279,8 @@
                               <v-text-field
                                 label="Serial Code"
                                 v-model="editedItem.serial_id"
-                                :rules="[ serial_id_validation ]"
                                 required
+                                readonly
                               />
                             </v-col>
                             <v-col cols="6">
@@ -493,7 +493,6 @@
                                 v-model="editedItem.serial_id"
                                 required
                                 :rules="[ serial_id_validation ]"
-                                readonly
                               />
                             </v-col>
                             <v-col cols="6">
@@ -663,7 +662,7 @@
                   </v-card>
                 </v-dialog>
               </v-list-item>
-              <v-list-item
+              <v-list-item v-if="item.stock_quantity > 0"
               >
                 <!-- pull out dialog -->
                 <v-dialog
@@ -733,7 +732,7 @@
                                 label="Pull Out Quantity"
                                 type="number"
                                 required
-                                :rules="rules.pull_out_quantity"
+                                :rules="[ pull_out_validation ]"
                               />
                             </v-col>
                           </v-row>
@@ -762,7 +761,10 @@
                   </v-card>
                 </v-dialog>
               </v-list-item>
-              <v-list-item
+              <v-list-item v-else>
+                <v-btn disabled>Pull Out</v-btn>
+              </v-list-item>
+              <v-list-item v-if="item.stock_quantity > 0"
               >
                 <!-- liquidate dialog -->
                 <v-dialog
@@ -832,7 +834,7 @@
                                 label="Liquidate Quantity"
                                 type="number"
                                 required
-                                :rules="rules.liquidate_quantity"
+                                :rules="[ pull_out_validation ]"
                               />
                             </v-col>
                           </v-row>
@@ -861,6 +863,9 @@
                   </v-card>
                 </v-dialog>
               </v-list-item>
+              <v-list-item v-else>
+                <v-btn disabled>Liquidate</v-btn>
+              </v-list-item>
             </v-list>
           </v-menu>
         </template>
@@ -875,6 +880,7 @@
         </template>
       </v-data-table>
     </div>
+    <div class="spacer"/>
     <v-footer id="footer">
     </v-footer>
   </div>
@@ -1124,6 +1130,23 @@ export default {
       return true;
     },
     /*
+      For validating input pull-out/liquidate values
+    */
+    pull_out_validation(value) {
+      if (this.showPullOutDialog || this.showLiquidateDialog) {
+        if (value.length === 0) {
+          return 'This field is required';
+        }
+        if (parseFloat(value) <= 0) {
+          return 'Must be a valid quantity';
+        }
+        if (parseFloat(value) > parseFloat(this.editedItem.stock_quantity)) {
+          return 'Must be less than current stock!';
+        }
+      }
+      return true;
+    },
+    /*
       Copies the data to editedItem to display on dialog.
       showDialog triggers the dialog view of the form.
     */
@@ -1204,7 +1227,6 @@ export default {
           console.log(this.editedItem);
           // assign current item to temporary
           const tempItem = { ...this.editedItem };
-          tempItem.batch_status = 'Old';
           tempItem.serial_id = this.prevSerialID;
           /* eslint no-underscore-dangle: 0 */
           /* eslint prefer-template: 0 */
@@ -1261,9 +1283,43 @@ export default {
           // Update existing warehouse item
           this.editedItem.pulled_out_quantity += parseInt(this.pull_out_quantity, 10);
           this.editedItem.stock_quantity -= parseInt(this.pull_out_quantity, 10);
-          const param = this.componentData[this.editedIndex]._id;
-          const response2 = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
-          Object.assign(this.componentData[this.editedIndex], response2.data);
+          // Check if item is out of stock
+          if (this.editedItem.stock_quantity === 0) {
+            this.editedItem.batch_status = 'Old';
+            this.editedItem.product_status = 'Out of Stock';
+            const param = this.componentData[this.editedIndex]._id;
+            const response2 = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
+            Object.assign(this.componentData[this.editedIndex], response2.data);
+            // Check if next batch exists
+            // Look for warehouse items with similar product name
+            const filteredData = this.componentData.filter(
+              item => item.product_title === this.editedItem.product_title
+            );
+            if (filteredData) {
+              filteredData.sort(
+                (item1, item2) => item1.batch_number - item2.batch_number
+              );
+              const nextBatchIndex = filteredData.findIndex(
+                item => item.batch_number > this.editedItem.batch_number
+                && item.batch_status === 'New'
+              );
+              if (nextBatchIndex > -1) {
+                const nextBatch = { ...filteredData[nextBatchIndex] };
+                const overallIndex = this.componentData.findIndex(
+                  item => item._id === nextBatch._id
+                );
+                const param2 = nextBatch._id;
+                delete nextBatch._id;
+                nextBatch.batch_status = 'Current';
+                const response4 = await axios.put(`${url}/warehouse/${param2}`, nextBatch);
+                Object.assign(this.componentData[overallIndex], response4.data);
+              }
+            }
+          } else {
+            const param = this.componentData[this.editedIndex]._id;
+            const response2 = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
+            Object.assign(this.componentData[this.editedIndex], response2.data);
+          }
           this.close();
         }
       } else if (this.showLiquidateDialog) {
@@ -1284,3 +1340,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.spacer{
+  padding-top: 25px;
+}
+</style>
