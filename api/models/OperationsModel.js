@@ -10,7 +10,7 @@ const OperationsSchema = new Schema({
     product_type: {type: String, required: true},
     product_code: {type: String, required: true},
     received_date: {type: Date, required: true, default: Date.now},
-    expiration_date: {type: Date, required: true, default: Date.now},
+    expiration_date: {type: Date, required: false},
     unit: {type: String, required: true},
     packaging: {type: String, required: true},
     entry: {type: String, required: true, enum: ["In", "Out"]},
