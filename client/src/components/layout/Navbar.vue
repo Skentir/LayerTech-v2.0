@@ -11,7 +11,7 @@
         </v-col>
         <v-col cols="6" class="right-container">
             <div id="user">
-                {{first_name}} {{last_name}}
+                {{fullName}}
             </div>
             <v-btn @click="logout" id="logout">
                 Log Out
@@ -22,18 +22,27 @@
 
 <script>
 export default {
+  computed: {
+    fullName() {
+      return [this.user.first_name, this.user.last_name].join(' ');
+    },
+  },
   data() {
     return {
-      first_name: 'Rex',
-      last_name: 'Lapis',
+      user: null,
     };
   },
   methods: {
     logout() {
       // remove user from local storage to log user out
       localStorage.removeItem('auth-token');
+      localStorage.removeItem('role');
       this.$router.push('/'); // redirect to login page
     },
+  },
+  created() {
+    this.user = JSON.parse(localStorage.getItem('user'));
+    console.log(this.fullName);
   }
 };
 </script>

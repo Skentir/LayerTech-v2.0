@@ -30,7 +30,7 @@
             >
               <template v-slot:activator="{ on, attrs }">
               <v-col class="text-right pr-0">
-                <v-btn
+                <v-btn id="create-btn"
                   color="primary"
                   dark
                   v-bind="attrs"
@@ -53,7 +53,7 @@
                   v-model="editedItem.supplier_name"
                   :rules="rules.supplier_name"
                   :items="supplier_names"
-                  label="Supplier Name" required/>
+                  label="Supplier Name" :disabled="editedIndex > -1" required/>
               </v-col>
               <v-col cols="6">
                 <v-text-field
@@ -72,19 +72,19 @@
                 <v-text-field
                   v-model="editedItem.population"
                   :rules="rules.population"
-                  label="Population" required/>
+                  label="Population" :disabled="editedIndex > -1" type="number" required/>
               </v-col>
               <v-col cols="4">
                 <v-text-field
                   v-model="editedItem.mortality_rate"
                   :rules="rules.mortality_rate"
-                  label="Mortality Rate" required/>
+                  label="Mortality Rate" type="number" required/>
               </v-col>
               <v-col cols="4">
                 <v-text-field
                   v-model="editedItem.morbidity_rate"
                   :rules="rules.morbidity_rate"
-                  label="Morbidity Rate" required/>
+                  label="Morbidity Rate" type="number" required/>
               </v-col>
               <v-col cols="6">
                 <v-text-field
@@ -100,8 +100,8 @@
               </v-col>
               <v-col cols="6">
                 <v-menu
-                  ref="menu_date_recieved"
-                  v-model="menu_date_recieved"
+                  ref="menu_date_received"
+                  v-model="menu_date_received"
                   :close-on-content-click="false"
                   transition="scale-transition"
                   offset-y
@@ -109,8 +109,9 @@
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                      v-model="editedItem.date_recieved"
-                      :rules="rules.date_recieved"
+                      v-model="editedItem.date_received"
+                      :disabled="editedIndex > -1"
+                      :rules="rules.date_received"
                       label="Date"
                       hint="YYYY/MM/DD format"
                       persistent-hint
@@ -122,9 +123,9 @@
                     ></v-text-field>
                   </template>
                   <v-date-picker
-                    v-model="editedItem.date_recieved"
+                    v-model="editedItem.date_received"
                     no-title
-                    @input="menu_date_recieved = false"
+                    @input="menu_date_received = false"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -151,14 +152,14 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
+          <v-btn id="close-create-btn"
             color="blue darken-1"
             text
-            @click="showDialog = false"
+            @click="showDialog=false"
           >
             Close
           </v-btn>
-          <v-btn
+          <v-btn id="submit-create-btn"
             color="blue darken-1"
             text
             @click="submit"
@@ -169,6 +170,49 @@
         </v-form>
         </v-card>
             </v-dialog>
+            <v-dialog v-model="dialogPullAdd" max-width="500px">
+              <v-form ref="addPull">
+                <v-card>
+                  <v-card-title class="headline">
+                    Add to chickens/Call-out chickens
+                  </v-card-title>
+                  <v-card-text>
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="addCallItem.population"
+                          :rules="rules.add_population"
+                          label="Add Population" type="number" required/>
+                      </v-col>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="addCallItem.called_out_quantity"
+                          :rules="rule_call_out"
+                          label="Call out chickens" type="number"
+                          required/>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                    id="close-call-btn"
+                    color="blue darken-1"
+                    text
+                    @click="closePullAdd">Cancel</v-btn>
+                    <v-btn
+                    id="submit-call-btn"
+                    color="blue darken-1"
+                    text
+                    @click="pullAddConfirm">OK</v-btn>
+                    <v-spacer></v-spacer>
+                  </v-card-actions>
+                </v-card>
+              </v-form>
+            </v-dialog>
           </v-toolbar>
         </template>
         <template v-slot:item.actions="{ item }">
@@ -178,6 +222,12 @@
             @click="editItem(item)"
           >
             mdi-pencil
+          </v-icon>
+          <v-icon
+            small
+            @click="pullAdd(item)"
+          >
+            mdi-plus-minus-variant
           </v-icon>
         </template>
       </v-data-table>
@@ -193,7 +243,6 @@ import Navbar from '@/components/layout/Navbar.vue';
 import axios from 'axios';
 
 const url = process.env.VUE_APP_API_URL;
-
 export default {
   components: {
     PageTemplate,
@@ -207,22 +256,25 @@ export default {
     search: '',
     tableTitle: 'Chickens',
     showDialog: false,
+    dialogPullAdd: false,
     componentData: [],
     supplier_names: [],
     headers: [
+      { text: 'Batch Number', value: 'batch_number' },
       { text: 'Breed', value: 'breed' },
-      { text: 'Chicken Type', value: 'chicken_type', sortable: false },
-      { text: 'Population', value: 'population', sortable: false },
-      { text: 'Mortality Rate', value: 'mortality_rate', sortable: false },
+      { text: 'Chicken Type', value: 'chicken_type' },
+      { text: 'Population', value: 'population' },
+      { text: 'Called Out Quantity', value: 'called_out_quantity' },
+      { text: 'Mortality Rate', value: 'mortality_rate' },
       { text: 'Morbidity Rate', value: 'morbidity_rate' },
       { text: 'Feed Requirement', value: 'feed_requirement' },
-      { text: 'Vaccination Schedule', value: 'vaccination_schedule', sortable: false },
-      { text: 'Date Received', value: 'date_received', sortable: false },
+      { text: 'Vaccination Schedule', value: 'vaccination_schedule' },
+      { text: 'Date Received', value: 'date_received' },
       { text: 'Supplier Name', value: 'supplier_name' },
       { text: 'Person In Charge', value: 'person_in_charge' },
       { text: 'Section', value: 'section' },
-      { text: 'Building', value: 'building', sortable: false },
-      { text: 'Actions', value: 'actions', sortable: false },
+      { text: 'Building', value: 'building' },
+      { text: 'Actions', value: 'actions' },
     ],
     editedIndex: -1,
     editedItem: {
@@ -230,37 +282,52 @@ export default {
         Below are temporary data that will be filled in
         for the edit form
       */
+      batch_number: 0,
       supplier_name: '',
       breed: '',
       chicken_type: '',
       population: 0,
+      called_out_quantity: 0,
       mortality_rate: 0,
       morbidity_rate: 0,
       feed_requirement: '',
       vaccination_schedule: '',
-      date_recieved: new Date().toISOString().substr(0, 10),
+      date_received: new Date().toISOString().substr(0, 10),
       person_in_charge: '',
       section: '',
       building: '',
+    },
+    /*
+      Below are temporary data that will be filled in
+      for the for the add and call out chickens
+    */
+    addCallItem: {
+      population: 0,
+      called_out_quantity: 0,
     },
     defaultItem: {
       /*
         Below are temporary data that will be filled in
         for the create form
       */
+      batch_number: 0,
       supplier_name: '',
       breed: '',
       chicken_type: '',
       population: 0,
+      called_out_quantity: 0,
       mortality_rate: 0,
       morbidity_rate: 0,
       feed_requirement: '',
       vaccination_schedule: '',
-      date_recieved: new Date().toISOString().substr(0, 10),
+      date_received: new Date().toISOString().substr(0, 10),
       person_in_charge: '',
       section: '',
       building: '',
     },
+    date: new Date().toISOString().substr(0, 10),
+    menu_date_recieved: false,
+    chicken_types: ['Adult', 'Pullet'],
     rules: {
       /* eslint arrow-parens: 0 */
       supplier_name: [val => !!val || 'This field is required'],
@@ -268,7 +335,10 @@ export default {
       chicken_type: [val => !!val || 'This field is required'],
       population: [
         val => !!val || 'This field is required',
-        val => /^[1-9][0-9]*$/.test(val) || 'Integer must be valid.',
+        val => /^[1-9][0-9]*$/.test(val) || 'Integer must be valid and more than 0',
+      ],
+      add_population: [
+        val => /^[0-9][0-9]*$/.test(val) || 'Integer must be valid',
       ],
       mortality_rate: [
         val => !!val || 'This field is required',
@@ -283,13 +353,16 @@ export default {
       section: [val => !!val || 'This field is required'],
       building: [val => !!val || 'This field is required'],
     },
-    date: new Date().toISOString().substr(0, 10),
-    menu_date_recieved: false,
-    chicken_types: ['Adult', 'Pullet'],
   }),
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
+    },
+    rule_call_out() {
+      return [
+        val => /^[0-9][0-9]*$/.test(val) || 'Integer must be valid',
+        val => val <= this.editedItem.population || 'Call out chickens number should be less than or equal to population'// population is updated on click (HOW TO FIX??????)
+      ];
     },
   },
   watch: {
@@ -323,12 +396,52 @@ export default {
           3. Also has to edit the date for editedItem
           4. then displays the dialog/modal
       */
-
       this.editedIndex = this.componentData.indexOf(item);
       this.editedItem = { ...item };
       this.editedItem.date_received = new Date(this.editedItem.date_received)
         .toISOString().substr(0, 10);
       this.showDialog = true;
+    },
+    /*
+      Opens the pull out chicken/add to population modal
+    */
+    pullAdd(item) {
+      this.editedIndex = this.componentData.indexOf(item);
+      this.editedItem = { ...item };
+      this.addCallItem.population = 0;
+      this.addCallItem.called_out_quantity = 0;
+      /*
+      update the population here: invalidation for call out chickens
+      */
+
+      this.dialogPullAdd = true;
+    },
+    /*
+      Confirms the add population and/or pull off a chicken batch and updates the table.
+    */
+    async pullAddConfirm() {
+      if (this.$refs.addPull.validate()) {
+        const param = this.componentData[this.editedIndex]._id;
+        /* eslint no-underscore-dangle: 0 */
+        /* eslint prefer-template: 0 */
+        /*
+          Arithmetic operations here for the population and called out quantity
+        */
+        console.log('addCallItem.population: ' + this.addCallItem.population);
+        console.log('editedItem.population: ' + this.editedItem.population);
+        let tempPop = Number(this.editedItem.population);
+        let tempCall = Number(this.editedItem.called_out_quantity);
+        tempPop += Number(this.addCallItem.population);
+        tempCall += Number(this.addCallItem.called_out_quantity);
+        tempPop -= Number(this.addCallItem.called_out_quantity);
+        const obj = {
+          population: tempPop,
+          called_out_quantity: tempCall,
+        };
+        const response = await axios.put(`${url}/chickens/${param}`, obj);
+        Object.assign(this.componentData[this.editedIndex], response.data);
+        this.closePullAdd();
+      }
     },
     /*
       Closes the dialog/modal then wipes the data from
@@ -340,6 +453,17 @@ export default {
         this.editedItem = { ...this.defaultItem };
         this.editedIndex = -1;
         this.$refs.form.reset();
+      });
+    },
+    /*
+      Closes the pull and add chickens dialog and resets editedItem
+      to defaultItem. Also resets editedIndex to -1.
+    */
+    closePullAdd() {
+      this.dialogPullAdd = false;
+      this.$nextTick(() => {
+        this.editedItem = { ...this.defaultItem };
+        this.editedIndex = -1;
       });
     },
     /*
@@ -355,12 +479,13 @@ export default {
           const param = this.componentData[this.editedIndex]._id;
           /* eslint no-underscore-dangle: 0 */
           /* eslint prefer-template: 0 */
-
           const response = await axios.put(`${url}/chickens/${param}`, this.editedItem);
           Object.assign(this.componentData[this.editedIndex], response.data);
         } else {
           // eslint-disable-next-line prefer-template
-
+          // update the batch number here
+          const chickens = await axios.get(`${url}/chickens/`);
+          this.editedItem.batch_number = chickens.data.length + 1;
           const response = await axios.post(`${url}/chickens/`, this.editedItem);
           this.componentData.push(response.data);
         }
