@@ -7,8 +7,9 @@ router.get('/', async (req, res) => {
         const operations_list = await Operations.find()
         if(!operations_list) throw new Error('No Operations Items')
     
-        res.status(200).json(opearations_list);
+        res.status(200).json(operations_list);
     }catch(error) {
+        console.log(error.message)
         res.status(500).json({ message: error.message })
     }
 })

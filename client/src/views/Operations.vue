@@ -27,10 +27,16 @@
             <v-spacer></v-spacer>
           </v-toolbar>
         </template>
+        <template v-slot:[`item.received_date`]="{ item }">
+          {{convertDate(item.received_date)}}
+        </template>
+        <template v-slot:[`item.expiration_date`]="{ item }">
+          {{convertDate(item.expiration_date)}}
+        </template>
         <template v-slot:no-data>
           <v-btn
             color="primary"
-            @click="initialize"
+            @click="reset"
           >
             Reset
           </v-btn>
@@ -86,8 +92,15 @@ export default {
   async mounted() {
     const response = await axios.get(`${url}/operations/`);
     this.componentData = response.data;
+    console.log(this.componentData);
   },
   methods: {
+    /*
+      For proper date formatting within the table
+    */
+    convertDate(date) {
+      return new Date(date).toISOString().substr(0, 10);
+    },
     async reset() {
       const response = await axios.get(`${url}/operations/`);
       this.componentData = response.data;
