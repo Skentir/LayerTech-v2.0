@@ -157,7 +157,7 @@
                                 @blur="date = parseDate(dateFormatted)"
                                 v-on="on"
                                 required
-                                :rules="rules.expiration_date"
+                                :rules="[ expiration_date_validation ]"
                               ></v-text-field>
                             </template>
                             <v-date-picker
@@ -213,7 +213,7 @@
                   id="add_item_btn_close"
                   color="blue darken-1"
                   text
-                  @click="showAddItemDialog = false"
+                  @click="close"
                 >
                   Close
                 </v-btn>
@@ -280,7 +280,7 @@
                                 label="Serial Code"
                                 v-model="editedItem.serial_id"
                                 required
-                                readonly
+                                :rules="[ serial_id_validation ]"
                               />
                             </v-col>
                             <v-col cols="6">
@@ -387,7 +387,7 @@
                                     @blur="date = parseDate(dateFormatted)"
                                     v-on="on"
                                     required
-                                    :rules="rules.expiration_date"
+                                    :rules="[ expiration_date_validation ]"
                                   ></v-text-field>
                                 </template>
                                 <v-date-picker
@@ -445,7 +445,7 @@
                       id="edit_item_btn_close"
                       color="blue darken-1"
                       text
-                      @click="showEditDialog=false"
+                      @click="close"
                       >
                         Close
                       </v-btn>
@@ -590,7 +590,7 @@
                                     @blur="date = parseDate(dateFormatted)"
                                     v-on="on"
                                     required
-                                    :rules="rules.expiration_date"
+                                    :rules="[ expiration_date_validation ]"
                                   ></v-text-field>
                                 </template>
                                 <v-date-picker
@@ -646,7 +646,7 @@
                       id="add_batch_btn_close"
                       color="blue darken-1"
                       text
-                      @click="showAddBatchDialog=false"
+                      @click="close"
                       >
                         Close
                       </v-btn>
@@ -745,7 +745,7 @@
                       id="pull_out_item_btn_close"
                       color="blue darken-1"
                       text
-                      @click="showPullOutDialog=false"
+                      @click="close"
                       >
                         Close
                       </v-btn>
@@ -847,7 +847,7 @@
                       id="liquidate_item_btn_close"
                       color="blue darken-1"
                       text
-                      @click="showLiquidateDialog=false"
+                      @click="close"
                       >
                         Close
                       </v-btn>
@@ -982,21 +982,23 @@ export default {
       serial_id: [
         val => (val || '').length > 0 || 'This field is required',
         val => val || this.serial_id_is_unique || 'Serial ID already exists'],
-      supplier: [val => (val || '').length > 0 || 'This field is required'],
-      product_title: [val => (val || '').length > 0 || 'This field is required'],
-      product_code: [val => (val || '').length > 0 || 'This field is required'],
-      product_type: [val => (val || '').length > 0 || 'This field is required'],
+      supplier: [val => (val || '').length > 0 || 'Please choose a supplier'],
+      product_title: [val => (val || '').length > 0 || 'Please input the product title'],
+      product_code: [
+        val => (val || '').length > 0 || 'Please input the product code',
+        val => /^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$/.test(val) || 'Product code must be a positive number'],
+      product_type: [val => (val || '').length > 0 || 'Please select the product type'],
       dosage: [val => (val || '').length > 0 || 'This field is required'],
-      received_date: [val => (val || '').length > 0 || 'This field is required'],
+      received_date: [val => (val || '').length > 0 || 'Please input the date received'],
       expiration_date: [val => (val || '').length > 0 || 'This field is required'],
       stock_quantity: [
-        val => !!val || 'This field is required',
-        val => /^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$/.test(val) || 'Must be a valid number'],
+        val => !!val || 'Please input the stock quantity',
+        val => /^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$/.test(val) || 'Stock quantity should be greater than 0'],
       critical_volume: [
-        val => !!val || 'This field is required',
-        val => /^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$/.test(val) || 'Integer or float must be valid.'],
-      unit: [val => (val || '').length > 0 || 'This field is required'],
-      packaging: [val => (val || '').length > 0 || 'This field is required'],
+        val => !!val || 'Please input the critical volume',
+        val => /^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$/.test(val) || 'Critical volume should be greater than 0'],
+      unit: [val => (val || '').length > 0 || 'Please input the unit'],
+      packaging: [val => (val || '').length > 0 || 'Please input the packaging'],
       pull_out_quantity: [
         val => !!val || 'This field is required',
         val => /^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$/.test(val) || 'Integer or float must be valid.'],
@@ -1016,6 +1018,7 @@ export default {
     liquidate_quantity: 0,
     prevSerialID: '',
   }),
+  /*
   watch: {
     showAddItemDialog(val) {
       // eslint-disable-next-line no-unused-expressions
@@ -1038,7 +1041,7 @@ export default {
       val || this.close();
     },
   },
-
+  */
   async mounted() {
     const response = await axios.get(`${url}/warehouse/`);
     this.componentData = response.data;
@@ -1091,6 +1094,7 @@ export default {
       this.$nextTick(() => {
         this.editedItem = { ...this.defaultItem };
         this.editedIndex = -1;
+        this.prevSerialID = '';
       });
     },
     /*
@@ -1108,6 +1112,7 @@ export default {
       tempDate = new Date(this.editedItem.received_date).toISOString().substr(0, 10);
       this.editedItem.received_date = tempDate;
     },
+    // VALIDATION METHODS
     /*
       For validation/rules for Serial_ID
       Checks whether if it's not empty and it's unique
@@ -1115,9 +1120,43 @@ export default {
     serial_id_validation(value) {
       if (this.showAddItemDialog || this.showEditDialog || this.showAddBatchDialog) {
         if (value.length === 0) {
-          return 'This field is required';
-        } if (this.serial_id_list.includes(value)) {
+          return 'Please input the serial code';
+        }
+        if (this.serial_id_list.includes(value) && !this.showEditDialog) {
           return 'Serial ID already exists';
+        }
+        const tempList = this.serial_id_list.filter(e => e !== this.prevSerialID);
+        if (tempList.includes(value)) {
+          return 'Serial ID already exists';
+        }
+      }
+      // eslint-disable-next-line no-else-return
+      return true;
+    },
+    /*
+      For validation rules for dosage
+    */
+    dosage_validation(value) {
+      if (this.showAddItemDialog || this.showEditDialog || this.showAddBatchDialog) {
+        if (this.editedItem.product_type === 'Vaccine' && value.length === 0) {
+          return 'Please input the serial code';
+        }
+      }
+      // eslint-disable-next-line no-else-return
+      return true;
+    },
+    /*
+      For validation rules for expiration date
+    */
+    expiration_date_validation(value) {
+      if (this.showAddItemDialog || this.showEditDialog || this.showAddBatchDialog) {
+        if (this.editedItem.product_type === 'Egg' || this.editedItem.product_type === 'Vaccine') {
+          if (value.length === 0) {
+            return 'Please input the expiration date';
+          }
+          if (value < this.editedItem.received_date) {
+            return 'Expiration date entered is invalid';
+          }
         }
       }
       // eslint-disable-next-line no-else-return
@@ -1140,12 +1179,14 @@ export default {
       }
       return true;
     },
+    // VALIDATION METHODS END
     /*
       Copies the data to editedItem to display on dialog.
       showDialog triggers the dialog view of the form.
     */
     editItem(item) {
       this.initializeForms(item);
+      this.prevSerialID = this.editedItem.serial_id;
     },
     /*
       For adding a new batch to warehouse
@@ -1195,6 +1236,11 @@ export default {
           */
           /* eslint no-underscore-dangle: 0 */
           /* eslint prefer-template: 0 */
+          if (this.prevSerialID !== this.editedItem.serial_id) {
+            this.serial_id_list.push(this.editedItem.serial_id);
+          } else {
+            this.serial_id_list.push(this.prevSerialID);
+          }
           const param = this.componentData[this.editedIndex]._id;
           const response = await axios.put(`${url}/warehouse/${param}`, this.editedItem);
           Object.assign(this.componentData[this.editedIndex], response.data);
