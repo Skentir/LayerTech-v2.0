@@ -407,6 +407,7 @@ export default {
       this.$nextTick(() => {
         this.editedItem = { ...this.defaultItem };
         this.editedIndex = -1;
+        this.confirm_password = '';
       });
       if (this.edit_username) {
         this.edit_username = false;
@@ -431,7 +432,7 @@ export default {
     */
     async save() {
       if (this.$refs.form.validate()) {
-        if (this.editedIndex > -1) { // if new employee
+        if (this.editedIndex > -1) { // if update/edit employee
           /*
             this sends the _id to api/suppliers/:id to update
           */
@@ -446,7 +447,7 @@ export default {
           const response = await axios.put(`${url}/employees/${id}`, this.editedItem);
           Object.assign(this.componentData[this.editedIndex], response.data);
           this.close();
-        } else { // if update/edit employee
+        } else { // if new employee
           // eslint-disable-next-line prefer-template
           const response = await axios.post(`${url}/employees/register/`, this.editedItem);
           if (response.data.success) {

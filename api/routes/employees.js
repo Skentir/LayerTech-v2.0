@@ -54,6 +54,9 @@ router.post('/register', async (req, res) => {
 
         const user_list = await new_user.save()
         if(!user_list) throw new Error('something went wrong')
+
+        // set password property to '' before returning
+        user_list.password = '';
                 
         const response = {
             user: user_list,
