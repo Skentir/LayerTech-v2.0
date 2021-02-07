@@ -174,21 +174,49 @@
               <v-form ref="addPull">
                 <v-card>
                   <v-card-title class="headline">
-                    Add to chickens/Call-out chickens
+                    Add/Call-out chickens
                   </v-card-title>
                   <v-card-text>
                   <v-container>
                     <v-row>
                       <v-col cols="12">
+                        <!--
+                        <v-select
+                        v-model="addCall"
+                        :items="add_call_items"
+                        label="Please choose an action" item-value="name" item-text="name" required>
+                          <template v-slot:selection="data">
+                          {{ data.item.name }}
+                          </template>
+                          <template v-slot:item="data">
+                            <v-list-tile-content>
+                              <v-list-tile-title @click="filterAddCall(data.item.name)"
+                              v-html="data.item.name"></v-list-tile-title>
+                            </v-list-tile-content>
+                          </template>
+                        </v-select>
+                        -->
+                        <select v-model="addCall" class="select-css">
+                          <option value="1"
+                          :selected="addCall === 1">
+                          Add Chickens</option>
+                          <option value="2"
+                          :selected="addCall === 2">
+                          Call-out Chickens</option>
+                        </select>
+                      </v-col>
+                      <v-col cols="12">
                         <v-text-field
                           v-model="addCallItem.population"
                           :rules="rules.add_population"
+                          :disabled="addCall==2"
                           label="Add Population" type="number" required/>
                       </v-col>
                       <v-col cols="12">
                         <v-text-field
                           v-model="addCallItem.called_out_quantity"
                           :rules="rule_call_out"
+                          :disabled="addCall==1"
                           label="Call out chickens" type="number"
                           required/>
                       </v-col>
@@ -328,6 +356,7 @@ export default {
     date: new Date().toISOString().substr(0, 10),
     menu_date_recieved: false,
     chicken_types: ['Adult', 'Pullet'],
+    add_call_items: ['Add Population', 'Call Out Chickens'],
     rules: {
       /* eslint arrow-parens: 0 */
       supplier_name: [val => !!val || 'This field is required'],
@@ -353,6 +382,7 @@ export default {
       section: [val => !!val || 'This field is required'],
       building: [val => !!val || 'This field is required'],
     },
+    addCall: 1,
   }),
   computed: {
     formTitle() {
@@ -385,6 +415,11 @@ export default {
   },
   methods: {
     /*
+    filterAddCall(itemName) {
+      console.log(itemName);
+    },
+    */
+    /*
       Fetches data from a row and loads them into
       the edit form modal
     */
@@ -410,10 +445,10 @@ export default {
       this.editedItem = { ...item };
       this.addCallItem.population = 0;
       this.addCallItem.called_out_quantity = 0;
+      this.addCall = 1;
       /*
       update the population here: invalidation for call out chickens
       */
-
       this.dialogPullAdd = true;
     },
     /*
@@ -495,3 +530,57 @@ export default {
   },
 };
 </script>
+<style>
+  /* class applies to select element itself, not a wrapper element */
+  .select-css {
+    display: block;
+    font-size: 16px;
+    font-family: sans-serif;
+    font-weight: 700;
+    color: #444;
+    line-height: 1.3;
+    padding: .6em 1.4em .5em .8em;
+    width: 100%;
+    max-width: 100%; /* useful when width is set to anything other than 100% */
+    box-sizing: border-box;
+    margin: 0;
+    border: 1px solid #aaa;
+    box-shadow: 0 1px 0 1px rgba(0,0,0,.04);
+    border-radius: .5em;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    background-repeat: no-repeat, repeat;
+    /* arrow icon position (1em from the right, 50% vertical) , then gradient position*/
+    background-position: right .7em top 50%, 0 0;
+    /* icon size, then gradient */
+    background-size: .65em auto, 100%;
+  }
+  /* Hide arrow icon in IE browsers */
+  .select-css::-ms-expand {
+    display: none;
+  }
+  /* Hover style */
+  .select-css:hover {
+    border-color: #888;
+  }
+  /* Focus style */
+  .select-css:focus {
+    border-color: #aaa;
+    /* It'd be nice to use -webkit-focus-ring-color here but it doesn't work on box-shadow */
+    box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+    box-shadow: 0 0 0 3px -moz-mac-focusring;
+    color: #222;
+    outline: none;
+  }
+  /* Set options to normal weight */
+  .select-css option {
+    font-weight:normal;
+  }
+  /* Support for rtl text, explicit support for Arabic and Hebrew */
+  *[dir="rtl"] .select-css, :root:lang(ar) .select-css, :root:lang(iw) .select-css {
+    background-position: left .7em top 50%, 0 0;
+    padding: .6em .8em .5em 1.4em;
+  }
+</style>
