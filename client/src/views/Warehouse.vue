@@ -1175,8 +1175,11 @@ export default {
           if (value.length === 0) {
             return 'Please input the expiration date';
           }
+          if (value <= this.editedItem.received_date) {
+            return 'Expiration date entered is invalid';
+          }
         }
-        if (value <= this.editedItem.received_date) {
+        if (value && value <= this.editedItem.received_date) {
           return 'Expiration date entered is invalid';
         }
       }
