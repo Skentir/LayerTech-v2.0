@@ -107,6 +107,16 @@
                         </v-col>
                       </v-row>
                       <v-row>
+                        <v-col cols="12">
+                          <v-text-field
+                            label="Product Assignment"
+                            v-model="editedItem.product_assignment"
+                            :rules="rules.product_assignment"
+                            required
+                          />
+                        </v-col>
+                      </v-row>
+                      <v-row>
                         <v-col cols="6">
                           <v-menu
                             ref="menu_date_received"
@@ -334,6 +344,16 @@
                             </v-col>
                           </v-row>
                           <v-row>
+                          <v-col cols="12">
+                              <v-text-field
+                                label="Product Assignment"
+                                v-model="editedItem.product_assignment"
+                                :rules="rules.product_assignment"
+                                required
+                              />
+                            </v-col>
+                          </v-row>
+                          <v-row>
                             <v-col cols="6">
                               <v-menu
                                 ref="menu_date_received"
@@ -535,6 +555,16 @@
                                 label="Dosage"
                                 v-model="editedItem.dosage"
                                 :rules="rules.dosage"
+                                required
+                              />
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                          <v-col cols="12">
+                              <v-text-field
+                                label="Product Assignment"
+                                v-model="editedItem.product_assignment"
+                                :rules="rules.product_assignment"
                                 required
                               />
                             </v-col>
@@ -926,6 +956,7 @@ export default {
       { text: 'Dosage', value: 'dosage' },
       { text: 'Received Date', value: 'received_date' },
       { text: 'Expiration Date', value: 'expiration_date' },
+      { text: 'Product Assignment', value: 'product_assignment' },
       { text: 'Stock Quantity', value: 'stock_quantity' },
       { text: 'Critical Volume', value: 'critical_volume' },
       { text: 'Unit', value: 'unit' },
@@ -948,6 +979,7 @@ export default {
       dosage: '',
       received_date: new Date().toISOString().substr(0, 10),
       expiration_date: new Date().toISOString().substr(0, 10),
+      product_assignment: '',
       stock_quantity: 0,
       critical_volume: 0,
       unit: '',
@@ -967,6 +999,7 @@ export default {
       dosage: '',
       received_date: new Date().toISOString().substr(0, 10),
       expiration_date: new Date().toISOString().substr(0, 10),
+      product_assignment: '',
       stock_quantity: 0,
       critical_volume: 0,
       unit: '',
@@ -991,6 +1024,7 @@ export default {
       dosage: [val => (val || '').length > 0 || 'This field is required'],
       received_date: [val => (val || '').length > 0 || 'Please input the date received'],
       expiration_date: [val => (val || '').length > 0 || 'This field is required'],
+      product_assignment: [val => (val || '').length > 0 || 'Please input the product assignment'],
       stock_quantity: [
         val => !!val || 'Please input the stock quantity',
         val => /^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$/.test(val) || 'Stock quantity should be greater than 0'],
