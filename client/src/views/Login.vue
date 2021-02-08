@@ -114,7 +114,7 @@ export default {
 <style>
 #login {
   background-color: #36409b;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   display: block;
   text-align: center;
@@ -134,6 +134,7 @@ export default {
   margin-top: 8%;
   margin-left: 30%;
   margin-right: 30%;
+  margin-bottom: 8%;
   padding-top: 5%;
   padding-left: 5%;
   padding-right: 5%;
