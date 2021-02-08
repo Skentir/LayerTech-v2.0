@@ -1,5 +1,5 @@
 <template>
-  <div id="login">
+  <div id="login" fill-height>
     <div class="loginWidget">
       <v-form @submit.prevent="login(username, password)">
         <img id="company-logo" src="../assets/undraw_nature_m5ll 1.png" />
@@ -112,12 +112,9 @@ export default {
 </script>
 
 <style>
-body {
-  background-color: #36409b;
-}
-
 #login {
-  height: 100%;
+  background-color: #36409b;
+  height: 100vh;
   width: 100%;
   display: block;
   text-align: center;
