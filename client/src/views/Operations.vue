@@ -79,6 +79,7 @@ export default {
       { text: 'Dosage', value: 'dosage' },
       { text: 'Date Received', value: 'received_date' },
       { text: 'Expiration Date', value: 'expiration_date' },
+      { text: 'Product Assignment', value: 'product_assignment' },
       { text: 'Unit', value: 'unit' },
       { text: 'Packaging', value: 'packaging' },
       { text: 'Entry', value: 'entry' },
