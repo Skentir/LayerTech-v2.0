@@ -141,7 +141,7 @@
                       >
                         <v-select
                           v-model="editedItem.department"
-                          :items="['Purchaser', 'Sales', 'Warehouse', 'Operations', 'Admin']"
+                          :items="['Logistics', 'Admin']"
                           label="Department"
                           :rules="rules.department"
                         ></v-select>
@@ -169,7 +169,7 @@
                         </v-btn>
                       </v-col>
                     </v-row>
-                    <div v-if="showChangePassword">
+                    <div v-if="showChangePassword && editedIndex != -1">
                       <v-row>
                         <v-col cols="12">
                           <!-- password field is not required -->

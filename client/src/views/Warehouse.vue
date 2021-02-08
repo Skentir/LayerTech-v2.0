@@ -101,7 +101,17 @@
                           <v-text-field
                             label="Dosage"
                             v-model="editedItem.dosage"
-                            :rules="rules.dosage"
+                            :rules="[ dosage_validation ]"
+                            required
+                          />
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="12">
+                          <v-text-field
+                            label="Product Assignment"
+                            v-model="editedItem.product_assignment"
+                            :rules="rules.product_assignment"
                             required
                           />
                         </v-col>
@@ -328,7 +338,16 @@
                               <v-text-field
                                 label="Dosage"
                                 v-model="editedItem.dosage"
-                                :rules="rules.dosage"
+                                :rules="[ dosage_validation ]"
+                              />
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                          <v-col cols="12">
+                              <v-text-field
+                                label="Product Assignment"
+                                v-model="editedItem.product_assignment"
+                                :rules="rules.product_assignment"
                                 required
                               />
                             </v-col>
@@ -534,7 +553,16 @@
                               <v-text-field
                                 label="Dosage"
                                 v-model="editedItem.dosage"
-                                :rules="rules.dosage"
+                                :rules="[ dosage_validation ]"
+                              />
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                          <v-col cols="12">
+                              <v-text-field
+                                label="Product Assignment"
+                                v-model="editedItem.product_assignment"
+                                :rules="rules.product_assignment"
                                 required
                               />
                             </v-col>
@@ -866,9 +894,6 @@
               <v-list-item v-else>
                 <v-btn disabled>Liquidate</v-btn>
               </v-list-item>
-              <v-list-item>
-                <v-btn @click="deleteI(item)">Delete</v-btn>
-              </v-list-item>
             </v-list>
           </v-menu>
         </template>
@@ -926,6 +951,7 @@ export default {
       { text: 'Dosage', value: 'dosage' },
       { text: 'Received Date', value: 'received_date' },
       { text: 'Expiration Date', value: 'expiration_date' },
+      { text: 'Product Assignment', value: 'product_assignment' },
       { text: 'Stock Quantity', value: 'stock_quantity' },
       { text: 'Critical Volume', value: 'critical_volume' },
       { text: 'Unit', value: 'unit' },
@@ -948,6 +974,7 @@ export default {
       dosage: '',
       received_date: new Date().toISOString().substr(0, 10),
       expiration_date: new Date().toISOString().substr(0, 10),
+      product_assignment: '',
       stock_quantity: 0,
       critical_volume: 0,
       unit: '',
@@ -967,6 +994,7 @@ export default {
       dosage: '',
       received_date: new Date().toISOString().substr(0, 10),
       expiration_date: new Date().toISOString().substr(0, 10),
+      product_assignment: '',
       stock_quantity: 0,
       critical_volume: 0,
       unit: '',
@@ -991,6 +1019,7 @@ export default {
       dosage: [val => (val || '').length > 0 || 'This field is required'],
       received_date: [val => (val || '').length > 0 || 'Please input the date received'],
       expiration_date: [val => (val || '').length > 0 || 'This field is required'],
+      product_assignment: [val => (val || '').length > 0 || 'Please input the product assignment'],
       stock_quantity: [
         val => !!val || 'Please input the stock quantity',
         val => /^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$/.test(val) || 'Stock quantity should be greater than 0'],
@@ -1017,6 +1046,7 @@ export default {
     pull_out_quantity: 0,
     liquidate_quantity: 0,
     prevSerialID: '',
+    tempItem: [],
   }),
   /*
   watch: {
@@ -1053,14 +1083,6 @@ export default {
   },
 
   methods: {
-    async deleteI(item) {
-      this.editedIndex = this.componentData.indexOf(item);
-      const param = this.componentData[this.editedIndex]._id;
-      // eslint-disable-next-line no-unused-vars
-      const response = await axios.delete(`${url}/warehouse/${param}`);
-      this.componentData.splice(this.editedIndex, 1);
-      this.editedIndex = -1;
-    },
     /*
       For proper date formatting within the table
     */
@@ -1139,7 +1161,7 @@ export default {
     dosage_validation(value) {
       if (this.showAddItemDialog || this.showEditDialog || this.showAddBatchDialog) {
         if (this.editedItem.product_type === 'Vaccine' && value.length === 0) {
-          return 'Please input the serial code';
+          return 'Please input the dosage';
         }
       }
       // eslint-disable-next-line no-else-return
@@ -1154,9 +1176,12 @@ export default {
           if (value.length === 0) {
             return 'Please input the expiration date';
           }
-          if (value < this.editedItem.received_date) {
+          if (value <= this.editedItem.received_date) {
             return 'Expiration date entered is invalid';
           }
+        }
+        if (value && value <= this.editedItem.received_date) {
+          return 'Expiration date entered is invalid';
         }
       }
       // eslint-disable-next-line no-else-return
@@ -1193,6 +1218,7 @@ export default {
     */
     addNewBatch(item) {
       this.initializeForms(item);
+      this.tempItem = { ...this.editedItem };
       this.prevSerialID = this.editedItem.serial_id;
       this.editedItem.serial_id = '';
       this.editedItem.product_code = '';
@@ -1252,14 +1278,11 @@ export default {
             Code segment for adding new batch from existing item
           */
           // assign current item to temporary
-          const tempItem = { ...this.editedItem };
-          tempItem.stock_quantity = this.componentData[this.editedIndex].stock_quantity;
           delete this.editedItem._id;
           delete this.editedItem.__v;
-          tempItem.serial_id = this.prevSerialID;
           /* eslint no-underscore-dangle: 0 */
           /* eslint prefer-template: 0 */
-          const param = this.componentData[this.editedIndex]._id;
+          const param = this.tempItem._id;
           // Add new batch
           // Check for other items in the batch
           const filteredData = this.componentData.filter(
@@ -1279,12 +1302,12 @@ export default {
           this.editedItem.product_status = 'In Stock';
           this.editedItem.pulled_out_quantity = 0;
           this.editedItem.liquidated_quantity = 0;
-          this.editedItem.batch_status = (tempItem.batch_status === 'Current') ? 'New' : 'Current';
+          this.editedItem.batch_status = (this.tempItem.batch_status === 'Current') ? 'New' : 'Current';
           const response1 = await axios.post(`${url}/warehouse/`, this.editedItem);
           this.componentData.push(response1.data);
           this.serial_id_list.push(this.editedItem.serial_id);
           // Update old batch
-          const response2 = await axios.put(`${url}/warehouse/${param}`, tempItem);
+          const response2 = await axios.put(`${url}/warehouse/${param}`, this.tempItem);
           Object.assign(this.componentData[this.editedIndex], response2.data);
           this.prevSerialID = '';
           this.close();

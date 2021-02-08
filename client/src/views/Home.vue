@@ -6,7 +6,7 @@
         <v-row no-gutters class="image-banner-text">
           <v-col cols="8" class="farm-title">
             <span id="farm-title">{{farmName}}</span>
-          </v-col>
+          </v-col
           <v-col cols="4" class="location-title">
             <span id="location-title">{{farmAddress}}</span>
           </v-col>
@@ -150,7 +150,15 @@
                 <span class="nav-label">Manage Employees</span>
               </div>
             </a>
-            <a href="#/home">
+
+            <!-- fillers to keep the buttons aligned -->
+            <a href="#/home" v-if="!isAdmin" class="inactiveLink">
+              <div class="nav-button">
+                <span class="nav-label"></span>
+              </div>
+            </a>
+
+            <a href="#/home" class="inactiveLink">
               <div class="nav-button">
                 <span class="nav-label"></span>
               </div>
@@ -184,21 +192,15 @@ export default {
     isAdmin() {
       return this.role === 'Admin';
     },
-    isOperations() {
-      return this.role === 'Admin' || this.role === 'Operations';
-    },
     isLogistics() {
       return this.role === 'Admin' || this.role === 'Logistics';
-    },
-    isSales() {
-      return this.role === 'Admin' || this.role === 'Sales';
     },
   },
   data() {
     return {
-      farmName: 'Guyun Stone Forest',
-      farmAddress: 'Sea of Clouds, Liyue',
-      // accountingAlerts: [],
+      farmName: 'Mugnolia Poultry Farm',
+      farmAddress: 'Lecheria Rd, Calamba, 4027 Laguna',
+      accountingAlerts: [],
       warehouseAlerts: [],
       // operationsAlerts: [],
       user: null,
@@ -222,7 +224,7 @@ export default {
   .image-banner {
     width: 100%;
     height: 100%;
-    background: url("../assets/202010504858.png");
+    background: url("../assets/images/default_farm_cover.jpg");
     background-size: cover;
     background-position: 60% 45%;
     aspect-ratio: 1-1;
@@ -363,7 +365,7 @@ export default {
   }
 
   .nav-button{
-    background: grey;
+    background: transparent;
     background-position: center center;
     background-size: cover;
     border-radius: 6px;
@@ -416,5 +418,10 @@ export default {
     bottom: 0;
     width: 100%;
     text-align: center;
+  }
+
+  .inactiveLink {
+    pointer-events: none;
+    cursor: default;
   }
 </style>

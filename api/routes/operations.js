@@ -62,7 +62,7 @@ router.post('/pullOut', async (req, res) => {
             console.log("Successfully added new item");
         }else{
             retrieved.quantity += req.body.quantity
-            response = await Operations.findByIdAndUpdate(retrieved)
+            response = await Operations.findByIdAndUpdate({_id: retrieved._id}, {quantity: retrieved.quantity})
             if(!response) throw Error('Error in updating existing Operations Item')
             console.log("Successfully updated existing item");
         }
