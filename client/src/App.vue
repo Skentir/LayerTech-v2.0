@@ -31,7 +31,7 @@ export default {
 }
 
 #footer {
-  position: absolute;
+  position: relative;
   background-color: #C4C4C4;
   bottom: 0;
   width: 100%;
