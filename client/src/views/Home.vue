@@ -182,14 +182,8 @@ export default {
     isAdmin() {
       return this.role === 'Admin';
     },
-    isOperations() {
-      return this.role === 'Admin' || this.role === 'Operations';
-    },
     isLogistics() {
       return this.role === 'Admin' || this.role === 'Logistics';
-    },
-    isSales() {
-      return this.role === 'Admin' || this.role === 'Sales';
     },
   },
   data() {
