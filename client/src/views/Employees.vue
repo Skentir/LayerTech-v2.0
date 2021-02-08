@@ -141,7 +141,7 @@
                       >
                         <v-select
                           v-model="editedItem.department"
-                          :items="['Purchaser', 'Sales', 'Warehouse', 'Operations', 'Admin']"
+                          :items="['Logistics', 'Admin']"
                           label="Department"
                           :rules="rules.department"
                         ></v-select>
