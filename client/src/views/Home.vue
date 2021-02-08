@@ -6,7 +6,7 @@
         <v-row no-gutters class="image-banner-text">
           <v-col cols="8" class="farm-title">
             <span id="farm-title">{{farmName}}</span>
-          </v-col>
+          </v-col
           <v-col cols="4" class="location-title">
             <span id="location-title">{{farmAddress}}</span>
           </v-col>
@@ -16,8 +16,9 @@
     <div class="content">
         <div class="alerts"> <!-- Alerts section -->
           <p class="heading">Alerts</p>
+          <!--
           <v-row id="accounting-warehouse-group">
-            <v-col cols="6" id="accounting-alerts" class="alerts-group"> <!-- Accounting alerts -->
+            <v-col cols="6" id="accounting-alerts" class="alerts-group"> Accounting alerts
               <span class="label">Accounting</span>
               <div class="alerts-box"
               v-if="accountingAlerts.length > 0"
@@ -47,7 +48,7 @@
                 </div>
               </div>
             </v-col>
-            <v-col cols="6" id="warehouse-alerts" class="alerts-group"> <!-- Warehouse alerts-->
+            <v-col cols="6" id="warehouse-alerts" class="alerts-group"> Warehouse alerts
               <span class="label">Warehouse</span>
               <div class="alerts-box"
               v-if="warehouseAlerts.length > 0"
@@ -83,34 +84,32 @@
                 </div>
               </div>
             </v-col>
-          </v-row>
+          </v-row>-->
           <v-row>
-            <v-col cols="12" id="operations-alerts" class="alerts-group"> <!-- Operations alerts -->
-              <span class="label">Operations</span>
+            <v-col cols="12" id="warehouse-alerts" class="alerts-group"> <!-- Warehouse alerts -->
+              <span class="label">Warehouse</span>
               <div class="alerts-box"
-              v-if="operationsAlerts.length > 0"
+              v-if="warehouseAlerts.length > 0"
               >
                 <div
-                v-for="alert in operationsAlerts"
+                v-for="alert in warehouseAlerts"
                 :key="alert.alert_id"
                 class="alert"
-                v-bind:class="{'alert-yellow':(alert.value_left > 1),
-                'alert-red':(alert.value_left <= 1)}"
+                v-bind:class="{'alert-yellow':(alert.type === 2),
+                'alert-red':(alert.type === 1 || alert.type === 3)}"
                 >
                     <span class="icon-notif"></span>
                     <span
-                    v-if="alert.type === 'expiration' && alert.value_left >= 0"
-                    >Batch {{alert.batch_no}} of {{alert.item_name}}
-                     expires in {{alert.value_left}} days.
+                    v-if="alert.type === 1"
+                    >Batch {{alert.batch_number}} of {{alert.item_name}} is almost out of stock
                     </span>
                     <span
-                    v-else-if="alert.type === 'expiration' && alert.value_left < 0"
-                    >Batch {{alert.batch_no}} of {{alert.item_name}}
-                     has expired {{alert.value_left * -1}} days ago.
+                    v-else-if="alert.type === 2"
+                    >Batch {{alert.batch_number}} of {{alert.item_name}} expires in less than a week
                     </span>
                     <span
-                    v-else-if="alert.type === 'critical'"
-                    >Batch {{alert.batch_no}} of {{alert.item_name}} is almost out of stock.
+                    v-else-if="alert.type === 3"
+                    >Batch {{alert.batch_number}} of {{alert.item_name}} expires today
                     </span>
                 </div>
               </div>
@@ -173,8 +172,11 @@
 </template>
 
 <script>
-import alertsData from '@/models/alerts.json';
 import Navbar from '@/components/layout/Navbar.vue';
+import axios from 'axios';
+
+// eslint-disable-next-line no-unused-vars
+const url = process.env.VUE_APP_API_URL;
 
 export default {
   name: 'Home',
@@ -200,30 +202,20 @@ export default {
       farmAddress: 'Lecheria Rd, Calamba, 4027 Laguna',
       accountingAlerts: [],
       warehouseAlerts: [],
-      operationsAlerts: [],
+      // operationsAlerts: [],
       user: null,
     };
   },
-  created() {
-    this.initialize();
+  async created() {
+    // this.initialize();
     // store role of the current user
     this.user = JSON.parse(localStorage.getItem('user'));
     console.log(this.user);
     console.log(this.role);
     console.log(this.isAdmin);
-  },
-  methods: {
-    /*
-      Assigns fetched data to local reference inside the component
-    */
-    initialize() {
-      // this.accountingAlerts = alertsData[0].accounting;
-      this.warehouseAlerts = alertsData[0].warehouse;
-      this.operationsAlerts = alertsData[0].operations;
-      this.accountingAlerts.sort((a, b) => a.value_left - b.value_left);
-      this.warehouseAlerts.sort((a, b) => a.value_left - b.value_left);
-      this.operationsAlerts.sort((a, b) => a.value_left - b.value_left);
-    },
+    const response = await axios.get(`${url}/warehouse/alerts`);
+    this.warehouseAlerts = response.data;
+    console.log(this.warehouseAlerts);
   },
 };
 </script>
@@ -324,6 +316,10 @@ export default {
 
   .alerts-group{
     height: 100%;
+  }
+
+  .alerts-box{
+    max-height: 25%;
   }
 
   .alerts-box > .alert{ /* styles for alerts */
