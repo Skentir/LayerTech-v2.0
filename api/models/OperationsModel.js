@@ -11,6 +11,7 @@ const OperationsSchema = new Schema({
     product_code: {type: String, required: true},
     received_date: {type: Date, required: true, default: Date.now},
     expiration_date: {type: Date, required: false},
+    product_assignment: {type: String, required: true},
     unit: {type: String, required: true},
     packaging: {type: String, required: true},
     entry: {type: String, required: true, enum: ["In", "Out"]},
