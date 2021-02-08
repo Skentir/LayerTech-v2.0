@@ -33,14 +33,6 @@
         <template v-slot:[`item.expiration_date`]="{ item }">
           {{convertDate(item.expiration_date)}}
         </template>
-        <template v-slot:no-data>
-          <v-btn
-            color="primary"
-            @click="reset"
-          >
-            Reset
-          </v-btn>
-        </template>
       </v-data-table>
     </div>
     <v-footer id="footer">

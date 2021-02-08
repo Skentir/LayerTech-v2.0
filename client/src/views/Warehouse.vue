@@ -897,15 +897,6 @@
             </v-list>
           </v-menu>
         </template>
-        <template v-slot:no-data>
-          <v-btn
-            id="empty_reset_btn"
-            color="primary"
-            @click="close"
-          >
-            Reset
-          </v-btn>
-        </template>
       </v-data-table>
     </div>
     <div class="spacer"/>
