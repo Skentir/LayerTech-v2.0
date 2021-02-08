@@ -1,58 +1,55 @@
 <template>
-  <div>
-    <div id="login">
-      <div class="loginWidget">
-        <v-form @submit.prevent="login(username, password)">
-          <img id="company-logo" src="../assets/undraw_nature_m5ll 1.png" />
-          <h1 id="company-name">LayerTech</h1>
-          <br />
-          <h3 class="splash-text">
-            An inventory and stock management web application for your farm
-          </h3>
-          <br />
-          <!-- Error message container -->
-          <v-alert
-            id="error-msg"
-            dense
-            v-show="hasError"
-            type="error"
-          >
-            {{errorMsg}}
-          </v-alert>
-
-          <v-text-field
-            id="username_tfield"
-            :rules="rules.required"
-            class="tField"
-            v-model="username"
-            background-color="rgba(255,255,255,1)"
-            outlined
-            placeholder="Username"
-          ></v-text-field>
-          <v-text-field
-            id="password_tfield"
-            :rules="rules.required"
-            class="tField"
-            :type="'password'"
-            v-model="password"
-            background-color="rgba(255,255,255,1)"
-            outlined
-            placeholder="Password"
-          ></v-text-field>
-          <v-btn
-            :disabled="!formIsValid"
-            type="submit"
-            id="login-btn"
-            color="rgba(4,35,178,1)"
-            class="lButton"
-            elevation="2"
-          >
-            Log In
-          </v-btn>
-          <br />
-          <br />
-        </v-form>
-      </div>
+  <div id="login" fill-height>
+    <div class="loginWidget">
+      <v-form @submit.prevent="login(username, password)">
+        <img id="company-logo" src="../assets/undraw_nature_m5ll 1.png" />
+        <h1 id="company-name">LayerTech</h1>
+        <br />
+        <h3 class="splash-text">
+          An inventory and stock management web application for your farm
+        </h3>
+        <br />
+        <!-- Error message container -->
+        <v-alert
+          id="error-msg"
+          dense
+          v-show="hasError"
+          type="error"
+        >
+          {{errorMsg}}
+        </v-alert>
+        <v-text-field
+          id="username_tfield"
+          :rules="rules.required"
+          class="tField"
+          v-model="username"
+          background-color="rgba(255,255,255,1)"
+          outlined
+          placeholder="Username"
+        ></v-text-field>
+        <v-text-field
+          id="password_tfield"
+          :rules="rules.required"
+          class="tField"
+          :type="'password'"
+          v-model="password"
+          background-color="rgba(255,255,255,1)"
+          outlined
+          placeholder="Password"
+        ></v-text-field>
+        <v-btn
+          :disabled="!formIsValid"
+          type="submit"
+          id="login-btn"
+          color="rgba(4,35,178,1)"
+          class="lButton"
+          elevation="2"
+        >
+          Log In
+        </v-btn>
+        <br />
+        <br />
+      </v-form>
     </div>
   </div>
 </template>
@@ -117,7 +114,7 @@ export default {
 <style>
 #login {
   background-color: #36409b;
-  height: 100%;
+  height: 100vh;
   width: 100%;
   display: block;
   text-align: center;
@@ -134,8 +131,9 @@ export default {
 .loginWidget {
   text-align: center;
   background-color: #d7eef3;
-  margin-left: 32%;
-  margin-right: 32%;
+  margin-top: 8%;
+  margin-left: 30%;
+  margin-right: 30%;
   padding-top: 5%;
   padding-left: 5%;
   padding-right: 5%;

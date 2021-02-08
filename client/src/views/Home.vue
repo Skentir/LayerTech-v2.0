@@ -151,7 +151,15 @@
                 <span class="nav-label">Manage Employees</span>
               </div>
             </a>
-            <a href="#/home">
+
+            <!-- fillers to keep the buttons aligned -->
+            <a href="#/home" v-if="!isAdmin" class="inactiveLink">
+              <div class="nav-button">
+                <span class="nav-label"></span>
+              </div>
+            </a>
+
+            <a href="#/home" class="inactiveLink">
               <div class="nav-button">
                 <span class="nav-label"></span>
               </div>
@@ -188,8 +196,8 @@ export default {
   },
   data() {
     return {
-      farmName: 'Guyun Stone Forest',
-      farmAddress: 'Sea of Clouds, Liyue',
+      farmName: 'Mugnolia Poultry Farm',
+      farmAddress: 'Lecheria Rd, Calamba, 4027 Laguna',
       accountingAlerts: [],
       warehouseAlerts: [],
       operationsAlerts: [],
@@ -224,7 +232,7 @@ export default {
   .image-banner {
     width: 100%;
     height: 100%;
-    background: url("../assets/202010504858.png");
+    background: url("../assets/images/default_farm_cover.jpg");
     background-size: cover;
     background-position: 60% 45%;
     aspect-ratio: 1-1;
@@ -361,7 +369,7 @@ export default {
   }
 
   .nav-button{
-    background: grey;
+    background: transparent;
     background-position: center center;
     background-size: cover;
     border-radius: 6px;
@@ -414,5 +422,10 @@ export default {
     bottom: 0;
     width: 100%;
     text-align: center;
+  }
+
+  .inactiveLink {
+    pointer-events: none;
+    cursor: default;
   }
 </style>
