@@ -1046,6 +1046,7 @@ export default {
     pull_out_quantity: 0,
     liquidate_quantity: 0,
     prevSerialID: '',
+    tempItem: [],
   }),
   /*
   watch: {
@@ -1217,6 +1218,7 @@ export default {
     */
     addNewBatch(item) {
       this.initializeForms(item);
+      this.tempItem = { ...this.editedItem };
       this.prevSerialID = this.editedItem.serial_id;
       this.editedItem.serial_id = '';
       this.editedItem.product_code = '';
@@ -1276,14 +1278,11 @@ export default {
             Code segment for adding new batch from existing item
           */
           // assign current item to temporary
-          const tempItem = { ...this.editedItem };
-          tempItem.stock_quantity = this.componentData[this.editedIndex].stock_quantity;
           delete this.editedItem._id;
           delete this.editedItem.__v;
-          tempItem.serial_id = this.prevSerialID;
           /* eslint no-underscore-dangle: 0 */
           /* eslint prefer-template: 0 */
-          const param = this.componentData[this.editedIndex]._id;
+          const param = this.tempItem._id;
           // Add new batch
           // Check for other items in the batch
           const filteredData = this.componentData.filter(
@@ -1303,12 +1302,12 @@ export default {
           this.editedItem.product_status = 'In Stock';
           this.editedItem.pulled_out_quantity = 0;
           this.editedItem.liquidated_quantity = 0;
-          this.editedItem.batch_status = (tempItem.batch_status === 'Current') ? 'New' : 'Current';
+          this.editedItem.batch_status = (this.tempItem.batch_status === 'Current') ? 'New' : 'Current';
           const response1 = await axios.post(`${url}/warehouse/`, this.editedItem);
           this.componentData.push(response1.data);
           this.serial_id_list.push(this.editedItem.serial_id);
           // Update old batch
-          const response2 = await axios.put(`${url}/warehouse/${param}`, tempItem);
+          const response2 = await axios.put(`${url}/warehouse/${param}`, this.tempItem);
           Object.assign(this.componentData[this.editedIndex], response2.data);
           this.prevSerialID = '';
           this.close();
