@@ -6,7 +6,7 @@
         <v-row no-gutters class="image-banner-text">
           <v-col cols="8" class="farm-title">
             <span id="farm-title">{{farmName}}</span>
-          </v-col
+          </v-col>
           <v-col cols="4" class="location-title">
             <span id="location-title">{{farmAddress}}</span>
           </v-col>
@@ -16,75 +16,6 @@
     <div class="content">
         <div class="alerts"> <!-- Alerts section -->
           <p class="heading">Alerts</p>
-          <!--
-          <v-row id="accounting-warehouse-group">
-            <v-col cols="6" id="accounting-alerts" class="alerts-group"> Accounting alerts
-              <span class="label">Accounting</span>
-              <div class="alerts-box"
-              v-if="accountingAlerts.length > 0"
-              >
-                <div
-                v-for="alert in accountingAlerts"
-                :key="alert.alert_id"
-                class="alert"
-                v-bind:class="{'alert-yellow':(alert.value_left > 1),
-                'alert-red':(alert.value_left <= 1)}"
-                >
-                    <span class="icon-notif"></span>
-                    <span
-                    v-if="alert.value_left >= 0"
-                    >{{alert.item_name}} is due in {{alert.value_left}} days.
-                    </span>
-                    <span
-                    v-else-if="alert.value_left < 0"
-                    >{{alert.item_name}} is overdue by {{alert.value_left * -1}} days.
-                    </span>
-                </div>
-              </div>
-              <div class="alerts-box"
-              v-else>
-                <div class="alert">
-                <span>No new notifications to show.</span>
-                </div>
-              </div>
-            </v-col>
-            <v-col cols="6" id="warehouse-alerts" class="alerts-group"> Warehouse alerts
-              <span class="label">Warehouse</span>
-              <div class="alerts-box"
-              v-if="warehouseAlerts.length > 0"
-              >
-                <div
-                v-for="alert in warehouseAlerts"
-                :key="alert.alert_id"
-                class="alert"
-                v-bind:class="{'alert-yellow':(alert.value_left > 1),
-                'alert-red':(alert.value_left <= 1 || alert.type === 'critical')}"
-                >
-                    <span class="icon-notif"></span>
-                    <span
-                    v-if="alert.type === 'expiration' && alert.value_left >= 0"
-                    >Batch {{alert.batch_no}} of {{alert.item_name}}
-                     expires in {{alert.value_left}} days.
-                    </span>
-                    <span
-                    v-else-if="alert.type === 'expiration' && alert.value_left < 0"
-                    >Batch {{alert.batch_no}} of {{alert.item_name}}
-                     has expired {{alert.value_left * -1}} days ago.
-                    </span>
-                    <span
-                    v-else-if="alert.type === 'critical'"
-                    >Batch {{alert.batch_no}} of {{alert.item_name}} is almost out of stock.
-                    </span>
-                </div>
-              </div>
-              <div class="alerts-box"
-              v-else>
-                <div class="alert">
-                <span>No new notifications to show.</span>
-                </div>
-              </div>
-            </v-col>
-          </v-row>-->
           <v-row>
             <v-col cols="12" id="warehouse-alerts" class="alerts-group"> <!-- Warehouse alerts -->
               <span class="label">Warehouse</span>
@@ -275,6 +206,10 @@ export default {
     font-size: 36px;
     font-weight: bold;
     margin-bottom: 0px;
+  }
+
+  .alerts {
+    width: 35%;
   }
 
   .alerts > div > span.label{
