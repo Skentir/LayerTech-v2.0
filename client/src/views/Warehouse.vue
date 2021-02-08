@@ -896,9 +896,6 @@
               <v-list-item v-else>
                 <v-btn disabled>Liquidate</v-btn>
               </v-list-item>
-              <v-list-item>
-                <v-btn @click="deleteI(item)">Delete</v-btn>
-              </v-list-item>
             </v-list>
           </v-menu>
         </template>
@@ -1087,14 +1084,6 @@ export default {
   },
 
   methods: {
-    async deleteI(item) {
-      this.editedIndex = this.componentData.indexOf(item);
-      const param = this.componentData[this.editedIndex]._id;
-      // eslint-disable-next-line no-unused-vars
-      const response = await axios.delete(`${url}/warehouse/${param}`);
-      this.componentData.splice(this.editedIndex, 1);
-      this.editedIndex = -1;
-    },
     /*
       For proper date formatting within the table
     */
