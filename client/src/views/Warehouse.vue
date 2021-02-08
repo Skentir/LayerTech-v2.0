@@ -101,7 +101,7 @@
                           <v-text-field
                             label="Dosage"
                             v-model="editedItem.dosage"
-                            :rules="rules.dosage"
+                            :rules="[ dosage_validation ]"
                             required
                           />
                         </v-col>
@@ -338,8 +338,7 @@
                               <v-text-field
                                 label="Dosage"
                                 v-model="editedItem.dosage"
-                                :rules="rules.dosage"
-                                required
+                                :rules="[ dosage_validation ]"
                               />
                             </v-col>
                           </v-row>
@@ -554,8 +553,7 @@
                               <v-text-field
                                 label="Dosage"
                                 v-model="editedItem.dosage"
-                                :rules="rules.dosage"
-                                required
+                                :rules="[ dosage_validation ]"
                               />
                             </v-col>
                           </v-row>
@@ -1162,7 +1160,7 @@ export default {
     dosage_validation(value) {
       if (this.showAddItemDialog || this.showEditDialog || this.showAddBatchDialog) {
         if (this.editedItem.product_type === 'Vaccine' && value.length === 0) {
-          return 'Please input the serial code';
+          return 'Please input the dosage';
         }
       }
       // eslint-disable-next-line no-else-return
@@ -1177,9 +1175,9 @@ export default {
           if (value.length === 0) {
             return 'Please input the expiration date';
           }
-          if (value < this.editedItem.received_date) {
-            return 'Expiration date entered is invalid';
-          }
+        }
+        if (value <= this.editedItem.received_date) {
+          return 'Expiration date entered is invalid';
         }
       }
       // eslint-disable-next-line no-else-return

@@ -8,7 +8,7 @@ const WarehouseSchema = new Schema({
     product_title: {type: String, required: true},
     product_type: {type: String, required: true},
     product_code: {type: String, required: true},
-    dosage: {type: String, required: true},
+    dosage: {type: String, required: false},
     received_date: {type: Date, required: true, default: Date.now},
     expiration_date: {type: Date, required: false},
     product_assignment: {type: String, required: true},
